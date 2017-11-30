@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">	
+</head>
+<body>
+	<section class="content">
+		<div class="row">
+			<div class="col-md-12 col-md-offset-0">
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title"
+							th:text="'系统'+${#strings.isEmpty(info.infoId)?'添加':'修改'}"></h3>
+					</div>
+					<div class="box-body">
+						<form class="form-horizontal js-ajax-form" action="/console/business/scienceEducationSys/save" method="post" enctype="multipart/form-data">
+							<div th:if="${not #strings.isEmpty(info.infoId)}">
+								<input type="hidden" name="infoId" th:value="${info.infoId}" />															
+							</div>							
+							<div class="form-group">
+								<label for="infoName" class="col-sm-2 control-label">系统名称</label>
+								<div class="col-sm-10">
+									<input type="text" name="infoName" class="form-control" maxlength="50"
+										id="infoName" required="true" th:value="${info.infoName}"
+										placeholder="请输入标题" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="linkUrl" class="col-sm-2 control-label">地区</label>
+								<div class="col-sm-10">
+									<input type="text"  name="ordView" class="form-control"
+										id="orderView"  th:value="${info.ordView}" readonly="readonly" placeholder="请点击选择" />
+									<input type="hidden" name="orgId" id="orgId" th:value="${info.orgId}"/>	
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="linkUrl" class="col-sm-2 control-label">跳转链接</label>
+								<div class="col-sm-10">
+									<input type="text" name="linkUrl" class="form-control"
+										id="linkUrl"  th:value="${info.LinkUrl}" maxlength="100"
+										placeholder="请输入跳转链接" />
+								</div>
+							</div>							
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div th:include="console/footer"></div>	
+	<script th:inline="javascript">
+		$("#orderView").click(function(){
+			layer.open({
+                type: 2,
+                title: '地区选择',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['500px', '600px'],
+                content: '/console/business/grant/?infoId=' + [[${info.infoId}]]
+            });
+		 });
+		
+		function grant(ids,text){
+			$("#orgId").val(ids);
+			$("#orderView").val(text);
+		}
+		/* window.operateEvents = {	        
+	        'click #orderId' : function (e, value, row, index) {
+	            layer.open({
+	                type: 2,
+	                title: '角色授权',
+	                shadeClose: true,
+	                shade: false,
+	                maxmin: true, //开启最大化最小化按钮
+	                area: ['500px', '600px'],
+	                content: '/console/business/grant/?infoId=' + [[${info.infoId}]]
+	            });
+	        }
+	    }; */
+	</script>
+</body>
+</html>

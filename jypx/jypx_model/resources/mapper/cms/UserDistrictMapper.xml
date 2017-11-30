@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geekcattle.mapper.cms.UserDistrictMapper">
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.cms.UserDistrict">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="DISTRICT_ID" jdbcType="VARCHAR" property="districtId" />
+    <result column="DISTRICT_NAME" jdbcType="VARCHAR" property="districtName" />
+    <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+    <result column="DIALLING_CODE" jdbcType="VARCHAR" property="diallingCode" />
+    <result column="CARD_FLAG" jdbcType="DECIMAL" property="cardFlag" />
+  </resultMap>
+  <select id="selectRootDistrict" resultMap="BaseResultMap">
+  	select * from user_district where parent_id not in(select district_id from user_district)
+  </select>
+  <select id="selectDistrictByIds" resultType="String">
+  	select listagg(district_name,',') WITHIN GROUP(ORDER BY 1) districtName  from user_district where district_id in 
+  	<foreach collection="array" item="districtId" index="index"  
+            open="(" close=")" separator=",">  
+            #{districtId}  
+    </foreach>
+  </select>
+</mapper>

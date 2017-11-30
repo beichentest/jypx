@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.cms.ModuleMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.cms.Module" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="MODULE_ID" property="moduleId" jdbcType="VARCHAR" />
+    <result column="MODULE_NAME" property="moduleName" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

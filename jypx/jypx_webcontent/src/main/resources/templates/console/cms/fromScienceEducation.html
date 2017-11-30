@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">	
+</head>
+<body>
+	<section class="content">
+		<div class="row">
+			<div class="col-md-12 col-md-offset-0">
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title"
+							th:text="'信息'+${#strings.isEmpty(info.infoId)?'添加':'修改'}"></h3>
+					</div>
+					<div class="box-body">
+						<form class="form-horizontal js-ajax-form" action="/console/business/scienceEducation/save" method="post" enctype="multipart/form-data">
+							<div th:if="${not #strings.isEmpty(info.infoId)}">
+								<input type="hidden" name="infoId" th:value="${info.infoId}" />															
+							</div>
+							<input type="hidden" name="moduleId" th:value="${#strings.isEmpty(moduleId)?info.moduleId:moduleId}" />
+							<input type="hidden" name="moduleCode" th:value="${moduleCode}" />
+							<div class="form-group">
+								<label for="infoName" class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-10">
+									<input type="text" name="infoName" class="form-control" maxlength="50"
+										id="infoName" required="true" th:value="${info.infoName}"
+										placeholder="请输入标题" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="summary" class="col-sm-2 control-label">简介</label>
+								<div class="col-sm-10">
+									<textarea rows="2" maxlength="120" name="summary" placeholder="请输入简介" class="form-control" th:text="${info.summary}"></textarea>									
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="imgUrl" class="col-sm-2 control-label">内容</label>
+								<div class="col-md-10 tl th">				      
+									<script id="content" name="content" type="text/plain" th:inline="javascript">
+            							
+        							</script>								
+								</div>
+							</div>							
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div th:include="console/footer"></div>
+	<script type="text/javascript" charset="utf-8" src="/static/assets/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/assets/ueditor/ueditor.all.min.js"> </script>    
+    <script type="text/javascript" charset="utf-8" src="/static/assets/ueditor/lang/zh-cn/zh-cn.js"></script>
+	<script th:inline="javascript">	
+		var editor = UE.getEditor('content', {
+		    toolbars: [
+		               ['fullscreen', 'source', 'undo', 'redo','bold', 'italic', 'underline', 
+		                'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 
+		                'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 
+		                'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 
+		                'cleardoc','justifyleft','justifyright','justifycenter','justifyjustify',
+		                'time','date','simpleupload','imagenone','imageleft','imageright','imagecenter']
+		           ],
+		           initialFrameHeight: 300,
+		           serverUrl:'/console/upload/config'}
+		);
+		editor.ready(function() {
+			if([[${info.content}]]!=null){
+				editor.setContent([[${info.content}]]);
+			}
+		});
+		UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;  
+	    UE.Editor.prototype.getActionUrl = function(action){  
+	        if(action == '/console/upload/save'){  
+	            return '/console/upload/save';  
+	        }else{  
+	            return this._bkGetActionUrl.call(this, action);  
+	        }  
+	    }		
+	</script>	
+</body>
+</html>

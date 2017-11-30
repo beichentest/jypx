@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>基层信息</h1>
+   <!--  <small>列表管理</small> -->
+</section>
+<ul class="nav nav-tabs">
+  <li th:classappend="${moduleCode eq 'NOTICE'}? 'active'"><a href="/console/business/grassRoot/index?moduleCode=NOTICE">通知</a></li>
+  <li th:classappend="${moduleCode eq 'POLICY'}? 'active'"><a href="/console/business/grassRoot/index?moduleCode=POLICY">政策</a></li> 
+</ul>
+<section class="content table-content">
+    <table id="dataGrid"></table>
+</section>
+<div id="toolbar">
+    <a th:href="@{'/console/business/grassRoot/from?moduleIdv='+${info.moduleId}+'&amp;moduleCode='+${moduleCode}}" href="/console/business/grassRoot/from" class="btn btn-primary" >添加</a>
+</div>
+<div th:include="console/footer"></div>
+<script th:inline="javascript">
+    $table = $("#dataGrid");
+    $(function () {
+        initDataGrid();
+    });
+    function initDataGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "infoId",
+            columns: [[
+				{title: "序号", formatter: function (value, row, index) { return index+1;}},       
+                {title: "名称", field: "infoName"},
+                //{title: "创建时间", field: "createDate", sortable: true,formatter:changeDateFormat},
+                {title: "修改时间", field: "updteDate", sortable: true,formatter:changeDateFormat},
+                //{title: "是否启用", field: "isOpen", formatter : tableModel.getState},
+                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
+            ]],
+            url: '/console/business/grassRoot/list',
+            queryParams: function(params){
+            	var param = {    
+            			limit: params.limit,    
+            			offset: params.offset,
+            			order:params.order,
+            			sort:params.sort,
+            			moduleId : [[${info.moduleId}]],
+            			search:params.search
+                    };
+                return param;
+            },
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            sortName : 'updteDate',
+            sortOrder : 'desc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true
+        });
+    }
+
+    function operateFormatter(value, row, index) {
+    	var mc = [[${moduleCode}]];
+        return [
+            '<a href="/console/business/grassRoot/from?infoId='+row.infoId+'&amp;moduleCode='+mc+'" >',
+            '<i class="glyphicon glyphicon-edit"></i>修改',
+            '</a>  ',
+            '<a class="remove" href="javascript:void(0);">',
+            '<i class="glyphicon glyphicon-remove"></i>删除',
+            '</a>'
+        ].join('');
+    }
+    function changeDateFormat(value) {    	
+        if (value != null) {        	
+        	return getSmpFormatDateByLong(value,true);        	
+        } 
+    } 
+    window.operateEvents = {
+        'click .remove' : function (e, value, row, index) {
+            operaModel.delRow(row.infoId, '/console/business/grassRoot/delete', 'infoId');
+        }        
+    };
+
+</script>
+</body>
+</html>
+

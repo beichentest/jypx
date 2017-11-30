@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.cms.InfoMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.cms.Info" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="INFO_ID" property="infoId" jdbcType="VARCHAR" />
+    <result column="INFO_NAME" property="infoName" jdbcType="VARCHAR" />
+    <result column="MODULE_ID" property="moduleId" jdbcType="VARCHAR" />
+    <result column="IMG_URL" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="IS_OPEN" property="isOpen" jdbcType="CHAR" />
+    <result column="LINK_URL" property="linkUrl" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDTE_DATE" property="updteDate" jdbcType="TIMESTAMP" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="AUTHOR" property="author" jdbcType="VARCHAR" />
+    <result column="CREATE_USER" property="createUser" jdbcType="VARCHAR" />
+    <result column="TAG" property="tag" jdbcType="VARCHAR" />
+    <result column="SUMMARY" property="summary" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findInfoByModuleId" parameterType="String" resultMap="BaseResultMap">
+        select * from jypx_cms_info where module_id = #{moduleId} and del_flag = '0'
+    </select>  
+  <select id="findInfoByModuleIds" parameterType="java.util.HashMap" resultMap="BaseResultMap">  		
+        select * from jypx_cms_info where module_id in
+	        <foreach collection="params.keys"  item="key" separator="," open="(" close=")">
+	         #{key}
+	         </foreach>
+	         and del_flag = '0'
+    </select>   
+  <update id="updateInfo" parameterType="com.geekcattle.model.cms.Info">
+  	UPDATE JYPX_CMS_INFO
+	   SET INFO_NAME   = #{infoName,jdbcType=VARCHAR},
+	       MODULE_ID   = #{moduleId,jdbcType=VARCHAR},
+	       IMG_URL     = #{imgUrl,jdbcType=VARCHAR},
+	       IS_OPEN     = #{isOpen,jdbcType=VARCHAR},
+	       LINK_URL    = #{linkUrl,jdbcType=VARCHAR},
+	       <if test="createDate!=null">
+	       CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+	       </if>	       
+	       UPDTE_DATE  = #{updteDate,jdbcType=TIMESTAMP},
+	       CODE        = #{code,jdbcType=VARCHAR},
+	       REMARK      = #{remark,jdbcType=VARCHAR},
+	       CONTENT     = #{content,jdbcType=VARCHAR},
+	       ORG_ID      = #{orgId,jdbcType=VARCHAR},
+	       AUTHOR      = #{author,jdbcType=VARCHAR},
+	       CREATE_USER = #{createUser,jdbcType=VARCHAR},
+	       TAG         = #{tag,jdbcType=VARCHAR},
+	       SUMMARY     = #{summary,jdbcType=VARCHAR}
+	 WHERE INFO_ID = #{infoId,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertInfo" parameterType="com.geekcattle.model.cms.Info">
+  	 INSERT INTO JYPX_CMS_INFO
+	   (INFO_ID,
+	    INFO_NAME,
+	    MODULE_ID,
+	    IMG_URL,
+	    IS_OPEN,
+	    LINK_URL,
+	    CREATE_DATE,
+	    UPDTE_DATE,
+	    CODE,
+	    REMARK,
+	    CONTENT,
+	    ORG_ID,
+	    AUTHOR,
+	    CREATE_USER,
+	    TAG,
+	    SUMMARY,
+	    DEL_FLAG)
+	 VALUES
+	   (#{infoId,jdbcType=VARCHAR}, 
+	    #{infoName,jdbcType=VARCHAR}, 
+	    #{moduleId,jdbcType=VARCHAR}, 
+	    #{imgUrl,jdbcType=VARCHAR}, 
+	    #{isOpen,jdbcType=VARCHAR}, 
+	    #{linkUrl,jdbcType=VARCHAR}, 
+		#{createDate,jdbcType=TIMESTAMP}, 
+		#{updteDate,jdbcType=TIMESTAMP}, 
+		#{code,jdbcType=VARCHAR}, 
+		#{remark,jdbcType=VARCHAR}, 
+		#{content,jdbcType=VARCHAR}, 
+		#{orgId,jdbcType=VARCHAR}, 
+		#{author,jdbcType=VARCHAR}, 
+		#{createUser,jdbcType=VARCHAR}, 
+		#{tag,jdbcType=VARCHAR},
+		#{summary,jdbcType=VARCHAR},
+		'0')
+  </insert>
+  <update id="updateOrder" parameterType="com.geekcattle.model.cms.Info">
+	  UPDATE JYPX_CMS_INFO
+		 SET ORG_ID = #{orgId,jdbcType=VARCHAR}
+	  WHERE INFO_ID = #{infoId,jdbcType=VARCHAR}	   
+  </update>
+  <update id="deleteInfo" >
+  	  UPDATE JYPX_CMS_INFO
+		 SET DEL_FLAG = #{delFlag,jdbcType=VARCHAR}
+	  WHERE INFO_ID = #{infoId,jdbcType=VARCHAR}
+  </update>  
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hys.jypx</groupId>
+	<artifactId>jypx</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.2.RELEASE</version>
+		<relativePath />
+	</parent>
+	<properties>
+		<java.version>1.8</java.version>
+		<!-- 依赖版本 -->
+		<mybatis.version>3.3.1</mybatis.version>
+		<mybatis.spring.version>1.2.4</mybatis.spring.version>
+		<mapper.version>3.3.9</mapper.version>
+		<pagehelper.version>4.1.1</pagehelper.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- MyBatis Generator -->
+		<!-- Java接口和实体类 -->
+		<targetJavaProject>${basedir}/src/main/java</targetJavaProject>
+		<targetMapperPackage>com.geekcattle.mapper</targetMapperPackage>
+		<targetModelPackage>com.geekcattle.model</targetModelPackage>
+		<!-- XML生成路径 -->
+		<targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
+		<targetXMLPackage>mapper</targetXMLPackage>
+		<!-- 依赖版本 -->
+		<mysql.version>5.1.29</mysql.version>
+		<jackson.version>2.8.5</jackson.version>
+		<servlet.version>3.0.1</servlet.version>
+		<project.version>0.0.1-SNAPSHOT</project.version>
+	</properties>
+	<modules>
+		<module>jypx_model</module>
+		<module>jypx_lib</module>
+		<module>jypx_security</module>
+		<module>jypx_core</module>
+		<module>jypx_service</module>
+		<module>jypx_webcontent</module>
+	</modules>
+</project>

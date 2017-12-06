@@ -2,121 +2,85 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">      
 <head th:include="console/header">
-<style> html, body { margin: 0; padding: 0; font-size: 75%; } </style>
 </head>
 <body>
 <section class="content-header">
     <h1>CME继教政策</h1>
    <!--  <small>列表管理</small> -->
 </section>
-
 <section class="content table-content">
-	<div id="toolbar">
-	    <a shiro:hasPermission="educationPolicy:edit" href="/console/business/educationPolicy/from" class="btn btn-primary" >添加</a>
-	</div>
-    <table id="mygrid"></table>
-    <div id="jqgrid-pager"></div>
+    <table id="dataGrid"></table>
 </section>
-
+<div id="toolbar">
+    <a shiro:hasPermission="educationPolicy:edit" href="/console/business/educationPolicy/from" class="btn btn-primary" >添加</a>
+</div>
 <div th:include="console/footer"></div>
-
-<div id="consoleDlg"  style="display: none"></div>
-<script type="text/javascript" src="/static/js/jquery-1.7.1.js"></script>
-<script type="text/javascript" src="/static/assets/jqgrid/js/jquery.jqGrid.src.js"></script>				
-<script type="text/javascript" src="/static/assets/jqgrid/js/i18n/grid.locale-cn.js"></script>
-<script th:inline="javascript">    
-$("#consoleDlg").dialog({
-	autoOpen : false, // 是否自动弹出窗口
-	modal : true, // 设置为模态对话框
-	resizable : true,
-	width : 500,
-	height : 300,
-	position : "center" // 窗口显示的位置
-}); 
-$('#mygrid').jqGrid({  
-    url : '/console/business/educationPolicy/list',  
-    //postData:{'menuId':$('#menuId').val(),'type':$('#type').val()},  
-    mtype : "GET",  
-    contentType : "application/json",  
-    datatype : "json", 
-    prmNames : {  
-    	page:"page",    // 表示请求页码的参数名称  
-    	rows:"limit",    // 表示请求行数的参数名称  
-    	sort: "sort", // 表示用于排序的列名的参数名称  
-    	order: "order", // 表示采用的排序方式的参数名称  
-    	search:"_search", // 表示是否是搜索请求的参数名称  
-    	nd:"nd", // 表示已经发送请求的次数的参数名称  
-    	id:"id", // 表示当在编辑数据模块中发送数据时，使用的id的名称  
-    	oper:"oper",    // operation参数名称（我暂时还没用到）  
-    	editoper:"edit", // 当在edit模式中提交数据时，操作的名称  
-    	addoper:"add", // 当在add模式中提交数据时，操作的名称  
-    	deloper:"del", // 当在delete模式中提交数据时，操作的名称  
-    	subgridid:"id", // 当点击以载入数据到子表时，传递的数据名称  
-    	npage: null,   
-    	totalrows:"totalrows" // 表示需从Server得到总共多少行数据的参数名称，参见jqGrid选项中的rowTotal  
-    },
-    styleUI: 'Bootstrap',
-    colModel : [
-    {  
-        label : '标题',  
-        name : 'infoName'  
-    }, {  
-        label : '修改时间',  
-        name : 'updteDate',  
-        formatter : changeDateFormat
-    }, {  
-        label : '操作',  
-        name : 'infoId',  
-        formatter : operateFormatter,
-        align : 'center'
+<script th:inline="javascript">
+    $table = $("#dataGrid");
+    $(function () {
+        initDataGrid();
+    });
+    function initDataGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "infoId",
+            columns: [[
+				{title: "序号", formatter: function (value, row, index) { return index+1;}},       
+                {title: "标题", field: "infoName"},     
+                {title: "修改时间", field: "updteDate", sortable: true,formatter:changeDateFormat},        
+                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
+            ]],
+            url: '/console/business/educationPolicy/list',
+            queryParams: function(params){
+            	var param = {    
+            			limit: params.limit,    
+            			offset: params.offset,
+            			order:params.order,
+            			sort:params.sort,
+            			search:params.search
+                    };
+                return param;
+            },
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            sortName : 'updteDate',
+            sortOrder : 'desc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true,
+            showColumns: true
+        });
     }
-    ],  
-    height : '100%',  
-    pager : '#jqgrid-pager',  
-    autowidth : true,
-    rowNum : 1, 
-    rownumbers: true,
-    rowList : [ 10, 20, 30 ],  
-    //sortname : 'createTime',  
-    //sortable : true,  
-    //sortorder : 'desc',  
-    jsonReader : {  
-        root : "result.pageInfo.list", // json中代表实际模型数据的入口  
-        records : "result.pageInfo.total", // json中代表数据行总数的数据  
-        page : "result.pageInfo.pageNum", // json中代表当前页码的数据  
-        total : "result.pageInfo.pages", // json中代表页码总数的数据  
-        repeatitems : false  
-    },    
-    multiselect : true,  
-    onSelectRow : function(rowid,  
-            status) {  
-        selId = rowid;  
-    }  
-});
-function changeDateFormat(value) {    	
-    if (value != null) {        	
-    	return getSmpFormatDateByLong(value,true);        	
-    } 
-} 
-function operateFormatter(value, row, index) {
-    return [           
-        '<a href="javascript:openPop();" >',    	 
-        '<i class="glyphicon glyphicon-edit"></i>修改',
-        '</a>  ',
-        '<a class="remove" href="javascript:void(0);">',
-        '<i class="glyphicon glyphicon-remove"></i>删除',
-        '</a>'
-    ].join('');
-}
-function openPop(){
-	var consoleDlg = $("#consoleDlg");
-	consoleDlg.html("sdff");	
-	consoleDlg.dialog("option", "title", "新增学生信息").dialog("open");
 
-}
-$(window).resize(function(){  
-    $("#mygrid").setGridWidth($(window).width());
-   });
+    function operateFormatter(value, row, index) {
+        return [           
+            '<a href="/console/business/educationPolicy/from?infoId='+row.infoId+'" >',
+            '<i class="glyphicon glyphicon-edit"></i>修改',
+            '</a>  ',
+            '<a class="remove" href="javascript:void(0);">',
+            '<i class="glyphicon glyphicon-remove"></i>删除',
+            '</a>'
+        ].join('');
+    }
+    function changeDateFormat(value) {    	
+        if (value != null) {        	
+        	return getSmpFormatDateByLong(value,true);        	
+        } 
+    } 
+    window.operateEvents = {
+        'click .remove' : function (e, value, row, index) {
+            operaModel.delRow(row.infoId, '/console/business/educationPolicy/delete', 'infoId');
+        }        
+    };
+
 </script>
 </body>
 </html>

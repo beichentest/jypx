@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2017 <l_iupeiyu@qq.com> All rights reserved.
- */
-
 package com.geekcattle.controller.console;
 
 import java.util.HashMap;
@@ -301,8 +297,7 @@ public class BusinessController {
 	@ResponseBody
 	public ModelMap listEducationPolicy(Info info) {
 		ModelMap map = new ModelMap();
-//		List<Info> lists = scienceEducationService.getPageList(info,ModuleEnum.EDUCATION_POLICY.toString());
-		List<Info> lists = scienceEducationService.getPageListPage(info,ModuleEnum.EDUCATION_POLICY.toString());
+		List<Info> lists = scienceEducationService.getPageList(info,ModuleEnum.EDUCATION_POLICY.toString());		
 		for (Info infov : lists) {
 			if(!StringUtil.isEmpty(infov.getOrgId())){
 				infov.setOrdView(userDistrictService.getDistrictByIds(infov.getOrgId().split(",")));

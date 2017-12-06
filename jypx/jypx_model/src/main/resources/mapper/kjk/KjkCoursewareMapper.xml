@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geekcattle.mapper.kjk.KjkCoursewareMapper">
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.kjk.KjkCourseware">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="P_NAME" jdbcType="VARCHAR" property="pName" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="PATH" jdbcType="VARCHAR" property="path" />
+    <result column="FILE_TYPE" jdbcType="VARCHAR" property="fileType" />
+    <result column="PLAY_TYPE" jdbcType="VARCHAR" property="playType" />
+    <result column="SUBJECT" jdbcType="VARCHAR" property="subject" />
+    <result column="KEYWORD" jdbcType="VARCHAR" property="keyword" />
+    <result column="INTRODUCE" jdbcType="VARCHAR" property="introduce" />
+    <result column="EXPERT" jdbcType="VARCHAR" property="expert" />
+    <result column="EXPERT_UNIT" jdbcType="VARCHAR" property="expertUnit" />
+    <result column="SOURCE" jdbcType="VARCHAR" property="source" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="ADD_DATE" jdbcType="TIMESTAMP" property="addDate" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="CLICK_COUNT" jdbcType="INTEGER" property="clickCount" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="CLASS_TIME" jdbcType="DECIMAL" property="classTime" />
+    <result column="CLASS_HOUR" jdbcType="DECIMAL" property="classHour" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="PAR1" jdbcType="VARCHAR" property="par1" />
+    <result column="PAR2" jdbcType="VARCHAR" property="par2" />
+    <result column="PAR3" jdbcType="VARCHAR" property="par3" />
+    <result column="PAR4" jdbcType="VARCHAR" property="par4" />
+    <result column="MOBILE_TYPE" jdbcType="VARCHAR" property="mobileType" />
+    <result column="SUBJECT2" jdbcType="VARCHAR" property="subject2" />
+    <result column="SL_IMG" jdbcType="VARCHAR" property="slImg" />
+    <result column="LOGO" jdbcType="VARCHAR" property="logo" />
+    <result column="PIANTOU" jdbcType="VARCHAR" property="piantou" />
+    <result column="PIANWEI" jdbcType="VARCHAR" property="pianwei" />
+    <result column="SHOT_YEAR" jdbcType="VARCHAR" property="shotYear" />
+   <result column="CLASS_TIME_STR" jdbcType="VARCHAR" property="classTimeStr" />
+  </resultMap>
+  <resultMap id="BaseResultExcelVo" type="com.geekcattle.vo.kjk.CoursewareVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="P_NAME" jdbcType="VARCHAR" property="pName" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="PATH" jdbcType="VARCHAR" property="path" />
+    <result column="FILE_TYPE" jdbcType="VARCHAR" property="fileType" />
+    <result column="PLAY_TYPE" jdbcType="VARCHAR" property="playType" />
+    <result column="SUBJECT" jdbcType="VARCHAR" property="subject" />
+    <result column="KEYWORD" jdbcType="VARCHAR" property="keyword" />
+    <result column="INTRODUCE" jdbcType="VARCHAR" property="introduce" />
+    <result column="EXPERT" jdbcType="VARCHAR" property="expert" />
+    <result column="EXPERT_UNIT" jdbcType="VARCHAR" property="expertUnit" />
+    <result column="SOURCE" jdbcType="VARCHAR" property="source" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="ADD_DATE" jdbcType="TIMESTAMP" property="addDate" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="CLICK_COUNT" jdbcType="INTEGER" property="clickCount" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="CLASS_TIME" jdbcType="DECIMAL" property="classTime" />
+    <result column="CLASS_HOUR" jdbcType="DECIMAL" property="classHour" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="PAR1" jdbcType="VARCHAR" property="par1" />
+    <result column="PAR2" jdbcType="VARCHAR" property="par2" />
+    <result column="PAR3" jdbcType="VARCHAR" property="par3" />
+    <result column="PAR4" jdbcType="VARCHAR" property="par4" />
+    <result column="MOBILE_TYPE" jdbcType="VARCHAR" property="mobileType" />
+    <result column="SUBJECT2" jdbcType="VARCHAR" property="subject2" />
+    <result column="SL_IMG" jdbcType="VARCHAR" property="slImg" />
+    <result column="LOGO" jdbcType="VARCHAR" property="logo" />
+    <result column="PIANTOU" jdbcType="VARCHAR" property="piantou" />
+    <result column="PIANWEI" jdbcType="VARCHAR" property="pianwei" />
+    <result column="SHOT_YEAR" jdbcType="VARCHAR" property="shotYear" />
+   <result column="CLASS_TIME_STR" jdbcType="VARCHAR" property="classTimeStr" />
+  </resultMap>  
+  <sql id="Courseware_Where">
+  	<where>
+  		<if test="status!=null">
+  			cw.status = #{status}
+  		</if>
+  		<if test="id!=null">
+  			and cw.id = #{id}
+  		</if>
+  		<if test="keyword!=null and keyword!=''">
+  			and cw.keyword  like '%'||#{keyword}||'%'
+  		</if>
+  	</where>
+  </sql>
+  <select id="findCourseware"  resultMap="BaseResultMap">
+        select * from KJK_COURSEWARE cw
+        <include refid="Courseware_Where" />
+    </select>
+    <select id="findCoursewareVo"  resultMap="BaseResultExcelVo">
+        select * from KJK_COURSEWARE cw
+        <include refid="Courseware_Where" />
+    </select>
+</mapper>

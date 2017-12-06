@@ -7,6 +7,7 @@ package com.geekcattle.model.console;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.geekcattle.model.BaseEntity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,8 +21,13 @@ import javax.persistence.Transient;
  * date 2017/1/6 0006 上午 11:21
  */
 @Table(name = "JYPX_LOG")
-public class Log  extends BaseEntity {
-    @Id
+public class Log  extends BaseEntity implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 291766441267553681L;
+
+	@Id
     @Column(name = "log_id")
     @GeneratedValue(generator = "UUID")
     private String logId;

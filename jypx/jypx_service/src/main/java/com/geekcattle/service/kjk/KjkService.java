@@ -24,6 +24,7 @@ public class KjkService {
 
 	@Autowired
 	private KjkCoursewareMapper kjkCoursewareMapper;
+	
 	public List<KjkCourseware> getPageList(KjkCourseware kjkCourseware) {
 		PageHelper.startPage(kjkCourseware.getPage(), kjkCourseware.getLimit(),
 				CamelCaseUtil.toUnderlineName(kjkCourseware.getSort()) + " " + kjkCourseware.getOrder());	
@@ -42,5 +43,9 @@ public class KjkService {
 	
 	public List<CoursewareVo> getExcelList(KjkCourseware kjkCourseware){
 		return kjkCoursewareMapper.findCoursewareVo(kjkCourseware);
+	}
+	
+	public int updateCourseCware(KjkCourseware kjkCourseware){
+		return kjkCoursewareMapper.updateByPrimaryKeySelective(kjkCourseware);
 	}
 }

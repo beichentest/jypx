@@ -38,6 +38,7 @@
     <result column="PIANWEI" jdbcType="VARCHAR" property="pianwei" />
     <result column="SHOT_YEAR" jdbcType="VARCHAR" property="shotYear" />
    <result column="CLASS_TIME_STR" jdbcType="VARCHAR" property="classTimeStr" />
+   <result column="LABEL" jdbcType="VARCHAR" property="label" />
   </resultMap>
   <resultMap id="BaseResultExcelVo" type="com.geekcattle.vo.kjk.CoursewareVo">
     <!--
@@ -76,6 +77,7 @@
     <result column="PIANWEI" jdbcType="VARCHAR" property="pianwei" />
     <result column="SHOT_YEAR" jdbcType="VARCHAR" property="shotYear" />
    <result column="CLASS_TIME_STR" jdbcType="VARCHAR" property="classTimeStr" />
+   <result column="LABEL" jdbcType="VARCHAR" property="label" />
   </resultMap>  
   <sql id="Courseware_Where">
   	<where>

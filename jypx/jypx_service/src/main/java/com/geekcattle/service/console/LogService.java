@@ -12,6 +12,7 @@ import com.geekcattle.util.DateUtil;
 import com.geekcattle.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class LogService {
     public void insert(Log log){
         logMapper.insert(log);
     }
-
+    @Async
     public void insertLoginLog(String username, String ip, String action){
         Log  log = new Log();
         log.setLogId(UuidUtil.getUUID());

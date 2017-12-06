@@ -99,7 +99,7 @@ public class KjkCourseware extends BaseEntity implements Serializable{
     @Column(name = "CLICK_COUNT")
     private Integer clickCount;
     /**
-     * 状态 0有效1删除
+     * 状态 -1下架,0有效,1删除
      */
     @Column(name = "STATUS")
     private Integer status;
@@ -178,7 +178,11 @@ public class KjkCourseware extends BaseEntity implements Serializable{
      */
     @Column(name = "CLASS_TIME_STR")
     private String classTimeStr;        
-    
+    /**
+     * 
+     */
+    @Column(name = "LABEL")
+    private String label;
     @Transient
     @JsonIgnore
     private String sort = "";
@@ -640,6 +644,14 @@ public class KjkCourseware extends BaseEntity implements Serializable{
 
 	public void setClassTimeStr(String classTimeStr) {
 		this.classTimeStr = classTimeStr;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	public String getSort() {

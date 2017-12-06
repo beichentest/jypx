@@ -8,7 +8,11 @@ public enum KjkEnum {
 	/**
 	 * 课件表状态（删除）
 	 */
-	KJK_COURSEWARE_STATUS_DISABLE(1L);
+	KJK_COURSEWARE_STATUS_DISABLE(1L),
+	/**
+	 * 课件表状态（下架）
+	 */
+	KJK_COURSEWARE_STATUS_DOWN(-1L);
 	private Long value;
 	private KjkEnum(Long value) {
 		this.value = value;

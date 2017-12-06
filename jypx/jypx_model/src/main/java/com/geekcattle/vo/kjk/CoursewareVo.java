@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Column;
+
 import cn.afterturn.easypoi.excel.annotation.Excel;
 
 public class CoursewareVo  implements Serializable{
@@ -177,6 +179,8 @@ public class CoursewareVo  implements Serializable{
     @Excel(name="时长(时:分:秒)")
     private String classTimeStr;        
     
+    @Excel(name="标签")
+    private String label;
     /**
      * @return ID
      */
@@ -632,4 +636,12 @@ public class CoursewareVo  implements Serializable{
 	public void setClassTimeStr(String classTimeStr) {
 		this.classTimeStr = classTimeStr;
 	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}		
 }

@@ -15,6 +15,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -23,6 +24,7 @@ import com.geekcattle.redis.serializer.StringRedisSerializer;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 
+@EnableAsync
 @EnableCaching
 @EnableWebMvc//启动MVC
 @EnableTransactionManagement // 启注解事务管理

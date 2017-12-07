@@ -16,7 +16,7 @@ public class CoursewareVo  implements Serializable{
 	/**
 	 * 
 	 */
-	
+	@Excel(name="课件ID")
     private Long id;
     /**
      * 课件名称

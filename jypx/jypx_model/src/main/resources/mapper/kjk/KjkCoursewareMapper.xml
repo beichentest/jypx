@@ -87,7 +87,7 @@
   		<if test="id!=null">
   			and cw.id = #{id}
   		</if>
-  		<if test="playType!=null and playType!=-1">
+  		<if test="playType!=null and playType!=-1 and  playType!=''">
   			and cw.play_type = #{playType}
   		</if>
   		<if test="keyword!=null and keyword!=''">

@@ -1,16 +1,14 @@
-/*
- * Copyright (c) 2017 <l_iupeiyu@qq.com> All rights reserved.
- */
-
 package com.geekcattle.controller.console;
 
-import com.geekcattle.conf.LoginEnum;
-import com.geekcattle.conf.shiro.CustomerAuthenticationToken;
-import com.geekcattle.model.valid.ValidAdmin;
-import com.geekcattle.service.console.LogService;
-import com.geekcattle.util.IpUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -22,17 +20,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import com.geekcattle.conf.LoginEnum;
+import com.geekcattle.conf.shiro.CustomerAuthenticationToken;
+import com.geekcattle.model.valid.ValidAdmin;
+import com.geekcattle.mq.producer.LogSender;
+import com.geekcattle.service.console.LogService;
+import com.geekcattle.util.IpUtil;
 
 @Controller
 @RequestMapping(value = "/console")
 public class PublicController {
 
     private static final Logger logger = LoggerFactory.getLogger(PublicController.class);
-
     @Autowired
     private LogService logService;
+    @Autowired    
+    private LogSender logSender;
 
     @RequestMapping(value="/login", method=RequestMethod.GET)
     public String loginForm(){
@@ -88,7 +91,8 @@ public class PublicController {
             session.setAttribute("loginType",LoginEnum.ADMIN.toString());
             logger.info("用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
             String ip = IpUtil.getIpAddr(request);
-            logService.insertLoginLog(username, ip, request.getContextPath());
+            logService.insertLoginLog(username, ip, "登录系统");
+            //logSender.send(username, ip, "登录");
             return "redirect:/console/index";
         }else{
             token.clear();

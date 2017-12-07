@@ -182,7 +182,7 @@ public class CoursewareVo  implements Serializable{
     @Excel(name="标签")
     private String label;
     
-    @Excel(name="付费标志",replace= {"未付费_0","已付费_1"})
+    @Excel(name="付费标志",replace= {"未付费_0","已付费_1","_null"})
     private String playFlag;
     /**
      * @return ID

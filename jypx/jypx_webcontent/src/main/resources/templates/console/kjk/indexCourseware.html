@@ -22,7 +22,8 @@
 	       	<label>关键字：</label><input type="text" class="input" id="keyword" />
 	       	<input type="submit" class="btn btn-primary" id="find_btn" value="查 询" /> 
 	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出课件" />
-	       <input type="button" class="btn btn-primary" id="del_btn" value="导入课件" />
+	       	<input type="button" class="btn btn-primary" id="template_btn" value="下载模板" />
+	       <input type="button" class="btn btn-primary" id="upload_btn" value="导入课件" />
 	    </div> 	     
  </div>
     <table id="mygrid"></table>
@@ -236,7 +237,11 @@ $(function(){
         window.location.href = "/console/kjk/courseware/download?id="+cwId+"&keyword="+keyword+"&playType="+playType;
         /*]]>*/
     });  
-	
+	//下载导入模板
+    $("#template_btn").click(function(){                
+        window.location.href = "/console/kjk/courseware/downloadTemplate";        
+    });  
+    
 	//删除数据(假删除)
 	$("#del_btn").click(function(){
 		var selectedRowIds = $("#mygrid").jqGrid("getGridParam", "selarrrow");

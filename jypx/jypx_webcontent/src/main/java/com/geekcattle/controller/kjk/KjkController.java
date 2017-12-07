@@ -1,6 +1,5 @@
 package com.geekcattle.controller.kjk;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -30,10 +28,11 @@ import com.geekcattle.service.kjk.KjkPlayTypeService;
 import com.geekcattle.service.kjk.KjkService;
 import com.geekcattle.util.IpUtil;
 import com.geekcattle.util.ReturnUtil;
+import com.geekcattle.util.console.ExcelOperate;
 import com.geekcattle.vo.kjk.CoursewareVo;
 import com.github.pagehelper.PageInfo;
 
-import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.entity.vo.NormalExcelConstants;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 
@@ -75,15 +74,23 @@ public class KjkController {
 	}
 	@RequiresPermissions("courseware:download")
 	@RequestMapping("/courseware/download")
-	public void downloadfile(KjkCourseware kjkCourseware,HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.reset();
+	public void downloadfile(KjkCourseware kjkCourseware,ModelMap model,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		/*response.reset();
 		response.setContentType("appliction/octet-stream;charset=UTF-8");
 		response.setHeader("Content-Disposition", "attachment;filename=courseware.xls");
 		ExportParams params = new ExportParams("课件表", "课件表");
 		params.setColor(HSSFColor.PALE_BLUE.index);		
 		List<CoursewareVo> list = kjkService.getExcelList(kjkCourseware);		
 		Workbook  workbook = ExcelExportUtil.exportExcel(params, CoursewareVo.class, list);
-		workbook.write(response.getOutputStream());
+		workbook.write(response.getOutputStream());*/
+		List<CoursewareVo> list = kjkService.getExcelList(kjkCourseware);
+		ExportParams params = new ExportParams("课件表", "课件表", ExcelType.XSSF);
+        params.setHeaderColor(HSSFColor.SKY_BLUE.index);        
+        model.put(NormalExcelConstants.DATA_LIST, list); // 数据集合
+        model.put(NormalExcelConstants.CLASS, CoursewareVo.class);//导出实体
+        model.put(NormalExcelConstants.PARAMS, params);//参数
+        model.put(NormalExcelConstants.FILE_NAME, "课件表");//文件名称
+        ExcelOperate.renderMergedOutputModel(model, request, response);
 	}
 	
 	/*@RequiresPermissions("cms:business:scienceEducation:edit")

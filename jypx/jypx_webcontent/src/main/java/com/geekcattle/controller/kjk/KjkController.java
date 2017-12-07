@@ -6,8 +6,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +21,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.geekcattle.conf.KjkEnum;
+import com.geekcattle.model.console.Admin;
 import com.geekcattle.model.kjk.KjkCourseware;
+import com.geekcattle.model.kjk.KjkPlayType;
+import com.geekcattle.service.console.LogService;
+import com.geekcattle.service.kjk.KjkPlayTypeService;
 import com.geekcattle.service.kjk.KjkService;
+import com.geekcattle.util.IpUtil;
 import com.geekcattle.util.ReturnUtil;
+import com.geekcattle.util.console.ExcelOperate;
 import com.geekcattle.vo.kjk.CoursewareVo;
 import com.github.pagehelper.PageInfo;
 
+import cn.afterturn.easypoi.entity.vo.NormalExcelConstants;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
@@ -40,11 +50,18 @@ public class KjkController {
 	private final static Logger logger = LoggerFactory.getLogger(KjkController.class);	
 	@Autowired
 	private KjkService kjkService;
+	@Autowired
+	private KjkPlayTypeService kjkPlayTypeService; 
+	@Autowired
+    private LogService logService;
 	
 	/***kjk begin……***/
 	@RequiresPermissions("courseware:index")
 	@RequestMapping(value = "/courseware/index", method = { RequestMethod.GET })
-	public String indexCourseware(Model model,String moduleCode) {		
+	public String indexCourseware(Model model,String moduleCode) {
+		//课件库播放类型集合
+		List<KjkPlayType> list = kjkPlayTypeService.findAll();
+		model.addAttribute("kjkPlayTypeList", list);
 		return "console/kjk/indexCourseware";
 	}
 
@@ -60,15 +77,23 @@ public class KjkController {
 	}
 	@RequiresPermissions("courseware:download")
 	@RequestMapping("/courseware/download")
-	public void downloadfile(KjkCourseware kjkCourseware,HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.reset();
+	public void downloadfile(KjkCourseware kjkCourseware,ModelMap model,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		/*response.reset();
 		response.setContentType("appliction/octet-stream;charset=UTF-8");
 		response.setHeader("Content-Disposition", "attachment;filename=courseware.xls");
 		ExportParams params = new ExportParams("课件表", "课件表");
 		params.setColor(HSSFColor.PALE_BLUE.index);		
 		List<CoursewareVo> list = kjkService.getExcelList(kjkCourseware);		
 		Workbook  workbook = ExcelExportUtil.exportExcel(params, CoursewareVo.class, list);
-		workbook.write(response.getOutputStream());
+		workbook.write(response.getOutputStream());*/
+		List<CoursewareVo> list = kjkService.getExcelList(kjkCourseware);
+		ExportParams params = new ExportParams("课件表", "课件表", ExcelType.XSSF);
+        params.setHeaderColor(HSSFColor.SKY_BLUE.index);        
+        model.put(NormalExcelConstants.DATA_LIST, list); // 数据集合
+        model.put(NormalExcelConstants.CLASS, CoursewareVo.class);//导出实体
+        model.put(NormalExcelConstants.PARAMS, params);//参数
+        model.put(NormalExcelConstants.FILE_NAME, "课件表");//文件名称
+        ExcelOperate.renderMergedOutputModel(model, request, response);
 	}
 	
 	/*@RequiresPermissions("cms:business:scienceEducation:edit")
@@ -115,25 +140,36 @@ public class KjkController {
 			e.printStackTrace();			
 			return ReturnUtil.Error("操作失败", null, null);
 		}
-	}	
-	@RequiresPermissions("cms:business:scienceEducation:delete")
-    @RequestMapping(value = "/scienceEducation/delete", method = {RequestMethod.GET})
+	}*/	
+	
+    @RequestMapping(value = "/courseware/delete", method = {RequestMethod.POST})
     @ResponseBody
-    public ModelMap delete(String[] ids) {
+    public ModelMap delete(String cwareids,HttpServletRequest request) {
         try {
-            if ("null".equals(ids) || "".equals(ids)) {
+            if (StringUtils.isBlank(cwareids)) {
                 return ReturnUtil.Error("Error", null, null);
             } else {
+            	StringBuffer sbf = new StringBuffer();
+            	KjkCourseware kjkCourseware = new KjkCourseware();
+            	String[] ids = cwareids.split(",");
             	for (String id : ids) {
-            		scienceEducationService.deleteById(id);
-				}            	
-                return ReturnUtil.Success("操作成功", null, null);
+            		kjkCourseware.setId(Long.valueOf(id));
+            		kjkCourseware.setStatus(KjkEnum.KJK_COURSEWARE_STATUS_DISABLE.getValue().intValue());
+            		kjkService.updateCourseCware(kjkCourseware);
+            		sbf.append(id).append(",");
+				}
+            	//记录删除课件日志
+            	String ip = IpUtil.getIpAddr(request);
+                Admin admin = (Admin)SecurityUtils.getSubject().getPrincipal();
+                logService.insertLoginLog(admin.getUsername(), ip, "删除课件"+sbf.toString().substring(0, sbf.toString().length()-1));
+                return ReturnUtil.Success("1", null, null);
             }
+            
         } catch (Exception e) {
         	logger.error("======", e);
             e.printStackTrace();
-            return ReturnUtil.Error("操作失败", null, null);
+            return ReturnUtil.Error("0", null, null);
         }
-    }	*/
+    }	
 	/***kjk end***/		
 }

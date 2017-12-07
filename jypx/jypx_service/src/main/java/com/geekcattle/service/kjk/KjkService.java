@@ -45,7 +45,21 @@ public class KjkService {
 		return kjkCoursewareMapper.findCoursewareVo(kjkCourseware);
 	}
 	
+	/**
+	 * 根据属性修改课件库
+	 * @param kjkCourseware
+	 * @return
+	 */
 	public int updateCourseCware(KjkCourseware kjkCourseware){
 		return kjkCoursewareMapper.updateByPrimaryKeySelective(kjkCourseware);
+	}
+	
+	/**
+	 * 根据主键查询课件库对象
+	 * @param id
+	 * @return
+	 */
+	public KjkCourseware getById(Long id){
+		return kjkCoursewareMapper.selectByPrimaryKey(id);
 	}
 }

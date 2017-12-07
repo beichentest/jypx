@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+<style type="text/css">
+.c_i{width: 280px;}
+</style>	
+</head>
+<body>
+<section class="content">
+<div class="row">
+	<div class="col-md-12 col-md-offset-0">
+		<div class="box-body">
+			<form class="form-horizontal js-ajax-form" action="/console/business/courseCME/save" method="post" enctype="multipart/form-data">
+				 <div th:if="${not #strings.isEmpty(info.id)}">
+					<input type="hidden" name="infoId" th:value="${info.id}" />	
+				</div>							
+				<label style="width:70px;">课件名称：</label><input style="width:270px;" type="text" class="input" required="true" id="name" name="name" placeholder="请输入课件名称"/><br/>
+	       		<label style="width:70px;">项目名称：</label><input style="width:270px;" type="text" class="input" required="true" id="pname" name="pname" placeholder="请输入项目名称"/><br/>
+	       		<label style="width:70px;">课件编号：</label><input style="width:270px;" type="text" class="input" maxlength="32" id="code" name="code" placeholder="请输入课件编号"/><br/>
+	       		<label style="width:70px;">物理路径：</label><input style="width:270px;" type="text" class="input" id="path" name="path" placeholder="请输入物理路径"/><br/>
+	       		<label style="width:70px;">文件类型：</label><input style="width:170px;" type="text" class="input" id="fileType" name="fileType" placeholder="请输入文件类型"/><br/>
+	       		<label style="width:70px;">二级学科：</label>
+	       			<select id="subject2Name" class="bt-select" name="subject2Name" style="height: 26px;width: 167px;">
+	       				<option></option>
+	        	 		<option th:each="module:${subjectList}" th:value="${module.subject2Name}" th:selected="${#strings.equals(info.subject2, module.subject2Name)}" ><div th:text="${module.subject2Name}"/></option>
+	       			</select><br/>
+	       		<label style="width:70px;">三级学科：</label>	
+	       			<select id="subject" class="bt-select" name="subject" style="height: 26px;width: 167px;"></select><br/>
+	       		<label style="width:70px;">关键字：</label><input style="width:170px;" type="text" class="input" id="keyword" maxlength="10"  name="keyword" placeholder="请输入关键字"/><br/>	
+	       		<label style="width:70px;">介绍：</label><input style="width:270px;" type="text" class="input" id="introduce" name="introduce" placeholder="请输入介绍"/><br/>	
+	       		<label style="width:70px;">专家：</label><input style="width:270px;" type="text" class="input" id="expert" name="expert" placeholder="请输入专家"/><br/>	
+	       		<label style="width:70px;">专家单位：</label><input style="width:270px;" type="text" class="input" id="expertUnit" name="expertUnit" placeholder="请输入专家单位"/><br/>	
+	       		<label style="width:70px;">来源：</label>
+	       			<select id="source" class="bt-select" name="source" style="height: 26px;width: 167px;">
+	       				<option></option>
+	        	 		<option th:each="module:${subjectList}" th:value="${module.subject2Name}" th:selected="${#strings.equals(info.subject2, module.subject2Name)}" ><div th:text="${module.subject2Name}"/></option>
+	       			</select><br/>	
+	       		<label style="width:70px;">电脑版播放类型：</label>
+	       			<select id="source" class="bt-select" name="source" style="height: 26px;width: 167px;">
+	       				<option></option>
+	        	 		<option th:each="module:${subjectList}" th:value="${module.subject2Name}" th:selected="${#strings.equals(info.subject2, module.subject2Name)}" ><div th:text="${module.subject2Name}"/></option>
+	       			</select><br/>
+	       		<label style="width:70px;">手机版播放类型：</label>
+	       			<select id="mobileType" class="bt-select" name="mobileType" style="height: 26px;width: 167px;">
+	       				<option></option>
+	        	 		<option th:each="module:${subjectList}" th:value="${module.subject2Name}" th:selected="${#strings.equals(info.subject2, module.subject2Name)}" ><div th:text="${module.subject2Name}"/></option>
+	       			</select><br/>		
+				<br/><div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</section>
+<div th:include="console/footer"></div>
+   <script type="text/javascript" src="/static/assets/fileinput/fileinput.min.js"></script>
+<script type="text/javascript" src="/static/assets/fileinput/zh.js"></script>
+<script type="text/javascript" src="/static/assets/fileinput/theme.min.js"></script>
+<script th:inline="javascript">	
+$(function() {	
+	$('#subject2Name').change(function(){
+		var name=this.value;
+		if(name !=''){
+			$.ajax({  
+	            type: "get",  
+	            url: "/console/kjk/ajaxSubjectName",  
+	            data: {subjectName2:name},  
+	            dataType: "json",  
+	            success: function (data) {  
+	            	var itemHTML="";
+	            	$.each(data, function(index, element) {  
+	            		/*<![CDATA[*/
+	            		itemHTML += "<option value='"+element.subjectName+"'>"+element.subjectName+"</option>";
+	            		/*]]>*/
+	            	});
+                    $("#subject").append(itemHTML);  
+	            }  
+	        });
+		}
+    });  
+	
+});
+
+
+</script>		
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">      
 <head th:include="console/header">
-<style> html, body { margin: 0; padding: 0; font-size: 75%; } </style>
+<style> html, body { margin: 0; padding: 0; font-size: 75%; }</style>
 </head>
 <body>
 <section class="content-header">
@@ -12,13 +12,16 @@
 <section class="content table-content">
 	<div id="opt"> 
 	    <div id="query">
-	    <input type="button" class="btn btn-primary" id="add_btn" value="新 增" /> 
-	    <input type="button" class="btn btn-primary" id="del_btn" value="删 除" /> 
-	       <label>课件类型：</label><input type="text" class="input" id="paly_type" /> 
-	       <label>课件id：</label><input type="text" class="input" id="cw_id" /> 
-	       <label>关键字：</label><input type="text" class="input" id="keyword" />
-	       <input type="submit" class="btn btn-primary" id="find_btn" value="查 询" /> 
-	       <input type="button" class="btn btn-primary" id="download_btn" value="导出课件" />
+	    	<input type="button" class="btn btn-primary" id="add_btn" value="新 增" /> 
+	    	<input type="button" class="btn btn-primary" id="del_btn" value="删 除" /> 
+	      	<label>课件类型：</label>
+	      	<select id="play_type" class="bt-select" style="height: 26px;width: 115px;">
+	        	 <option th:each="module:${kjkPlayTypeList}" th:value="${module.playType}" ><div th:text="${module.playTypeName}"/></option>
+	       	</select> 
+	       	<label>课件id：</label><input type="text" class="input" id="cw_id" /> 
+	       	<label>关键字：</label><input type="text" class="input" id="keyword" />
+	       	<input type="submit" class="btn btn-primary" id="find_btn" value="查 询" /> 
+	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出课件" />
 	       <input type="button" class="btn btn-primary" id="del_btn" value="导入课件" />
 	    </div> 	     
  </div>
@@ -213,6 +216,7 @@ function openPop(id){
      });
 }
 $(function(){ 
+	//查询数据
     $("#find_btn").click(function(){ 
         var cwId = $("#cw_id").val(); 
         var keyword = $("#keyword").val();
@@ -223,6 +227,7 @@ $(function(){
             page:1 
         }).trigger("reloadGrid"); //重新载入 
     });     
+	//导出数据
     $("#download_btn").click(function(){ 
         var cwId = $("#cw_id").val(); 
         var keyword = $("#keyword").val();
@@ -230,7 +235,35 @@ $(function(){
         /*<![CDATA[*/
         window.location.href = "/console/kjk/courseware/download?id="+cwId+"&keyword="+keyword+"&playType="+playType;
         /*]]>*/
-    });     
+    });  
+	
+	//删除数据(假删除)
+	$("#del_btn").click(function(){
+		var selectedRowIds = $("#mygrid").jqGrid("getGridParam", "selarrrow");
+		//判断是否为空  
+        if(selectedRowIds==""){  
+			layer.msg("请选择要删除的行！");
+        }
+		
+        $.ajax({  
+            type: "post",  
+            url: "/console/kjk/courseware/delete",  
+            data: {cwareids:selectedRowIds.toString()},  
+            dataType: "json",  
+            success: function (data) {  
+                //判断后台是否删除成功  
+                //如果成功则调用jqGrid的reloadGrid方法重新加载表格  
+                if(data.msg==1){ 
+                	layer.msg("删除成功！");
+                    $("#mygrid").trigger("reloadGrid"); //重新载入 
+                }else{
+                	layer.msg("删除异常，请联系管理员");
+                }  
+            }  
+        });
+		
+	});
+	
 }); 
 </script>
 </body>

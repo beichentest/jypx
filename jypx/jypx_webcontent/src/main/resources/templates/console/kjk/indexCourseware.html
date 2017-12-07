@@ -264,6 +264,19 @@ $(function(){
 		
 	});
 	
+	//添加课件
+	$("#add_btn").click(function(){
+		layer.open({
+            type: 2,
+            title: '新增课件',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['500px', '600px'],
+            content: '/console/kjk/courseware/eidt'
+        });
+	 });
+	
 }); 
 </script>
 </body>

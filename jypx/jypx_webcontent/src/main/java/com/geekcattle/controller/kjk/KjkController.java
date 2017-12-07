@@ -1,6 +1,7 @@
 package com.geekcattle.controller.kjk;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,9 +24,11 @@ import com.geekcattle.conf.KjkEnum;
 import com.geekcattle.model.console.Admin;
 import com.geekcattle.model.kjk.KjkCourseware;
 import com.geekcattle.model.kjk.KjkPlayType;
+import com.geekcattle.model.kjk.NcmeSubject;
 import com.geekcattle.service.console.LogService;
 import com.geekcattle.service.kjk.KjkPlayTypeService;
 import com.geekcattle.service.kjk.KjkService;
+import com.geekcattle.service.kjk.NcmeSubjectService;
 import com.geekcattle.util.IpUtil;
 import com.geekcattle.util.ReturnUtil;
 import com.geekcattle.util.console.ExcelOperate;
@@ -51,6 +54,9 @@ public class KjkController {
 	private KjkPlayTypeService kjkPlayTypeService; 
 	@Autowired
     private LogService logService;
+	@Autowired
+	private NcmeSubjectService ncmeSubjectService;
+	
 	
 	/***kjk begin……***/
 	@RequiresPermissions("courseware:index")
@@ -93,19 +99,25 @@ public class KjkController {
         ExcelOperate.renderMergedOutputModel(model, request, response);
 	}
 	
-	/*@RequiresPermissions("cms:business:scienceEducation:edit")
-	@RequestMapping(value = "/scienceEducation/from", method = { RequestMethod.GET })
-	public String from(Info info, Model model,String moduleIdv,String moduleCode) {
-		if (!StringUtils.isEmpty(info.getInfoId())) {
-			info = scienceEducationService.getById(info.getInfoId());
+	/**
+	 * 编辑课件
+	 * @param kjkCourseware
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("courseware:edit")
+	@RequestMapping(value = "/courseware/eidt", method = { RequestMethod.GET })
+	public String from(KjkCourseware kjkCourseware, Model model) {
+		if (kjkCourseware.getId()!=null) {
+			kjkCourseware = kjkService.getById(kjkCourseware.getId());
 		}
-		model.addAttribute("info", info);
-		model.addAttribute("moduleId", moduleIdv);
-		model.addAttribute("moduleCode", moduleCode);
-		return "console/cms/fromScienceEducation";
+		
+		model.addAttribute("subjectList",ncmeSubjectService.getNcmeSubject2());
+		model.addAttribute("info", kjkCourseware);
+		return "console/kjk/fromCoursewareEdit";
 	}
 
-	@RequiresPermissions("cms:business:scienceEducation:edit")
+	/*@RequiresPermissions("cms:business:scienceEducation:edit")
 	@RequestMapping(value = "/scienceEducation/save", method = { RequestMethod.POST })
 	@ResponseBody
 	public ModelMap save(Info info, BindingResult result,String moduleCode) {
@@ -168,5 +180,13 @@ public class KjkController {
             return ReturnUtil.Error("0", null, null);
         }
     }	
+    
+    @ResponseBody  
+    @RequestMapping("/ajaxSubjectName")
+    public List<NcmeSubject> ajaxSubjectName(String subjectName2){
+    	List<NcmeSubject> list = ncmeSubjectService.getNcmeSubjectByName(subjectName2);
+        return list;
+    }
+    
 	/***kjk end***/		
 }

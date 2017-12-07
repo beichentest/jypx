@@ -23,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.geekcattle.conf.LoginEnum;
 import com.geekcattle.conf.shiro.CustomerAuthenticationToken;
 import com.geekcattle.model.valid.ValidAdmin;
-import com.geekcattle.mq.producer.LogSender;
 import com.geekcattle.service.console.LogService;
 import com.geekcattle.util.IpUtil;
 
@@ -34,8 +33,6 @@ public class PublicController {
     private static final Logger logger = LoggerFactory.getLogger(PublicController.class);
     @Autowired
     private LogService logService;
-    @Autowired    
-    private LogSender logSender;
 
     @RequestMapping(value="/login", method=RequestMethod.GET)
     public String loginForm(){

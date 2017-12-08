@@ -39,6 +39,9 @@
     <result column="SHOT_YEAR" jdbcType="VARCHAR" property="shotYear" />
    <result column="CLASS_TIME_STR" jdbcType="VARCHAR" property="classTimeStr" />
    <result column="LABEL" jdbcType="VARCHAR" property="label" />
+   <result column="PLY_FLAG" jdbcType="VARCHAR" property="playFlag" />
+   <result column="CREATER" jdbcType="VARCHAR" property="creater" />
+   <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <resultMap id="BaseResultExcelVo" type="com.geekcattle.vo.kjk.CoursewareVo">
     <!--
@@ -78,6 +81,9 @@
     <result column="SHOT_YEAR" jdbcType="VARCHAR" property="shotYear" />
    <result column="CLASS_TIME_STR" jdbcType="VARCHAR" property="classTimeStr" />
    <result column="LABEL" jdbcType="VARCHAR" property="label" />
+   <result column="PLY_FLAG" jdbcType="VARCHAR" property="playFlag" />
+   <result column="CREATER" jdbcType="VARCHAR" property="creater" />
+   <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
   </resultMap>  
   <sql id="Courseware_Where">
   	<where>

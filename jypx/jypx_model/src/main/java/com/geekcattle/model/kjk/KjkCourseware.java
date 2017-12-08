@@ -179,10 +179,25 @@ public class KjkCourseware extends BaseEntity implements Serializable{
     @Column(name = "CLASS_TIME_STR")
     private String classTimeStr;        
     /**
-     * 
+     *标签 
      */
     @Column(name = "LABEL")
     private String label;
+    /**
+     * 付费标志（0 未付费，1 付费）
+     */
+    @Column(name = "PLY_FLAG")
+    private String playFlag;
+    /**
+     * 课件创建人id
+     */
+    @Column(name = "CREATER")
+    private String creater;    
+    /**
+     * 课件最后修改人id
+     */
+    @Column(name = "MODIFIER")
+    private String modifier;
     @Transient
     @JsonIgnore
     private String sort = "";
@@ -668,5 +683,29 @@ public class KjkCourseware extends BaseEntity implements Serializable{
 
 	public void setOrder(String order) {
 		this.order = order;
-	}     
+	}
+
+	public String getPlayFlag() {
+		return playFlag;
+	}
+
+	public void setPlayFlag(String playFlag) {
+		this.playFlag = playFlag;
+	}
+
+	public String getCreater() {
+		return creater;
+	}
+
+	public void setCreater(String creater) {
+		this.creater = creater;
+	}
+
+	public String getModifier() {
+		return modifier;
+	}
+
+	public void setModifier(String modifier) {
+		this.modifier = modifier;
+	}    		
 }

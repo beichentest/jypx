@@ -101,7 +101,7 @@ public class CoursewareVo  implements Serializable{
     /**
      * 状态 0有效1删除
      */
-    @Excel(name="状态",replace= {"有效_0","删除_1"})
+    @Excel(name="状态",replace= {"有效_0","删除_1","下架_-1"})
     private Integer status;
     /**
      * 时长(秒)
@@ -181,6 +181,9 @@ public class CoursewareVo  implements Serializable{
     
     @Excel(name="标签")
     private String label;
+    
+    @Excel(name="付费标志",replace= {"未付费_0","已付费_1","_null"})
+    private String playFlag;
     /**
      * @return ID
      */
@@ -643,5 +646,13 @@ public class CoursewareVo  implements Serializable{
 
 	public void setLabel(String label) {
 		this.label = label;
-	}		
+	}
+
+	public String getPlayFlag() {
+		return playFlag;
+	}
+
+	public void setPlayFlag(String playFlag) {
+		this.playFlag = playFlag;
+	}			
 }

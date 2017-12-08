@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -104,13 +105,46 @@ public class KjkController {
 	public void downloadfile(KjkCourseware kjkCourseware, ModelMap model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		List<CoursewareVo> list = kjkService.getExcelList(kjkCourseware);
-		ExportParams params = new ExportParams("课件表", "课件表", ExcelType.XSSF);
-       /* params.setHeaderColor(HSSFColor.SKY_BLUE.index);        
-        model.put(NormalExcelConstants.DATA_LIST, list); // 数据集合
-        model.put(NormalExcelConstants.CLASS, CoursewareVo.class);//导出实体
-        model.put(NormalExcelConstants.PARAMS, params);//参数
-        model.put(NormalExcelConstants.FILE_NAME, "课件表");//文件名称
-        ExcelOperate.renderMergedOutputModel(model, request, response);*/
+		ExportParams params = new ExportParams(ConstantEnum.DOWNLOAD_COURSEWARE_TITLENAME.toString(),
+				ConstantEnum.DOWNLOAD_COURSEWARE_SHEETNAME.toString(), ExcelType.XSSF);
+		model.put(NormalExcelConstants.DATA_LIST, list); // 数据集合
+		model.put(NormalExcelConstants.CLASS, CoursewareVo.class);// 导出实体
+		model.put(NormalExcelConstants.PARAMS, params);// 参数
+		model.put(NormalExcelConstants.FILE_NAME, ConstantEnum.DOWNLOAD_COURSEWARE_FILENAME);// 文件名称
+		ExcelOperate.renderMergedOutputModel(model, request, response);
+	}
+
+	@RequiresPermissions("courseware:download")
+	@RequestMapping("/courseware/downloadTemplate")
+	public void downloadCoursewareTemplate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		System.out.println(System.getProperty("user.dir") );
+		File file = new File(request.getSession().getServletContext().getRealPath(coursewareTemplate));
+		response.setHeader("content-type", "application/octet-stream");
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
+		byte[] buff = new byte[1024];
+		BufferedInputStream bis = null;
+		OutputStream os = null;
+		try {
+			os = response.getOutputStream();
+			bis = new BufferedInputStream(new FileInputStream(file));
+			int i = bis.read(buff);
+			while (i != -1) {
+				os.write(buff, 0, buff.length);
+				os.flush();
+				i = bis.read(buff);
+			}
+		} catch (IOException e) {
+			logger.error("======下载课件导入模板异常", e);
+		} finally {
+			if (bis != null) {
+				try {
+					bis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	/**

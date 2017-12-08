@@ -86,20 +86,20 @@
    <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
   </resultMap>  
   <sql id="Courseware_Where">
-  	<where>
-  		<if test="status!=null">
-  			cw.status = #{status}
-  		</if>
-  		<if test="id!=null">
-  			and cw.id = #{id}
-  		</if>
-  		<if test="playType!=null and playType!=-1 and  playType!=''">
-  			and cw.play_type = #{playType}
-  		</if>
-  		<if test="keyword!=null and keyword!=''">
-  			and (cw.keyword like '%'||#{keyword}||'%' or cw.name like '%'||#{keyword}||'%' or cw.p_name like '%'||#{keyword}||'%')
-  		</if>
-  	</where>
+      <where>
+          <if test="status!=null">
+              cw.status = #{status}
+          </if>
+          <if test="id!=null">
+              and cw.id = #{id}
+          </if>
+          <if test="playType!=null and playType!=-1 and  playType!=''">
+              and (cw.play_type = #{playType} or cw.MOBILE_TYPE = #{playType} ) 
+          </if>
+          <if test="keyword!=null and keyword!=''">
+              and (cw.keyword like '%'||#{keyword}||'%' or cw.name like '%'||#{keyword}||'%' or cw.p_name like '%'||#{keyword}||'%')
+          </if>
+      </where>
   </sql>
   <select id="findCourseware"  resultMap="BaseResultMap">
         select * from KJK_COURSEWARE cw

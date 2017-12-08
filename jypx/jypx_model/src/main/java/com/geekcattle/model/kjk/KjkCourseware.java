@@ -1,20 +1,20 @@
 package com.geekcattle.model.kjk;
-
+ 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
-
+ 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.geekcattle.model.BaseEntity;
-
+ 
 @Table(name = "KJK_COURSEWARE")
 public class KjkCourseware extends BaseEntity implements Serializable{
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -5721815388624799496L;
-	@Id
+     * 
+     */
+    private static final long serialVersionUID = -5721815388624799496L;
+    @Id
     @Column(name = "ID")
     @SequenceGenerator(name="",sequenceName="select KJK_COURSEWARE_SEQ.nextval from dual")
     private Long id;
@@ -58,9 +58,9 @@ public class KjkCourseware extends BaseEntity implements Serializable{
      */
     @Column(name = "KEYWORD")
     private String keyword;
-	/**
-	 * 简介
-	 */
+    /**
+     * 简介
+     */
     @Column(name = "INTRODUCE")
     private String introduce;
     /**
@@ -179,14 +179,29 @@ public class KjkCourseware extends BaseEntity implements Serializable{
     @Column(name = "CLASS_TIME_STR")
     private String classTimeStr;        
     /**
-     * 
+     *标签 
      */
     @Column(name = "LABEL")
     private String label;
+    /**
+     * 付费标志（0 未付费，1 付费）
+     */
+    @Column(name = "PLY_FLAG")
+    private String playFlag;
+    /**
+     * 课件创建人id
+     */
+    @Column(name = "CREATER")
+    private String creater;    
+    /**
+     * 课件最后修改人id
+     */
+    @Column(name = "MODIFIER")
+    private String modifier;
     @Transient
     @JsonIgnore
     private String sort = "";
-
+ 
     @Transient
     @JsonIgnore
     private String order = "";
@@ -196,477 +211,501 @@ public class KjkCourseware extends BaseEntity implements Serializable{
     public Long getId() {
         return id;
     }
-
+ 
     /**
      * @param id
      */
     public void setId(Long id) {
         this.id = id;
     }
-
+ 
     /**
      * @return NAME
      */
     public String getName() {
         return name;
     }
-
+ 
     /**
      * @param name
      */
     public void setName(String name) {
         this.name = name;
     }
-
+ 
     /**
      * @return P_NAME
      */
     public String getpName() {
         return pName;
     }
-
+ 
     /**
      * @param pName
      */
     public void setpName(String pName) {
         this.pName = pName;
     }
-
+ 
     /**
      * @return CODE
      */
     public String getCode() {
         return code;
     }
-
+ 
     /**
      * @param code
      */
     public void setCode(String code) {
         this.code = code;
     }
-
+ 
     /**
      * @return PATH
      */
     public String getPath() {
         return path;
     }
-
+ 
     /**
      * @param path
      */
     public void setPath(String path) {
         this.path = path;
     }
-
+ 
     /**
      * @return FILE_TYPE
      */
     public String getFileType() {
         return fileType;
     }
-
+ 
     /**
      * @param fileType
      */
     public void setFileType(String fileType) {
         this.fileType = fileType;
     }
-
+ 
     /**
      * @return PLAY_TYPE
      */
     public String getPlayType() {
         return playType;
     }
-
+ 
     /**
      * @param playType
      */
     public void setPlayType(String playType) {
         this.playType = playType;
     }
-
+ 
     /**
      * @return SUBJECT
      */
     public String getSubject() {
         return subject;
     }
-
+ 
     /**
      * @param subject
      */
     public void setSubject(String subject) {
         this.subject = subject;
     }
-
+ 
     /**
      * @return KEYWORD
      */
     public String getKeyword() {
         return keyword;
     }
-
+ 
     /**
      * @param keyword
      */
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
-
+ 
     /**
      * @return INTRODUCE
      */
     public String getIntroduce() {
         return introduce;
     }
-
+ 
     /**
      * @param introduce
      */
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
     }
-
+ 
     /**
      * @return EXPERT
      */
     public String getExpert() {
         return expert;
     }
-
+ 
     /**
      * @param expert
      */
     public void setExpert(String expert) {
         this.expert = expert;
     }
-
+ 
     /**
      * @return EXPERT_UNIT
      */
     public String getExpertUnit() {
         return expertUnit;
     }
-
+ 
     /**
      * @param expertUnit
      */
     public void setExpertUnit(String expertUnit) {
         this.expertUnit = expertUnit;
     }
-
+ 
     /**
      * @return SOURCE
      */
     public String getSource() {
         return source;
     }
-
+ 
     /**
      * @param source
      */
     public void setSource(String source) {
         this.source = source;
     }
-
+ 
     /**
      * @return CREATE_DATE
      */
     public Date getCreateDate() {
         return createDate;
     }
-
+ 
     /**
      * @param createDate
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-
+ 
     /**
      * @return ADD_DATE
      */
     public Date getAddDate() {
         return addDate;
     }
-
+ 
     /**
      * @param addDate
      */
     public void setAddDate(Date addDate) {
         this.addDate = addDate;
     }
-
+ 
     /**
      * @return UPDATE_DATE
      */
     public Date getUpdateDate() {
         return updateDate;
     }
-
+ 
     /**
      * @param updateDate
      */
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
-
+ 
     /**
      * @return CLICK_COUNT
      */
     public Integer getClickCount() {
         return clickCount;
     }
-
+ 
     /**
      * @param clickCount
      */
     public void setClickCount(Integer clickCount) {
         this.clickCount = clickCount;
     }
-
+ 
     /**
      * @return STATUS
      */
     public Integer getStatus() {
         return status;
     }
-
+ 
     /**
      * @param status
      */
     public void setStatus(Integer status) {
         this.status = status;
     }
-
+ 
     /**
      * @return CLASS_TIME
      */
     public BigDecimal getClassTime() {
         return classTime;
     }
-
+ 
     /**
      * @param classTime
      */
     public void setClassTime(BigDecimal classTime) {
         this.classTime = classTime;
     }
-
+ 
     /**
      * @return CLASS_HOUR
      */
     public BigDecimal getClassHour() {
         return classHour;
     }
-
+ 
     /**
      * @param classHour
      */
     public void setClassHour(BigDecimal classHour) {
         this.classHour = classHour;
     }
-
+ 
     /**
      * @return REMARK
      */
     public String getRemark() {
         return remark;
     }
-
+ 
     /**
      * @param remark
      */
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
+ 
     /**
      * @return PAR1
      */
     public String getPar1() {
         return par1;
     }
-
+ 
     /**
      * @param par1
      */
     public void setPar1(String par1) {
         this.par1 = par1;
     }
-
+ 
     /**
      * @return PAR2
      */
     public String getPar2() {
         return par2;
     }
-
+ 
     /**
      * @param par2
      */
     public void setPar2(String par2) {
         this.par2 = par2;
     }
-
+ 
     /**
      * @return PAR3
      */
     public String getPar3() {
         return par3;
     }
-
+ 
     /**
      * @param par3
      */
     public void setPar3(String par3) {
         this.par3 = par3;
     }
-
+ 
     /**
      * @return PAR4
      */
     public String getPar4() {
         return par4;
     }
-
+ 
     /**
      * @param par4
      */
     public void setPar4(String par4) {
         this.par4 = par4;
     }
-
+ 
     /**
      * @return MOBILE_TYPE
      */
     public String getMobileType() {
         return mobileType;
     }
-
+ 
     /**
      * @param mobileType
      */
     public void setMobileType(String mobileType) {
         this.mobileType = mobileType;
     }
-
+ 
     /**
      * @return SUBJECT2
      */
     public String getSubject2() {
         return subject2;
     }
-
+ 
     /**
      * @param subject2
      */
     public void setSubject2(String subject2) {
         this.subject2 = subject2;
     }
-
+ 
     /**
      * @return SL_IMG
      */
     public String getSlImg() {
         return slImg;
     }
-
+ 
     /**
      * @param slImg
      */
     public void setSlImg(String slImg) {
         this.slImg = slImg;
     }
-
+ 
     /**
      * @return LOGO
      */
     public String getLogo() {
         return logo;
     }
-
+ 
     /**
      * @param logo
      */
     public void setLogo(String logo) {
         this.logo = logo;
     }
-
+ 
     /**
      * @return PIANTOU
      */
     public String getPiantou() {
         return piantou;
     }
-
+ 
     /**
      * @param piantou
      */
     public void setPiantou(String piantou) {
         this.piantou = piantou;
     }
-
+ 
     /**
      * @return PIANWEI
      */
     public String getPianwei() {
         return pianwei;
     }
-
+ 
     /**
      * @param pianwei
      */
     public void setPianwei(String pianwei) {
         this.pianwei = pianwei;
     }
-
+ 
     /**
      * @return SHOT_YEAR
      */
     public String getShotYear() {
         return shotYear;
     }
-
+ 
     /**
      * @param shotYear
      */
     public void setShotYear(String shotYear) {
         this.shotYear = shotYear;
     }
-
-	public String getClassTimeStr() {
-		return classTimeStr;
-	}
-
-	public void setClassTimeStr(String classTimeStr) {
-		this.classTimeStr = classTimeStr;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public String getSort() {
-		return sort;
-	}
-
-	public void setSort(String sort) {
-		this.sort = sort;
-	}
-
-	public String getOrder() {
-		return order;
-	}
-
-	public void setOrder(String order) {
-		this.order = order;
-	}     
+ 
+    public String getClassTimeStr() {
+        return classTimeStr;
+    }
+ 
+    public void setClassTimeStr(String classTimeStr) {
+        this.classTimeStr = classTimeStr;
+    }
+ 
+    public String getLabel() {
+        return label;
+    }
+ 
+    public void setLabel(String label) {
+        this.label = label;
+    }
+ 
+    public String getSort() {
+        return sort;
+    }
+ 
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+ 
+    public String getOrder() {
+        return order;
+    }
+ 
+    public void setOrder(String order) {
+        this.order = order;
+    }
+ 
+    public String getPlayFlag() {
+        return playFlag;
+    }
+ 
+    public void setPlayFlag(String playFlag) {
+        this.playFlag = playFlag;
+    }
+ 
+    public String getCreater() {
+        return creater;
+    }
+ 
+    public void setCreater(String creater) {
+        this.creater = creater;
+    }
+ 
+    public String getModifier() {
+        return modifier;
+    }
+ 
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
+    }            
 }

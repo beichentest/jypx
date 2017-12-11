@@ -184,6 +184,9 @@ public class CoursewareVo  implements Serializable{
     
     @Excel(name="付费标志",replace= {"未付费_0","已付费_1","_null"})
     private String playFlag;
+    
+    @Excel(name="项目级别",replace= {"普通_0","国家级_1","_null"})
+    private String projectLevel;
     /**
      * @return ID
      */
@@ -654,5 +657,13 @@ public class CoursewareVo  implements Serializable{
  
     public void setPlayFlag(String playFlag) {
         this.playFlag = playFlag;
-    }            
+    }
+
+	public String getProjectLevel() {
+		return projectLevel;
+	}
+
+	public void setProjectLevel(String projectLevel) {
+		this.projectLevel = projectLevel;
+	}       
 }

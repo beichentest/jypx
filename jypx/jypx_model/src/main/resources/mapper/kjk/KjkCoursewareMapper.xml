@@ -42,6 +42,7 @@
    <result column="PLY_FLAG" jdbcType="VARCHAR" property="playFlag" />
    <result column="CREATER" jdbcType="VARCHAR" property="creater" />
    <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
+   <result column="PROJECT_LEVEL" jdbcType="VARCHAR" property="projectLevel" />
   </resultMap>
   <resultMap id="BaseResultExcelVo" type="com.geekcattle.vo.kjk.CoursewareVo">
     <!--
@@ -84,6 +85,7 @@
    <result column="PLY_FLAG" jdbcType="VARCHAR" property="playFlag" />
    <result column="CREATER" jdbcType="VARCHAR" property="creater" />
    <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
+   <result column="PROJECT_LEVEL" jdbcType="VARCHAR" property="projectLevel" />
   </resultMap>  
   <sql id="Courseware_Where">
       <where>

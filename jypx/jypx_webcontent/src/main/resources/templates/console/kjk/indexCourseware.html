@@ -74,21 +74,23 @@ $('#mygrid').jqGrid({
     },
     {
         label : '电脑版播放类型',  
-        name : 'playType'
+        name : 'playType' ,
+        formatter : playType
     },
     {  
         label : '预览',  
-        name : 'code',
-        formatter : previewDateFormat
+        name : 'playType',
+        formatter : previewForPc
     },
     {  
         label : '手机版播放类型',  
-        name : 'mobileType'
+        name : 'mobileType',
+        formatter :playType
     },
     {  
         label : '预览',  
-        name : 'code',
-        formatter : previewDateFormat        
+        name : 'mobileType',
+        formatter : previewForPc       
     },
     {  
         label : '最后修改时间',  
@@ -188,8 +190,15 @@ function changeDateFormat(value) {
     	return getSmpFormatDateByLong(value,true);        	
     } 
 } 
-function previewDateFormat(value){
-	return "预览";
+function previewForPc(value, row, index){
+	if(index.playType=='13'||index.playType=='1'){
+		return '<a href="/console/kjk/courseware/view?id='+index.id+'" target="_blank">预览</a>';
+	}else{
+		return '预览';
+	}
+}
+function previewForPhone(value, row, index){
+	return '<a href="javascript:void(0)" onclick="preview()">预览</a>';
 }
 function nullDateFormat(value){
 	return "未知列";
@@ -261,10 +270,43 @@ $(function(){
                 }  
             }  
         });
-		
+		 
 	});
 	
 }); 
+
+	function playType(value){
+	var str='';
+	/*<![CDATA[*/
+	var  list = [[${kjkPlayTypeList}]];
+	for(var i=0;i<list.length;i++){
+		if(list[i].playType==value){
+			str=list[i].playTypeName;
+			break;
+		}
+	}
+	/*]]>*/
+	return str;
+	}
+	//课件预览
+	function preview(id,name){
+		 $.ajax({  
+	            type: "get",  
+	            url: "/console/kjk/courseware/view?id="+id,  
+	            data: {id:id},  
+	            dataType: "json",  
+	            success: function (data) {  
+	                //判断后台是否删除成功  
+	                //如果成功则调用jqGrid的reloadGrid方法重新加载表格  
+	                alert(data.result);
+                	window.open(data.result,"_blank");
+	                if(data.msg==1){ 
+	                	window.open(data.result,"_blank");
+	                }  
+	            }  
+	        });
+
+	}
 </script>
 </body>
 </html>

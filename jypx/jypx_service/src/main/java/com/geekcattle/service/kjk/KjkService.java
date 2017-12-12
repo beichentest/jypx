@@ -43,9 +43,13 @@ public class KjkService {
 	
 	public List<CoursewareVo> getExcelList(KjkCourseware kjkCourseware){
 		return kjkCoursewareMapper.findCoursewareVo(kjkCourseware);
-	}
+	} 
 	
 	public int updateCourseCware(KjkCourseware kjkCourseware){
 		return kjkCoursewareMapper.updateByPrimaryKeySelective(kjkCourseware);
+	}
+
+	public KjkCourseware findKjkCoursewareById(Long id) {
+		return kjkCoursewareMapper.selectByPrimaryKey(id);
 	}
 }

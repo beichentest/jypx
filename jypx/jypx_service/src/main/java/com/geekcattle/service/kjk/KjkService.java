@@ -49,7 +49,4 @@ public class KjkService {
 		return kjkCoursewareMapper.updateByPrimaryKeySelective(kjkCourseware);
 	}
 
-	public KjkCourseware findKjkCoursewareById(Long id) {
-		return kjkCoursewareMapper.selectByPrimaryKey(id);
-	}
 }

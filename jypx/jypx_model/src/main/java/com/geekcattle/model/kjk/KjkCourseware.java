@@ -16,7 +16,7 @@ public class KjkCourseware extends BaseEntity implements Serializable{
 	private static final long serialVersionUID = -5721815388624799496L;
 	@Id
     @Column(name = "ID")
-    @SequenceGenerator(name="",sequenceName="select KJK_COURSEWARE_SEQ.nextval from dual")
+    @SequenceGenerator(name="",sequenceName="KJK_COURSEWARE_SEQ")
     private Long id;
     /**
      * 课件名称
@@ -179,10 +179,30 @@ public class KjkCourseware extends BaseEntity implements Serializable{
     @Column(name = "CLASS_TIME_STR")
     private String classTimeStr;        
     /**
-     * 
+     *标签 
      */
     @Column(name = "LABEL")
     private String label;
+    /**
+     * 付费标志（0 未付费，1 付费）
+     */
+    @Column(name = "PLAY_FLAG")
+    private String playFlag;
+    /**
+     * 课件创建人id
+     */
+    @Column(name = "CREATER")
+    private String creater;    
+    /**
+     * 课件最后修改人id
+     */
+    @Column(name = "MODIFIER")
+    private String modifier;
+    /**
+     * 项目级别（0 普通项目，1 国家级项目）
+     */
+    @Column(name = "PROJECT_LEVEL")
+    private String projectLevel;
     @Transient
     @JsonIgnore
     private String sort = "";
@@ -668,5 +688,37 @@ public class KjkCourseware extends BaseEntity implements Serializable{
 
 	public void setOrder(String order) {
 		this.order = order;
-	}     
+	}
+
+	public String getPlayFlag() {
+		return playFlag;
+	}
+
+	public void setPlayFlag(String playFlag) {
+		this.playFlag = playFlag;
+	}
+
+	public String getCreater() {
+		return creater;
+	}
+
+	public void setCreater(String creater) {
+		this.creater = creater;
+	}
+
+	public String getModifier() {
+		return modifier;
+	}
+
+	public void setModifier(String modifier) {
+		this.modifier = modifier;
+	}
+
+	public String getProjectLevel() {
+		return projectLevel;
+	}
+
+	public void setProjectLevel(String projectLevel) {
+		this.projectLevel = projectLevel;
+	}    		
 }

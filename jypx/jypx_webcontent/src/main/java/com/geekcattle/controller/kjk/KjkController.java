@@ -207,7 +207,35 @@ public class KjkController {
  
     }
     /***kjk-view-end***/	
-
+    /**
+     * yuguoliang 课件预览
+     * @param model
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/courseware/view", method = {RequestMethod.GET})
+    public String view(ModelMap model, Long id,HttpServletRequest request){
+        Admin admin = (Admin)SecurityUtils.getSubject().getPrincipal();
+		if(admin==null){
+			return "redirect:/console/login";
+		}
+    	KjkCourseware kjkCourseware =kjkService.findKjkCoursewareById(id);
+    	String url="";
+    	if(kjkCourseware!=null){
+    		if(kjkCourseware.getPlayType().equals("13")){//cc视频
+            	url="https://p.bokecc.com/player?vid="+kjkCourseware.getCode()+"&siteid=4066F9F39D08AB88&autoStart=false&width=600px&height=490px&playerid=5B8B3C4F1E5EBECF&playertype=1";
+            	model.addAttribute("url", url);
+            	return "console/kjk/ccView";
+    		}else if(kjkCourseware.getPlayType().equals("1")){//cme视频
+            	url="http://media.cmechina.net/cme_main.html?courseid="+kjkCourseware.getPar1()+"&coursewareNo="+kjkCourseware.getPar2()+"&userid=null&examurl=http://www.cmechina.net/study/course_quiz.jsp&examicon=null";
+            	model.addAttribute("url", url);
+        		return "console/kjk/cmeView";
+    		}
+    	}
+    	return null;
+ 
+    }
     
     
 }

@@ -1,5 +1,9 @@
 package com.geekcattle.conf;
-
+/**
+ * 课件库Long类型常量
+ * @author Administrator
+ *
+ */
 public enum KjkEnum {
 	/**
 	 * 课件表状态（有效）

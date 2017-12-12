@@ -39,6 +39,10 @@
     <result column="SHOT_YEAR" jdbcType="VARCHAR" property="shotYear" />
    <result column="CLASS_TIME_STR" jdbcType="VARCHAR" property="classTimeStr" />
    <result column="LABEL" jdbcType="VARCHAR" property="label" />
+   <result column="PLAY_FLAG" jdbcType="VARCHAR" property="playFlag" />
+   <result column="CREATER" jdbcType="VARCHAR" property="creater" />
+   <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
+   <result column="PROJECT_LEVEL" jdbcType="VARCHAR" property="projectLevel" />
   </resultMap>
   <resultMap id="BaseResultExcelVo" type="com.geekcattle.vo.kjk.CoursewareVo">
     <!--
@@ -78,22 +82,26 @@
     <result column="SHOT_YEAR" jdbcType="VARCHAR" property="shotYear" />
    <result column="CLASS_TIME_STR" jdbcType="VARCHAR" property="classTimeStr" />
    <result column="LABEL" jdbcType="VARCHAR" property="label" />
+   <result column="CREATER" jdbcType="VARCHAR" property="creater" />
+   <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
+   <result column="PROJECT_LEVEL" jdbcType="VARCHAR" property="projectLevel" />
+   <result column="PLAY_FLAG" jdbcType="VARCHAR" property="playFlag" />
   </resultMap>  
   <sql id="Courseware_Where">
-  	<where>
-  		<if test="status!=null">
-  			cw.status = #{status}
-  		</if>
-  		<if test="id!=null">
-  			and cw.id = #{id}
-  		</if>
-  		<if test="playType!=null and playType!=-1">
-  			and cw.play_type = #{playType}
-  		</if>
-  		<if test="keyword!=null and keyword!=''">
-  			and (cw.keyword like '%'||#{keyword}||'%' or cw.name like '%'||#{keyword}||'%' or cw.p_name like '%'||#{keyword}||'%')
-  		</if>
-  	</where>
+      <where>
+          <if test="status!=null">
+              cw.status = #{status}
+          </if>
+          <if test="id!=null">
+              and cw.id = #{id}
+          </if>
+          <if test="playType!=null and playType!=-1 and  playType!=''">
+              and (cw.play_type = #{playType} or cw.MOBILE_TYPE = #{playType} ) 
+          </if>
+          <if test="keyword!=null and keyword!=''">
+              and (cw.keyword like '%'||#{keyword}||'%' or cw.name like '%'||#{keyword}||'%' or cw.p_name like '%'||#{keyword}||'%')
+          </if>
+      </where>
   </sql>
   <select id="findCourseware"  resultMap="BaseResultMap">
         select * from KJK_COURSEWARE cw
@@ -103,4 +111,72 @@
         select * from KJK_COURSEWARE cw
         <include refid="Courseware_Where" />
     </select>
+    
+    <insert id="insertCourseware" parameterType="com.geekcattle.model.kjk.KjkCourseware">
+    insert into KJK_COURSEWARE (ID, NAME, P_NAME, 
+      CODE, PATH, FILE_TYPE, 
+      PLAY_TYPE, SUBJECT, KEYWORD, 
+      INTRODUCE, EXPERT, EXPERT_UNIT, 
+      SOURCE, CREATE_DATE, ADD_DATE, 
+      UPDATE_DATE, CLICK_COUNT, STATUS, 
+      CLASS_TIME, CLASS_HOUR, REMARK, 
+      PAR1, PAR2, PAR3, PAR4, 
+      MOBILE_TYPE, SUBJECT2, SL_IMG, 
+      LOGO, PIANTOU, PIANWEI, 
+      SHOT_YEAR,CLASS_TIME_STR,LABEL,
+      CREATER,PLAY_FLAG,PROJECT_LEVEL)
+    values (KJK_COURSEWARE_SEQ.nextval, #{name,jdbcType=VARCHAR}, #{pName,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{fileType,jdbcType=VARCHAR}, 
+      #{playType,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, #{keyword,jdbcType=VARCHAR}, 
+      #{introduce,jdbcType=VARCHAR}, #{expert,jdbcType=VARCHAR}, #{expertUnit,jdbcType=VARCHAR}, 
+      #{source,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{addDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{clickCount,jdbcType=DECIMAL}, #{status,jdbcType=DECIMAL}, 
+      #{classTime,jdbcType=DECIMAL}, #{classHour,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{par1,jdbcType=VARCHAR}, #{par2,jdbcType=VARCHAR}, #{par3,jdbcType=VARCHAR}, #{par4,jdbcType=VARCHAR}, 
+      #{mobileType,jdbcType=VARCHAR}, #{subject2,jdbcType=VARCHAR}, #{slImg,jdbcType=VARCHAR}, 
+      #{logo,jdbcType=VARCHAR}, #{piantou,jdbcType=VARCHAR}, #{pianwei,jdbcType=VARCHAR}, 
+      #{shotYear,jdbcType=VARCHAR},#{classTimeStr,jdbcType=VARCHAR},#{label,jdbcType=VARCHAR},
+      #{creater,jdbcType=VARCHAR},#{playFlag,jdbcType=VARCHAR},#{projectLevel,jdbcType=VARCHAR})
+    </insert>
+    
+     <update id="updateCourseware" parameterType="com.geekcattle.model.kjk.KjkCourseware">
+    update KJK_COURSEWARE
+    set NAME = #{name,jdbcType=VARCHAR},
+      P_NAME = #{pName,jdbcType=VARCHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      PATH = #{path,jdbcType=VARCHAR},
+      FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+      PLAY_TYPE = #{playType,jdbcType=VARCHAR},
+      SUBJECT = #{subject,jdbcType=VARCHAR},
+      KEYWORD = #{keyword,jdbcType=VARCHAR},
+      INTRODUCE = #{introduce,jdbcType=VARCHAR},
+      EXPERT = #{expert,jdbcType=VARCHAR},
+      EXPERT_UNIT = #{expertUnit,jdbcType=VARCHAR},
+      SOURCE = #{source,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=DATE},
+      ADD_DATE = #{addDate,jdbcType=DATE},
+      UPDATE_DATE = #{updateDate,jdbcType=DATE},
+      CLICK_COUNT = #{clickCount,jdbcType=DECIMAL},
+      STATUS = #{status,jdbcType=DECIMAL},
+      CLASS_TIME = #{classTime,jdbcType=DECIMAL},
+      CLASS_HOUR = #{classHour,jdbcType=DECIMAL},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      PAR1 = #{par1,jdbcType=VARCHAR},
+      PAR2 = #{par2,jdbcType=VARCHAR},
+      PAR3 = #{par3,jdbcType=VARCHAR},
+      PAR4 = #{par4,jdbcType=VARCHAR},
+      MOBILE_TYPE = #{mobileType,jdbcType=VARCHAR},
+      SUBJECT2 = #{subject2,jdbcType=VARCHAR},
+      SL_IMG = #{slImg,jdbcType=VARCHAR},
+      LOGO = #{logo,jdbcType=VARCHAR},
+      PIANTOU = #{piantou,jdbcType=VARCHAR},
+      PIANWEI = #{pianwei,jdbcType=VARCHAR},
+      SHOT_YEAR = #{shotYear,jdbcType=VARCHAR},
+      CLASS_TIME_STR = #{classTimeStr,jdbcType=VARCHAR},
+      LABEl=#{label,jdbcType=VARCHAR},
+      CREATER=#{creater,jdbcType=VARCHAR},
+      PLAY_FLAG=#{playFlag,jdbcType=VARCHAR},
+      PROJECT_LEVEL=#{projectLevel,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
 </mapper>

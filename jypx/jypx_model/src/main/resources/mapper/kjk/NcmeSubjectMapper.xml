@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geekcattle.mapper.kjk.NcmeSubjectMapper">
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.kjk.NcmeSubject">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="SUBJECT_ID" jdbcType="VARCHAR" property="subjectId" />
+    <result column="SUBJECT_NAME" jdbcType="VARCHAR" property="subjectName" />
+    <result column="WEIGHT" jdbcType="DECIMAL" property="weight" />
+    <result column="SUBJECT2_ID" jdbcType="VARCHAR" property="subject2Id" />
+    <result column="SUBJECT2_NAME" jdbcType="VARCHAR" property="subject2Name" />
+    <result column="GUIDE" jdbcType="VARCHAR" property="guide" />
+    <result column="EXP_ID" jdbcType="VARCHAR" property="expId" />
+    <result column="KEY_GUIDE" jdbcType="VARCHAR" property="keyGuide" />
+    <result column="PRAC_GUIDE" jdbcType="VARCHAR" property="pracGuide" />
+  </resultMap>
+  
+  <!--获取二级学科  -->
+  <select id="getNcmeSubject2" resultMap="BaseResultMap">
+  	select distinct subject2_name from  ncme_subject
+  </select>
+  
+  <!-- 根据二级学科获取三级学科 -->
+  <select id="getNcmeSubjectByName" resultMap="BaseResultMap">
+  	select SUBJECT_NAME from  ncme_subject where subject2_name=#{subjectName2}
+  </select>
+</mapper>

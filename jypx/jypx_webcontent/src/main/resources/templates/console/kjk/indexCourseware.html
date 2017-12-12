@@ -275,6 +275,17 @@ $(function(){
 	
 }); 
 
+
+//刷新当前表格type=1修改，2添加
+function reloadCurrentGrid(type){
+	debugger;
+	if(type==1){
+		 $("#mygrid").trigger("reloadGrid"); //重新载入 
+	}else{
+		 $("#mygrid").jqGrid('setGridParam',{page:1}).trigger("reloadGrid"); //重新载入 
+	}
+}
+
 	function playType(value){
 	var str='';
 	/*<![CDATA[*/

@@ -21,7 +21,7 @@ public class ReturnUtil {
         mp.put("state", "success");
         mp.put("msg", msg);
         mp.put("referer", referer);
-        mp.put("result", obj);
+        mp.put("result", obj);//obj=1修改 ,obj==2添加其他为空(为刷新注窗口用)
         return mp;
     }
 

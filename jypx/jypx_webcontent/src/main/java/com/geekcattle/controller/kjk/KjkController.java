@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,6 +40,7 @@ import com.geekcattle.service.console.LogService;
 import com.geekcattle.service.kjk.KjkPlayTypeService;
 import com.geekcattle.service.kjk.KjkService;
 import com.geekcattle.service.kjk.NcmeSubjectService;
+import com.geekcattle.util.DateUtil;
 import com.geekcattle.util.IpUtil;
 import com.geekcattle.util.ReturnUtil;
 import com.geekcattle.util.console.ExcelOperate;
@@ -68,7 +72,6 @@ public class KjkController {
 	private NcmeSubjectService ncmeSubjectService;
 	
 	
-	/***kjk begin……***/
 	private final static List<String> COURSEWARE_SOURCE = new ArrayList<String>() {
 		{
 			add(ConstantEnum.KJK_COURSEWARE_SOURCE_CME.toString());
@@ -78,6 +81,13 @@ public class KjkController {
 			add(ConstantEnum.KJK_COURSEWARE_SOURCE_COUNTRY_DOCTORS.toString());
 		}
 	};
+	private final static Map<String, Object> PROJECT_LEVEL = new HashMap<String, Object>() {
+		{
+			put(ConstantEnum.KJK_COURSEWARE_PROJECT_LEVEL_COMMON.toString(),"普通项目	");
+			put(ConstantEnum.KJK_COURSEWARE_PROJECT_LEVEL_NATION.toString(),"国家级项目");
+		}
+	};
+	
 
 	/*** kjk begin…… ***/
 	@RequiresPermissions("courseware:index")
@@ -159,12 +169,21 @@ public class KjkController {
 		if (kjkCourseware.getId()!=null) {
 			kjkCourseware = kjkService.getById(kjkCourseware.getId());
 		}
-		
+		//课件播放类型
+		List<KjkPlayType> list = kjkPlayTypeService.findAll();
+		model.addAttribute("kjkPlayTypeList", list);
+		model.addAttribute("courSourceList", COURSEWARE_SOURCE);
+		model.addAttribute("moduleMap", PROJECT_LEVEL);
 		model.addAttribute("subjectList",ncmeSubjectService.getNcmeSubject2());
 		model.addAttribute("info", kjkCourseware);
 		return "console/kjk/fromCoursewareEdit";
 	}
 
+	/**
+	 * 根据三级学科获取二级学科
+	 * @param subjectName2
+	 * @return
+	 */
     @ResponseBody  
     @RequestMapping("/ajaxSubjectName")
     public List<NcmeSubject> ajaxSubjectName(String subjectName2){
@@ -172,8 +191,96 @@ public class KjkController {
         return list;
     }
     
-	/***kjk end***/		
-
+    /**
+     * 添加或者修改
+     * @param kjkCourseware
+     * @param result
+     * @param request
+     * @return
+     */
+    @RequiresPermissions("courseware:edit")
+    @RequestMapping(value="/courseware/save",method={RequestMethod.POST})
+    @ResponseBody
+    public ModelMap save(KjkCourseware kjkCourseware,BindingResult result,HttpServletRequest request){
+		if (result.hasErrors()) {
+			for (ObjectError er : result.getAllErrors())
+				return ReturnUtil.Error(er.getDefaultMessage(), null, null);
+		}
+		try {
+			
+			Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
+			if (StringUtils.isEmpty(kjkCourseware.getName()))
+                 return ReturnUtil.Error("课程名称不能为空", null, null);
+			if (StringUtils.isEmpty(kjkCourseware.getpName()))
+				return ReturnUtil.Error("项目名称不能为空", null, null);
+			if(StringUtils.isEmpty(kjkCourseware.getExpert()))
+				return ReturnUtil.Error("专家不能为空", null, null);
+			if(StringUtils.isEmpty(kjkCourseware.getExpertUnit()))
+				return ReturnUtil.Error("专家单位不能为空", null, null);
+			if(StringUtils.isEmpty(kjkCourseware.getClassTimeStr()))
+				return ReturnUtil.Error("时长不能为空", null, null);
+			if(StringUtils.isEmpty(kjkCourseware.getSubject2()))
+				return ReturnUtil.Error("二级学科不能为空", null, null);
+			if(StringUtils.isEmpty(kjkCourseware.getSubject()))
+				return ReturnUtil.Error("三级学科不能为空", null, null);
+			if(StringUtils.isEmpty(kjkCourseware.getPar1()))
+				return ReturnUtil.Error("播放参数1不能为空", null, null);
+			if(StringUtils.isEmpty(kjkCourseware.getPar2()))
+				return ReturnUtil.Error("播放参数2不能为空", null, null);
+			
+			if(StringUtils.isEmpty(kjkCourseware.getPlayType()) && StringUtils.isEmpty(kjkCourseware.getMobileType())){
+				return ReturnUtil.Error("播放类型不能为空", null, null);
+			}else{
+				//手机播放类型或pc播放类型 为cc格式
+				if(kjkCourseware.getPlayType().equals(ConstantEnum.KJK_PLAY_TYPE_CC.toString())  || StringUtils.isEmpty(kjkCourseware.getMobileType()) && kjkCourseware.getMobileType().equals(ConstantEnum.KJK_PLAY_TYPE_CC.toString())){
+					if(StringUtils.isEmpty(kjkCourseware.getCode()))
+						return ReturnUtil.Error("课件编号不能为空", null, null);
+					if(kjkCourseware.getCode().trim().length()!=32)
+						return ReturnUtil.Error("课件编号长度必须为32位", null, null);
+					String par1=kjkCourseware.getPar1();
+					String par2=kjkCourseware.getPar2();
+					if(!par1.contains("vid=") || !par2.contains("vid="))
+						return ReturnUtil.Error("播放参数格式不对", null, null);
+					String str1=par1.substring(par1.indexOf("vid=")+4, par1.indexOf("&siteid"));
+					String str2=par2.substring(par2.indexOf("vid=")+4, par2.indexOf("&siteid"));
+					//课件类型是CC视频课件 播放参数1和播放参数2中vid必须相同
+					if(!str1.endsWith(str2))
+						return ReturnUtil.Error("播放参数1和播放参数2中vid必须相同", null, null);
+				}
+			}
+			kjkCourseware.setCreateDate(DateUtil.getSysTime());
+			kjkCourseware.setAddDate(DateUtil.getSysTime());
+			kjkCourseware.setStatus(KjkEnum.KJK_COURSEWARE_STATUS_ENABLE.getValue().intValue());
+			kjkCourseware.setPlayFlag(ConstantEnum.KJK_COURSEWARE_PLY_FLAG_NOT.toString());
+			kjkCourseware.setClickCount(0);	//点击量
+			kjkCourseware.setShotYear(DateUtil.getCurrentYear());//拍摄年份
+			kjkCourseware.setCreater(admin.getUid());
+			//kjkCourseware.setClassTime(new BigDecimal(DateUtil.dateToSS(kjkCourseware.getClassTimeStr())));
+			kjkCourseware.setClassHour(new BigDecimal(0));
+			kjkCourseware.setUpdateDate(DateUtil.getSysTime());
+			if(kjkCourseware.getId()!=null){
+				kjkCourseware.setModifier(admin.getUid());
+				kjkService.save(kjkCourseware);
+				return ReturnUtil.Success("操作成功", 1, null);
+			}else
+				kjkService.insert(kjkCourseware);
+			
+			return ReturnUtil.Success("操作成功", 2, null);
+		} catch (Exception e) {
+			logger.error("======",e);
+			e.printStackTrace();			
+			return ReturnUtil.Error("操作失败", null, null);
+		}
+	
+    } 
+    
+    /**
+     * 删除课件
+     * @param cwareids
+     * @param request
+     * @return
+     */
+    @RequiresPermissions("courseware:edit")
 	@RequestMapping(value = "/courseware/delete", method = { RequestMethod.POST })
 	@ResponseBody
 	public ModelMap delete(String cwareids, HttpServletRequest request) {
@@ -204,5 +311,8 @@ public class KjkController {
 			return ReturnUtil.Error("0", null, null);
 		}
 	}
+	
+	
+	
 	/*** kjk end ***/
 }

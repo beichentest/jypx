@@ -64,7 +64,17 @@ public enum ConstantEnum {
 	/**
 	 * 项目级别 国家级项目	
 	 */
-	KJK_COURSEWARE_PROJECT_LEVEL_NATION("1")
+	KJK_COURSEWARE_PROJECT_LEVEL_NATION("1"),
+	
+///////////////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * cc视频格式
+	 */
+	KJK_PLAY_TYPE_CC("13"),
+	/**
+	 * cme视频格式
+	 */
+	KJK_PLAY_TYPE_CME("1")
 	;
 	private String value;
 	private ConstantEnum(String value) {

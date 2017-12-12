@@ -439,4 +439,18 @@ public class DateUtil {
     public static String  dateToString(Date date,SimpleDateFormat dateFormat){    	
     	return dateFormat.format(date);
     }
+    
+    /**
+     * 分秒转换位秒
+     * @param dataTime
+     * @return
+     */
+    public static long dateToSS(String dataTime){
+    	long ss = 0;
+    	String[] time = dataTime.split(":")==null?dataTime.split("：")==null?null:dataTime.split("："):dataTime.split(":");
+    	if(time!=null){
+    		ss=Long.valueOf(time[0])*60+Long.valueOf(time[1]);
+    	}
+    	return ss;
+    }
 }

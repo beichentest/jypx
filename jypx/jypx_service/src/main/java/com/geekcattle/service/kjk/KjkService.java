@@ -62,4 +62,12 @@ public class KjkService {
 	public KjkCourseware getById(Long id){
 		return kjkCoursewareMapper.selectByPrimaryKey(id);
 	}
+	
+	public void insert(KjkCourseware kjkCourseware){
+		kjkCoursewareMapper.insertCourseware(kjkCourseware);
+	}
+	
+	public void save(KjkCourseware kjkCourseware){
+		kjkCoursewareMapper.updateCourseware(kjkCourseware);;
+	}
 }

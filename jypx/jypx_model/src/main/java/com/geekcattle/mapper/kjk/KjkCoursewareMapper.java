@@ -10,4 +10,8 @@ public interface KjkCoursewareMapper extends CustomerMapper<KjkCourseware> {
 	List<KjkCourseware> findCourseware(KjkCourseware courseware);
 	
 	List<CoursewareVo> findCoursewareVo(KjkCourseware courseware);
+	
+	void insertCourseware(KjkCourseware courseware);
+	
+	void updateCourseware(KjkCourseware courseware);
 }

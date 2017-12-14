@@ -16,7 +16,7 @@ public class KjkCourseware extends BaseEntity implements Serializable{
 	private static final long serialVersionUID = -5721815388624799496L;
 	@Id
     @Column(name = "ID")
-    @SequenceGenerator(name="",sequenceName="select KJK_COURSEWARE_SEQ.nextval from dual")
+    @SequenceGenerator(name="",sequenceName="KJK_COURSEWARE_SEQ")
     private Long id;
     /**
      * 课件名称
@@ -186,7 +186,7 @@ public class KjkCourseware extends BaseEntity implements Serializable{
     /**
      * 付费标志（0 未付费，1 付费）
      */
-    @Column(name = "PLY_FLAG")
+    @Column(name = "PLAY_FLAG")
     private String playFlag;
     /**
      * 课件创建人id

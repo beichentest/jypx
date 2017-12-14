@@ -33,4 +33,16 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <repositories>
+        <repository>
+            <id>releases</id>
+            <url>http://192.168.191.21:8081/nexus/content/repositories/releases</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+           <id>snapshots</id>
+            <url>http://192.168.191.21:8081/nexus/content/repositories/snapshots</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

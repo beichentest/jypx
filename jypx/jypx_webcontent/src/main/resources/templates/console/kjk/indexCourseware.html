@@ -155,13 +155,13 @@ $('#mygrid').jqGrid({
     {  
         label : '物理路径',  
         name : 'path'
-    }
-  /*   {  
+    },
+    {  
         label : '操作',  
-        name : 'infoId',  
+        name : 'id',  
         formatter : operateFormatter,
         align : 'center'
-    } */
+    }
     ],  
     height : '100%',  
     pager : '#jqgrid-pager',  
@@ -206,24 +206,21 @@ function nullDateFormat(value){
 }
 function operateFormatter(value, row, index) {
     return [           
-        '<a href="javascript:openPop(\''+value+'\');" >',    	 
+        '<a href="javascript:openPop(\''+value+'\');" >',         
         '<i class="glyphicon glyphicon-edit"></i>修改',
-        '</a>  ',
-        '<a class="remove" href="javascript:void(0);">',
-        '<i class="glyphicon glyphicon-remove"></i>删除',
         '</a>'
     ].join('');
 }
 function openPop(id){
-	 layer.open({
-         type: 2,
-         title: '修改',
-         shadeClose: true,
-         shade: false,
-         maxmin: true, //开启最大化最小化按钮
-         area: ['500px', '600px'],
-         content: '/console/business/educationPolicy/from?infoId=' +id
-     });
+    layer.open({
+        type: 2,
+        title: '修改',
+        shadeClose: true,
+        shade: false,
+        maxmin: true, //开启最大化最小化按钮
+        area: ['500px', '650px'],
+        content: '/console/kjk/courseware/eidt?id=' +id
+    });
 }
 $(function(){ 
 	//查询数据

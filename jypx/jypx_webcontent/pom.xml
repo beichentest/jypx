@@ -33,6 +33,11 @@
 			<artifactId>jypx_security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.hys.jypx</groupId>
+			<artifactId>jypx_mq</artifactId>
+			<version>${project.version}</version>
+		</dependency>		
 	</dependencies>
 	<build>
 		<finalName>jypx</finalName>

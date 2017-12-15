@@ -22,8 +22,8 @@
 	       	<label>关键字：</label><input type="text" class="input" id="keyword" />
 	       	<input type="submit" class="btn btn-primary" id="find_btn" value="查 询" /> 
 	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出课件" />
-	       	<input type="button" class="btn btn-primary" id="template_btn" value="下载模板" />
-	       <input type="button" class="btn btn-primary" id="upload_btn" value="导入课件" />
+	       <input type="button" class="btn btn-primary" id="template_btn" value="下载模板" />
+           <input type="button" class="btn btn-primary" id="upload_btn" value="导入课件" />
 	    </div> 	     
  </div>
     <table id="mygrid"></table>
@@ -75,21 +75,23 @@ $('#mygrid').jqGrid({
     },
     {
         label : '电脑版播放类型',  
-        name : 'playType'
+        name : 'playType' ,
+        formatter : playType
     },
     {  
         label : '预览',  
-        name : 'code',
-        formatter : previewDateFormat
+        name : 'playType',
+        formatter : previewForPc
     },
     {  
         label : '手机版播放类型',  
-        name : 'mobileType'
+        name : 'mobileType',
+        formatter :playType
     },
     {  
         label : '预览',  
-        name : 'code',
-        formatter : previewDateFormat        
+        name : 'mobileType',
+        formatter : previewForPc       
     },
     {  
         label : '最后修改时间',  
@@ -189,29 +191,36 @@ function changeDateFormat(value) {
     	return getSmpFormatDateByLong(value,true);        	
     } 
 } 
-function previewDateFormat(value){
-	return "预览";
+function previewForPc(value, row, index){
+	if(index.playType=='13'||index.playType=='1'){
+		return '<a href="/console/kjk/courseware/view?id='+index.id+'" target="_blank">预览</a>';
+	}else{
+		return '预览';
+	}
+}
+function previewForPhone(value, row, index){
+	return '<a href="javascript:void(0)" onclick="preview()">预览</a>';
 }
 function nullDateFormat(value){
 	return "未知列";
 }
 function operateFormatter(value, row, index) {
     return [           
-        '<a href="javascript:openPop(\''+value+'\');" >',    	 
+        '<a href="javascript:openPop(\''+value+'\');" >',         
         '<i class="glyphicon glyphicon-edit"></i>修改',
         '</a>'
     ].join('');
 }
 function openPop(id){
-	 layer.open({
-         type: 2,
-         title: '修改',
-         shadeClose: true,
-         shade: false,
-         maxmin: true, //开启最大化最小化按钮
-         area: ['500px', '650px'],
-         content: '/console/kjk/courseware/eidt?id=' +id
-     });
+    layer.open({
+        type: 2,
+        title: '修改',
+        shadeClose: true,
+        shade: false,
+        maxmin: true, //开启最大化最小化按钮
+        area: ['500px', '650px'],
+        content: '/console/kjk/courseware/eidt?id=' +id
+    });
 }
 $(function(){ 
 	//查询数据
@@ -234,18 +243,30 @@ $(function(){
         window.location.href = "/console/kjk/courseware/download?id="+cwId+"&keyword="+keyword+"&playType="+playType;
         /*]]>*/
     });  
-	//下载导入模板
+
+  //下载导入模板
     $("#template_btn").click(function(){                
         window.location.href = "/console/kjk/courseware/downloadTemplate";        
-    });  
-    
+    });      
+    //导入课件
+    $("#upload_btn").click(function(){                
+         layer.open({
+             type: 2,
+             title: '导入课件',
+             shadeClose: true,
+             shade: false,
+             maxmin: false, //开启最大化最小化按钮
+             area: ['500px', '300px'],
+             content: '/console/kjk/fromImport?type=courseware'
+         });       
+    }); 
+
 	//删除数据(假删除)
 	$("#del_btn").click(function(){
 		var selectedRowIds = $("#mygrid").jqGrid("getGridParam", "selarrrow");
 		//判断是否为空  
         if(selectedRowIds==""){  
 			layer.msg("请选择要删除的行！");
-			return;
         }
 		
         $.ajax({  
@@ -264,7 +285,7 @@ $(function(){
                 }  
             }  
         });
-		
+		 
 	});
 	
 	//添加课件
@@ -279,8 +300,8 @@ $(function(){
             content: '/console/kjk/courseware/eidt'
         });
 	 });
-	
 }); 
+
 
 //刷新当前表格type=1修改，2添加
 function reloadCurrentGrid(type){
@@ -291,7 +312,39 @@ function reloadCurrentGrid(type){
 		 $("#mygrid").jqGrid('setGridParam',{page:1}).trigger("reloadGrid"); //重新载入 
 	}
 }
+
+	function playType(value){
+	var str='';
+	/*<![CDATA[*/
+	var  list = [[${kjkPlayTypeList}]];
+	for(var i=0;i<list.length;i++){
+		if(list[i].playType==value){
+			str=list[i].playTypeName;
+			break;
+		}
+	}
+	/*]]>*/
+	return str;
+	}
+	//课件预览
+	function preview(id,name){
+		 $.ajax({  
+	            type: "get",  
+	            url: "/console/kjk/courseware/view?id="+id,  
+	            data: {id:id},  
+	            dataType: "json",  
+	            success: function (data) {  
+	                //判断后台是否删除成功  
+	                //如果成功则调用jqGrid的reloadGrid方法重新加载表格  
+	                alert(data.result);
+                	window.open(data.result,"_blank");
+	                if(data.msg==1){ 
+	                	window.open(data.result,"_blank");
+	                }  
+	            }  
+	        });
+
+	}
 </script>
 </body>
 </html>
-

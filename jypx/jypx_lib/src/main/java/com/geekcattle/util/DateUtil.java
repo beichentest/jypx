@@ -447,9 +447,13 @@ public class DateUtil {
      */
     public static long dateToSS(String dataTime){
     	long ss = 0;
-    	String[] time = dataTime.split(":")==null?dataTime.split("：")==null?null:dataTime.split("："):dataTime.split(":");
-    	if(time!=null){
+    	String[] time = dataTime.replace("：",":").split(":");
+    	if(time!=null && time.length==2){//分钟，秒
     		ss=Long.valueOf(time[0])*60+Long.valueOf(time[1]);
+    	}else if(time.length==3){//小时，分钟，秒
+    		ss=Long.valueOf(time[0])*3600+Long.valueOf(time[1])*60+Long.valueOf(time[2]);
+    	}else{
+    		ss=Long.valueOf(time[0]);
     	}
     	return ss;
     }

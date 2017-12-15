@@ -33,6 +33,11 @@
 			<artifactId>jypx_security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.hys.jypx</groupId>
+			<artifactId>jypx_mq</artifactId>
+			<version>${project.version}</version>
+		</dependency>		
 	</dependencies>
 	<build>
 		<finalName>jypx</finalName>
@@ -80,14 +85,6 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.4.3</version>
-				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>

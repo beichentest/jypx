@@ -211,6 +211,8 @@ public class KjkController {
 			Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
 			if (StringUtils.isEmpty(kjkCourseware.getName()))
                  return ReturnUtil.Error("课程名称不能为空", null, null);
+			if(kjkCourseware.getId()==null && kjkService.getListByName(kjkCourseware.getName()).size()>0)
+				return ReturnUtil.Error("课程名称已存在", null, null);
 			if (StringUtils.isEmpty(kjkCourseware.getpName()))
 				return ReturnUtil.Error("项目名称不能为空", null, null);
 			if(StringUtils.isEmpty(kjkCourseware.getExpert()))
@@ -248,22 +250,27 @@ public class KjkController {
 						return ReturnUtil.Error("播放参数1和播放参数2中vid必须相同", null, null);
 				}
 			}
-			kjkCourseware.setCreateDate(DateUtil.getSysTime());
-			kjkCourseware.setAddDate(DateUtil.getSysTime());
 			kjkCourseware.setStatus(KjkEnum.KJK_COURSEWARE_STATUS_ENABLE.getValue().intValue());
 			kjkCourseware.setPlayFlag(ConstantEnum.KJK_COURSEWARE_PLY_FLAG_NOT.toString());
 			kjkCourseware.setClickCount(0);	//点击量
 			kjkCourseware.setShotYear(DateUtil.getCurrentYear());//拍摄年份
-			kjkCourseware.setCreater(admin.getUid());
-			//kjkCourseware.setClassTime(new BigDecimal(DateUtil.dateToSS(kjkCourseware.getClassTimeStr())));
+			kjkCourseware.setClassTime(new BigDecimal(DateUtil.dateToSS(kjkCourseware.getClassTimeStr())));
 			kjkCourseware.setClassHour(new BigDecimal(0));
 			kjkCourseware.setUpdateDate(DateUtil.getSysTime());
 			if(kjkCourseware.getId()!=null){
+				KjkCourseware tempKjk = kjkService.getById(kjkCourseware.getId());
+				kjkCourseware.setCreateDate(tempKjk.getCreateDate());
+				kjkCourseware.setAddDate(tempKjk.getAddDate());
+				kjkCourseware.setCreater(tempKjk.getCreater());
 				kjkCourseware.setModifier(admin.getUid());
 				kjkService.save(kjkCourseware);
 				return ReturnUtil.Success("操作成功", 1, null);
-			}else
+			}else{
+				kjkCourseware.setCreater(admin.getUid());
+				kjkCourseware.setCreateDate(DateUtil.getSysTime());
+				kjkCourseware.setAddDate(DateUtil.getSysTime());
 				kjkService.insert(kjkCourseware);
+			}
 			
 			return ReturnUtil.Success("操作成功", 2, null);
 		} catch (Exception e) {

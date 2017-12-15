@@ -3,6 +3,7 @@ package com.geekcattle.controller.kjk;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -45,6 +47,8 @@ import com.geekcattle.service.kjk.KjkPlayTypeService;
 import com.geekcattle.service.kjk.KjkService;
 import com.geekcattle.service.kjk.NcmeSubjectService;
 import com.geekcattle.util.DateUtil;
+import com.geekcattle.util.FileUtil;
+import com.geekcattle.util.IdUtil;
 import com.geekcattle.util.IpUtil;
 import com.geekcattle.util.ReturnUtil;
 import com.geekcattle.util.console.ExcelOperate;
@@ -68,7 +72,11 @@ import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 public class KjkController {
 	private final static Logger logger = LoggerFactory.getLogger(KjkController.class);
 	@Value("${upload.courseware.template}")
-	private String coursewareTemplate;
+	private String coursewareTemplate;	
+	@Value("${upload.courseware.filepath}")
+	private String uploadCoursewarePath;
+	@Value("${upload.courseware.errfilepath}")
+	private String uploadCoursewareErrPath;
 	@Autowired
 	private KjkService kjkService;
 	@Autowired
@@ -158,23 +166,11 @@ public class KjkController {
 				}
 			}
 		}
-	}
-
-	@RequestMapping("/fromImport")
-	public String fromImport(Model model, String type) {
-		if("courseware".equals(type)) {
-			model.addAttribute("action", "/console/kjk/courseware/importCourseware");
-			model.addAttribute("name", "上传课件");
-			return "console/kjk/importData";
-		}	
-		return "";
-	}
+	}	
 	@RequiresPermissions("courseware:download")
 	@RequestMapping("/courseware/importCourseware")
 	@ResponseBody
 	public ModelMap fromImportCourseware(HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "imgFile", required = false) MultipartFile impFile) throws Exception {
-		String msg = "";
-		String flag = "0";
 		String filename = impFile.getOriginalFilename();
 		if (impFile == null || impFile.getSize() == 0 || filename == null) {
 			return ReturnUtil.Error("请先选择有内容的文件", null, null);
@@ -182,7 +178,6 @@ public class KjkController {
 		try{
 			//学科信息
 			List<NcmeSubject> subject2List = ncmeSubjectService.getNcmeSubject2();			
-
 			Map<String,List<NcmeSubject>> map = new HashMap<String,List<NcmeSubject>>();
 			for(NcmeSubject subject2 : subject2List) {
 				map.put(subject2.getSubject2Name(), ncmeSubjectService.getNcmeSubjectByName(subject2.getSubject2Name()));
@@ -192,17 +187,56 @@ public class KjkController {
 			ImportParams ip = new ImportParams();
 			ip.setNeedVerfiy(true);
 			ip.setVerifyHanlder(new CoursewareVerify(playTypeList,map));
-			long beginTime = System.currentTimeMillis();
+			long beginTime = System.currentTimeMillis();			
 			ExcelImportResult<CoursewareVo> eir = ExcelImportUtil.importExcelMore(impFile.getInputStream(), CoursewareVo.class, ip);
-			if (eir.isVerfiyFail()) { // 未通过验证
-				String path = request.getSession().getServletContext().getRealPath("upload");
-				System.out.println(path);				
-				return ReturnUtil.Success("导入失败，请下载文件查看", null, "courseware/index");				
-				/*OutputStream os = null;
-				flag = "-1";
+			//上传文件保存路径
+			String filePath = request.getSession().getServletContext().getRealPath(uploadCoursewarePath)+File.separator+IdUtil.timeId()+FileUtil.getExt(filename);			
+			File uploadServerFile = FileUtil.createAndWriteFile(filePath, impFile.getBytes());
+			File uploadServerErrFile = null;
+			//数据导入
+			List<CoursewareVo> list = eir.getList();
+			if(list!=null&&list.size()>0) {
+				
+			}
+			if(eir.isVerfiyFail()) { //有错误
+				OutputStream os = null;
+				String errFileName = "";
 				try {
-					os = new FileOutputStream(Photo.getAbsolutePath(ERR_FILE_NAME));
-					Workbook wb = eir.getWorkbook();
+					String errFolder = request.getSession().getServletContext().getRealPath(uploadCoursewareErrPath);
+					File tempFolder = new File(errFolder);	
+					if(!tempFolder.exists()){
+						tempFolder.mkdir();
+					}
+					errFileName = IdUtil.timeId()+FileUtil.getExt(filename);
+					os = new FileOutputStream(errFolder+File.separator+errFileName);
+					Workbook wb = eir.getFailWorkbook();
+					wb.write(os);					
+				} catch (Exception e) {
+					throw e;
+				} finally {
+					if (os != null) {
+						os.close();
+					}
+				}
+				return ReturnUtil.Success("导入文件有错误，错误数据请下载文件查看", null, "fromImport?type=err&errFile="+errFileName);
+			}
+				
+			
+			
+			/*if (eir.isVerfiyFail()) { // 未通过验证
+				System.out.println(FileUtil.getAbsolutePath(uploadCoursewarePath));
+				String path = request.getSession().getServletContext().getRealPath("upload");
+				System.out.println(path);
+				File file = new File(path);	
+				if(!file.exists()){
+					file.mkdir();
+				}											
+				OutputStream os = null;				
+				try {
+					List<CoursewareVo> list = eir.getList();					
+					String errFileName = IdUtil.timeId()+FileUtil.getExt(filename);
+					os = new FileOutputStream(path+File.separator+errFileName);
+					Workbook wb = eir.getFailWorkbook();
 					wb.write(os);
 				} catch (Exception e) {
 					throw e;
@@ -210,14 +244,15 @@ public class KjkController {
 					if (os != null) {
 						os.close();
 					}
-				}*/
+				}
+				return ReturnUtil.Success("导入失败，请下载文件查看", null, "courseware/index");	
 			} else { // 通过验证
 				List<CoursewareVo> list = eir.getList();				
-				/*importUserService.saveImpUser(list);
+				importUserService.saveImpUser(list);
 				CallResult callResult = importUserService.callImportUser(siteId, serviceId, mapId);
 				flag = "1";
-				redirect.addFlashAttribute("callResult", callResult);*/
-			}
+				redirect.addFlashAttribute("callResult", callResult);
+			}*/
 			long endTime = System.currentTimeMillis();
 			System.out.println(endTime - beginTime);
 			return ReturnUtil.Success("导入成功", null, "courseware/index");

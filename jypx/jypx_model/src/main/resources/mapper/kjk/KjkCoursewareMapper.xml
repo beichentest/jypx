@@ -124,7 +124,7 @@
       MOBILE_TYPE, SUBJECT2, SL_IMG, 
       LOGO, PIANTOU, PIANWEI, 
       SHOT_YEAR,CLASS_TIME_STR,LABEL,
-      CREATER,PLAY_FLAG,PROJECT_LEVEL)
+      CREATER,PLAY_FLAG,PROJECT_LEVEL,MODIFIER)
     values (KJK_COURSEWARE_SEQ.nextval, #{name,jdbcType=VARCHAR}, #{pName,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{fileType,jdbcType=VARCHAR}, 
       #{playType,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, #{keyword,jdbcType=VARCHAR}, 
@@ -136,7 +136,7 @@
       #{mobileType,jdbcType=VARCHAR}, #{subject2,jdbcType=VARCHAR}, #{slImg,jdbcType=VARCHAR}, 
       #{logo,jdbcType=VARCHAR}, #{piantou,jdbcType=VARCHAR}, #{pianwei,jdbcType=VARCHAR}, 
       #{shotYear,jdbcType=VARCHAR},#{classTimeStr,jdbcType=VARCHAR},#{label,jdbcType=VARCHAR},
-      #{creater,jdbcType=VARCHAR},#{playFlag,jdbcType=VARCHAR},#{projectLevel,jdbcType=VARCHAR})
+      #{creater,jdbcType=VARCHAR},#{playFlag,jdbcType=VARCHAR},#{projectLevel,jdbcType=VARCHAR},#{modifier,jdbcType=VARCHAR})
     </insert>
     
      <update id="updateCourseware" parameterType="com.geekcattle.model.kjk.KjkCourseware">
@@ -176,7 +176,8 @@
       LABEl=#{label,jdbcType=VARCHAR},
       CREATER=#{creater,jdbcType=VARCHAR},
       PLAY_FLAG=#{playFlag,jdbcType=VARCHAR},
-      PROJECT_LEVEL=#{projectLevel,jdbcType=VARCHAR}
+      PROJECT_LEVEL=#{projectLevel,jdbcType=VARCHAR},
+      MODIFIER=#{modifier,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 </mapper>

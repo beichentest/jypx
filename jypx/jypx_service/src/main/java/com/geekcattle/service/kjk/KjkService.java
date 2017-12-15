@@ -70,4 +70,15 @@ public class KjkService {
 	public void save(KjkCourseware kjkCourseware){
 		kjkCoursewareMapper.updateCourseware(kjkCourseware);;
 	}
+	
+	/**
+	 * 根据属性返回list对象
+	 * @param name
+	 * @return
+	 */
+	public List<KjkCourseware> getListByName(String name){
+		KjkCourseware kjkCourseware = new KjkCourseware();
+		kjkCourseware.setName(name);
+		return kjkCoursewareMapper.select(kjkCourseware);
+	}
 }

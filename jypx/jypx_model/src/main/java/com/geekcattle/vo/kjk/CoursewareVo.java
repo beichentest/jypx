@@ -665,5 +665,18 @@ public class CoursewareVo  implements Serializable{
 
 	public void setProjectLevel(String projectLevel) {
 		this.projectLevel = projectLevel;
-	}       
+	}  
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final CoursewareVo courseware = (CoursewareVo)obj;
+        if(this.getName()!=null&&this.getName().equals(courseware.getName())) {
+        	return true;
+        }
+		return super.equals(obj);
+	}
 }

@@ -21,11 +21,12 @@ import cn.afterturn.easypoi.handler.inter.IExcelVerifyHandler;
 public class CoursewareVerify implements IExcelVerifyHandler<CoursewareVo> {
 	private List<KjkPlayType> playTypeList;
 	private Map<String,List<NcmeSubject>> subjectMap;
+	private String userId;
 	@Override
 	public ExcelVerifyHanlderResult verifyHandler(CoursewareVo obj) {			
 		boolean result = true;
 		CoursewareFilterChain chain = new CoursewareFilterChain();
-		chain.addFilter(new CoursewareNotNullFilter())
+		chain.addFilter(new CoursewareNotNullFilter(userId))
 		        .addFilter(new CoursewareSourceFilter())
 		        .addFilter(new CoursewarePlayTypeFilter(playTypeList))
 		        .addFilter(new CoursewareSubjectFilter(subjectMap));
@@ -37,8 +38,9 @@ public class CoursewareVerify implements IExcelVerifyHandler<CoursewareVo> {
 		}
 		return new ExcelVerifyHanlderResult(result,errMsg);
 	}
-	public CoursewareVerify(List<KjkPlayType> list,Map<String,List<NcmeSubject>> map){
+	public CoursewareVerify(List<KjkPlayType> list,Map<String,List<NcmeSubject>> map,String userId){
 		this.playTypeList = list;
 		this.subjectMap = map;
+		this.userId = userId;
 	}
 }

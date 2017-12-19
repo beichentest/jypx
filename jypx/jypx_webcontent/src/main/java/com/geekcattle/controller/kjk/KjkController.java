@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -72,7 +73,7 @@ import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 public class KjkController {
 	private final static Logger logger = LoggerFactory.getLogger(KjkController.class);
 	@Value("${upload.courseware.template}")
-	private String coursewareTemplate;	
+	private String coursewareTemplate;
 	@Value("${upload.courseware.filepath}")
 	private String uploadCoursewarePath;
 	@Value("${upload.courseware.errfilepath}")
@@ -82,7 +83,7 @@ public class KjkController {
 	@Autowired
 	private KjkPlayTypeService kjkPlayTypeService;
 	@Autowired
-    private LogService logService;
+	private LogService logService;
 	@Autowired
 	private NcmeSubjectService ncmeSubjectService;
 	private final static List<String> COURSEWARE_SOURCE = new ArrayList<String>() {
@@ -95,31 +96,32 @@ public class KjkController {
 		}
 	};
 	private final static Map<String, Object> PROJECT_LEVEL = new HashMap<String, Object>() {
-        {
-            put(ConstantEnum.KJK_COURSEWARE_PROJECT_LEVEL_COMMON.toString(),"普通项目    ");
-            put(ConstantEnum.KJK_COURSEWARE_PROJECT_LEVEL_NATION.toString(),"国家级项目");
-        }
-    };
+		{
+			put(ConstantEnum.KJK_COURSEWARE_PROJECT_LEVEL_COMMON.toString(), "普通项目    ");
+			put(ConstantEnum.KJK_COURSEWARE_PROJECT_LEVEL_NATION.toString(), "国家级项目");
+		}
+	};
+
 	/*** kjk begin…… ***/
 	@RequiresPermissions("courseware:index")
-    @RequestMapping(value = "/courseware/index", method = { RequestMethod.GET })
-    public String indexCourseware(Model model, String moduleCode) {
-        // 课件库播放类型集合
-        List<KjkPlayType> list = kjkPlayTypeService.findAll();
-        model.addAttribute("kjkPlayTypeList", list);
-        return "console/kjk/indexCourseware";
-    }
- 
-    @RequiresPermissions("courseware:index")
-    @RequestMapping(value = "/courseware/list", method = { RequestMethod.GET })
-    @ResponseBody
-    public ModelMap listCourseware(KjkCourseware kjkCourseware) {
-        ModelMap map = new ModelMap();
-        List<KjkCourseware> lists = kjkService.getPageList(kjkCourseware);
-        map.put("pageInfo", new PageInfo<KjkCourseware>(lists));
-        map.put("queryParam", kjkCourseware);
-        return ReturnUtil.Success("加载成功", map, null);
-    }
+	@RequestMapping(value = "/courseware/index", method = { RequestMethod.GET })
+	public String indexCourseware(Model model, String moduleCode) {
+		// 课件库播放类型集合
+		List<KjkPlayType> list = kjkPlayTypeService.findAll();
+		model.addAttribute("kjkPlayTypeList", list);
+		return "console/kjk/indexCourseware";
+	}
+
+	@RequiresPermissions("courseware:index")
+	@RequestMapping(value = "/courseware/list", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelMap listCourseware(KjkCourseware kjkCourseware) {
+		ModelMap map = new ModelMap();
+		List<KjkCourseware> lists = kjkService.getPageList(kjkCourseware);
+		map.put("pageInfo", new PageInfo<KjkCourseware>(lists));
+		map.put("queryParam", kjkCourseware);
+		return ReturnUtil.Success("加载成功", map, null);
+	}
 
 	@RequiresPermissions("courseware:download")
 	@RequestMapping("/courseware/download")
@@ -138,10 +140,10 @@ public class KjkController {
 	@RequiresPermissions("courseware:download")
 	@RequestMapping("/courseware/downloadTemplate")
 	public void downloadCoursewareTemplate(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		URL url = Thread.currentThread().getContextClassLoader().getResource(coursewareTemplate);		
+		URL url = Thread.currentThread().getContextClassLoader().getResource(coursewareTemplate);
 		File file = new File(url.toURI());
 		response.setHeader("content-type", "application/octet-stream");
-		response.setContentType("application/octet-stream");		
+		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
 		byte[] buff = new byte[1024];
 		BufferedInputStream bis = null;
@@ -166,204 +168,189 @@ public class KjkController {
 				}
 			}
 		}
-	}	
+	}
+
 	@RequiresPermissions("courseware:download")
 	@RequestMapping("/courseware/importCourseware")
 	@ResponseBody
-	public ModelMap fromImportCourseware(HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "imgFile", required = false) MultipartFile impFile) throws Exception {
+	public ModelMap fromImportCourseware(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "imgFile", required = false) MultipartFile impFile) throws Exception {
 		String filename = impFile.getOriginalFilename();
 		if (impFile == null || impFile.getSize() == 0 || filename == null) {
 			return ReturnUtil.Error("请先选择有内容的文件", null, null);
-		} 
-		try{
-			//学科信息
-			List<NcmeSubject> subject2List = ncmeSubjectService.getNcmeSubject2();			
-			Map<String,List<NcmeSubject>> map = new HashMap<String,List<NcmeSubject>>();
-			for(NcmeSubject subject2 : subject2List) {
-				map.put(subject2.getSubject2Name(), ncmeSubjectService.getNcmeSubjectByName(subject2.getSubject2Name()));
-			}			
-			//课件类型
-			List<KjkPlayType> playTypeList = kjkPlayTypeService.findAll();			
-			ImportParams ip = new ImportParams();
-			ip.setNeedVerfiy(true);
-			ip.setVerifyHanlder(new CoursewareVerify(playTypeList,map));
-			long beginTime = System.currentTimeMillis();			
-			ExcelImportResult<CoursewareVo> eir = ExcelImportUtil.importExcelMore(impFile.getInputStream(), CoursewareVo.class, ip);
-			//上传文件保存路径
-			String filePath = request.getSession().getServletContext().getRealPath(uploadCoursewarePath)+File.separator+IdUtil.timeId()+FileUtil.getExt(filename);			
-			File uploadServerFile = FileUtil.createAndWriteFile(filePath, impFile.getBytes());
-			File uploadServerErrFile = null;
-			//数据导入
-			List<CoursewareVo> list = eir.getList();
-			if(list!=null&&list.size()>0) {
-				
-			}
-			if(eir.isVerfiyFail()) { //有错误
-				OutputStream os = null;
-				String errFileName = "";
-				try {
-					String errFolder = request.getSession().getServletContext().getRealPath(uploadCoursewareErrPath);
-					File tempFolder = new File(errFolder);	
-					if(!tempFolder.exists()){
-						tempFolder.mkdir();
-					}
-					errFileName = IdUtil.timeId()+FileUtil.getExt(filename);
-					os = new FileOutputStream(errFolder+File.separator+errFileName);
-					Workbook wb = eir.getFailWorkbook();
-					wb.write(os);					
-				} catch (Exception e) {
-					throw e;
-				} finally {
-					if (os != null) {
-						os.close();
-					}
-				}
-				return ReturnUtil.Success("导入文件有错误，错误数据请下载文件查看", null, "fromImport?type=err&errFile="+errFileName);
-			}
-				
-			
-			
-			/*if (eir.isVerfiyFail()) { // 未通过验证
-				System.out.println(FileUtil.getAbsolutePath(uploadCoursewarePath));
-				String path = request.getSession().getServletContext().getRealPath("upload");
-				System.out.println(path);
-				File file = new File(path);	
-				if(!file.exists()){
-					file.mkdir();
-				}											
-				OutputStream os = null;				
-				try {
-					List<CoursewareVo> list = eir.getList();					
-					String errFileName = IdUtil.timeId()+FileUtil.getExt(filename);
-					os = new FileOutputStream(path+File.separator+errFileName);
-					Workbook wb = eir.getFailWorkbook();
-					wb.write(os);
-				} catch (Exception e) {
-					throw e;
-				} finally {
-					if (os != null) {
-						os.close();
-					}
-				}
-				return ReturnUtil.Success("导入失败，请下载文件查看", null, "courseware/index");	
-			} else { // 通过验证
-				List<CoursewareVo> list = eir.getList();				
-				importUserService.saveImpUser(list);
-				CallResult callResult = importUserService.callImportUser(siteId, serviceId, mapId);
-				flag = "1";
-				redirect.addFlashAttribute("callResult", callResult);
-			}*/
-			long endTime = System.currentTimeMillis();
-			System.out.println(endTime - beginTime);
-			return ReturnUtil.Success("导入成功", null, "courseware/index");
-		}finally{
-			//endImport();
 		}
-		/*redirect.addFlashAttribute("msg", msg);
-		redirect.addFlashAttribute("code", flag);
-		return "redirect:/clientPersonManage/personManage";*/
+		Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
+		// 学科信息
+		List<NcmeSubject> subject2List = ncmeSubjectService.getNcmeSubject2();
+		Map<String, List<NcmeSubject>> map = new HashMap<String, List<NcmeSubject>>();
+		for (NcmeSubject subject2 : subject2List) {
+			map.put(subject2.getSubject2Name(), ncmeSubjectService.getNcmeSubjectByName(subject2.getSubject2Name()));
+		}
+		// 课件类型
+		List<KjkPlayType> playTypeList = kjkPlayTypeService.findAll();
+		ImportParams imParam = new ImportParams();
+		imParam.setNeedVerfiy(true);
+		imParam.setVerifyHanlder(new CoursewareVerify(playTypeList, map, admin.getUid()));
+		long beginTime = System.currentTimeMillis();
+		ExcelImportResult<CoursewareVo> eir = ExcelImportUtil.importExcelVerify(impFile.getInputStream(),
+				CoursewareVo.class, imParam);
+		// 上传文件保存路径
+		String filePath = request.getSession().getServletContext().getRealPath(uploadCoursewarePath) + File.separator
+				+ IdUtil.timeId() + FileUtil.getExt(filename);
+		File uploadServerFile = FileUtil.createAndWriteFile(filePath, impFile.getBytes());
+		File uploadServerErrFile = null;
+		if (eir.isVerfiyFail()) { // 有错误
+			OutputStream os = null;
+			String errFileName = "";
+			try {
+				String errFolder = request.getSession().getServletContext().getRealPath(uploadCoursewareErrPath);
+				File tempFolder = new File(errFolder);
+				if (!tempFolder.exists()) {
+					tempFolder.mkdir();
+				}
+				errFileName = IdUtil.timeId() + FileUtil.getExt(filename);
+				os = new FileOutputStream(errFolder + File.separator + errFileName);
+				Workbook wb = eir.getWorkbook();
+				wb.write(os);
+			} catch (Exception e) {
+				throw e;
+			} finally {
+				if (os != null) {
+					os.close();
+				}
+			}
+			return ReturnUtil.Success("导入文件有错误，未导入课件请下载文件查看具体原因", null, "fromImport?type=err&errFile=" + errFileName);
+		} else {
+			List<CoursewareVo> list = eir.getList();
+			if (list != null && list.size() > 0) {
+				if (list.size() > 1000) { // 由于使用in判断，不能超过1000
+					return ReturnUtil.Error("文件中内容请控制在1000条内", null, null);
+				}
+				List<String> dupList = getDuplicateElements(list);
+				if (dupList != null && dupList.size() > 0) {
+					return ReturnUtil.Error("文件中课件名称有重复请检查", null, null);
+				}
+				List<CoursewareVo> sameList = kjkService.getListByNames(list);
+				if (sameList != null && sameList.size() > 0) {
+					return ReturnUtil.Error("文件中课件名称同系统中课件名称有重复", null, null);
+				}
+				kjkService.insertBatch(list);
+				String ip = IpUtil.getIpAddr(request);
+				logService.insertLoginLog(admin.getUsername(), ip, "导入课件" + list.size() + "条");
+			}
+		}
+		long endTime = System.currentTimeMillis();
+		System.out.println(endTime - beginTime);
+		return ReturnUtil.Success("导入成功", 2, null);
 	}
+
 	/**
-     * 编辑课件
-     * @param kjkCourseware
-     * @param model
-     * @return
-     */
-    @RequiresPermissions("courseware:edit")
-    @RequestMapping(value = "/courseware/eidt", method = { RequestMethod.GET })
-    public String from(KjkCourseware kjkCourseware, Model model) {
-        if (kjkCourseware.getId()!=null) {
-            kjkCourseware = kjkService.getById(kjkCourseware.getId());
-        }
-        //课件播放类型
-        List<KjkPlayType> list = kjkPlayTypeService.findAll();
-        model.addAttribute("kjkPlayTypeList", list);
-        model.addAttribute("courSourceList", COURSEWARE_SOURCE);
-        model.addAttribute("moduleMap", PROJECT_LEVEL);
-        model.addAttribute("subjectList",ncmeSubjectService.getNcmeSubject2());
-        model.addAttribute("info", kjkCourseware);
-        return "console/kjk/fromCoursewareEdit";
-    }
- 
-    /**
-     * 根据三级学科获取二级学科
-     * @param subjectName2
-     * @return
-     */
-    @ResponseBody  
-    @RequestMapping("/ajaxSubjectName")
-    public List<NcmeSubject> ajaxSubjectName(String subjectName2){
-        List<NcmeSubject> list = ncmeSubjectService.getNcmeSubjectByName(subjectName2);
-        return list;
-    }
-    
-    /**
-     * 添加或者修改
-     * @param kjkCourseware
-     * @param result
-     * @param request
-     * @return
-     */
-    @RequiresPermissions("courseware:edit")
-    @RequestMapping(value="/courseware/save",method={RequestMethod.POST})
-    @ResponseBody
-    public ModelMap save(KjkCourseware kjkCourseware,BindingResult result,HttpServletRequest request){
+	 * 编辑课件
+	 * 
+	 * @param kjkCourseware
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("courseware:edit")
+	@RequestMapping(value = "/courseware/eidt", method = { RequestMethod.GET })
+	public String from(KjkCourseware kjkCourseware, Model model) {
+		if (kjkCourseware.getId() != null) {
+			kjkCourseware = kjkService.getById(kjkCourseware.getId());
+		}
+		// 课件播放类型
+		List<KjkPlayType> list = kjkPlayTypeService.findAll();
+		model.addAttribute("kjkPlayTypeList", list);
+		model.addAttribute("courSourceList", COURSEWARE_SOURCE);
+		model.addAttribute("moduleMap", PROJECT_LEVEL);
+		model.addAttribute("subjectList", ncmeSubjectService.getNcmeSubject2());
+		model.addAttribute("info", kjkCourseware);
+		return "console/kjk/fromCoursewareEdit";
+	}
+
+	/**
+	 * 根据三级学科获取二级学科
+	 * 
+	 * @param subjectName2
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/ajaxSubjectName")
+	public List<NcmeSubject> ajaxSubjectName(String subjectName2) {
+		List<NcmeSubject> list = ncmeSubjectService.getNcmeSubjectByName(subjectName2);
+		return list;
+	}
+
+	/**
+	 * 添加或者修改
+	 * 
+	 * @param kjkCourseware
+	 * @param result
+	 * @param request
+	 * @return
+	 */
+	@RequiresPermissions("courseware:edit")
+	@RequestMapping(value = "/courseware/save", method = { RequestMethod.POST })
+	@ResponseBody
+	public ModelMap save(KjkCourseware kjkCourseware, BindingResult result, HttpServletRequest request) {
 		if (result.hasErrors()) {
 			for (ObjectError er : result.getAllErrors())
 				return ReturnUtil.Error(er.getDefaultMessage(), null, null);
 		}
 		try {
-			
+
 			Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
 			if (StringUtils.isEmpty(kjkCourseware.getName()))
-                 return ReturnUtil.Error("课程名称不能为空", null, null);
-			if(kjkCourseware.getId()==null && kjkService.getListByName(kjkCourseware.getName()).size()>0)
+				return ReturnUtil.Error("课程名称不能为空", null, null);
+			if (kjkCourseware.getId() == null && kjkService.getListByName(kjkCourseware.getName()).size() > 0)
 				return ReturnUtil.Error("课程名称已存在", null, null);
 			if (StringUtils.isEmpty(kjkCourseware.getpName()))
 				return ReturnUtil.Error("项目名称不能为空", null, null);
-			if(StringUtils.isEmpty(kjkCourseware.getExpert()))
+			if (StringUtils.isEmpty(kjkCourseware.getExpert()))
 				return ReturnUtil.Error("专家不能为空", null, null);
-			if(StringUtils.isEmpty(kjkCourseware.getExpertUnit()))
+			if (StringUtils.isEmpty(kjkCourseware.getExpertUnit()))
 				return ReturnUtil.Error("专家单位不能为空", null, null);
-			if(StringUtils.isEmpty(kjkCourseware.getClassTimeStr()))
+			if (StringUtils.isEmpty(kjkCourseware.getClassTimeStr()))
 				return ReturnUtil.Error("时长不能为空", null, null);
-			if(StringUtils.isEmpty(kjkCourseware.getSubject2()))
+			if (StringUtils.isEmpty(kjkCourseware.getSubject2()))
 				return ReturnUtil.Error("二级学科不能为空", null, null);
-			if(StringUtils.isEmpty(kjkCourseware.getSubject()))
+			if (StringUtils.isEmpty(kjkCourseware.getSubject()))
 				return ReturnUtil.Error("三级学科不能为空", null, null);
-			if(StringUtils.isEmpty(kjkCourseware.getPar1()))
+			if (StringUtils.isEmpty(kjkCourseware.getPar1()))
 				return ReturnUtil.Error("播放参数1不能为空", null, null);
-			if(StringUtils.isEmpty(kjkCourseware.getPar2()))
+			if (StringUtils.isEmpty(kjkCourseware.getPar2()))
 				return ReturnUtil.Error("播放参数2不能为空", null, null);
-			
-			if(StringUtils.isEmpty(kjkCourseware.getPlayType()) && StringUtils.isEmpty(kjkCourseware.getMobileType())){
+
+			if (StringUtils.isEmpty(kjkCourseware.getPlayType())
+					&& StringUtils.isEmpty(kjkCourseware.getMobileType())) {
 				return ReturnUtil.Error("播放类型不能为空", null, null);
-			}else{
-				//手机播放类型或pc播放类型 为cc格式
-				if(kjkCourseware.getPlayType().equals(ConstantEnum.KJK_PLAY_TYPE_CC.toString())  || StringUtils.isEmpty(kjkCourseware.getMobileType()) && kjkCourseware.getMobileType().equals(ConstantEnum.KJK_PLAY_TYPE_CC.toString())){
-					if(StringUtils.isEmpty(kjkCourseware.getCode()))
+			} else {
+				// 手机播放类型或pc播放类型 为cc格式
+				if (kjkCourseware.getPlayType().equals(ConstantEnum.KJK_PLAY_TYPE_CC.toString())
+						|| StringUtils.isEmpty(kjkCourseware.getMobileType())
+								&& kjkCourseware.getMobileType().equals(ConstantEnum.KJK_PLAY_TYPE_CC.toString())) {
+					if (StringUtils.isEmpty(kjkCourseware.getCode()))
 						return ReturnUtil.Error("课件编号不能为空", null, null);
-					if(kjkCourseware.getCode().trim().length()!=32)
+					if (kjkCourseware.getCode().trim().length() != 32)
 						return ReturnUtil.Error("课件编号长度必须为32位", null, null);
-					String par1=kjkCourseware.getPar1();
-					String par2=kjkCourseware.getPar2();
-					if(!par1.contains("vid=") || !par2.contains("vid="))
+					String par1 = kjkCourseware.getPar1();
+					String par2 = kjkCourseware.getPar2();
+					if (!par1.contains("vid=") || !par2.contains("vid="))
 						return ReturnUtil.Error("播放参数格式不对", null, null);
-					String str1=par1.substring(par1.indexOf("vid=")+4, par1.indexOf("&siteid"));
-					String str2=par2.substring(par2.indexOf("vid=")+4, par2.indexOf("&siteid"));
-					//课件类型是CC视频课件 播放参数1和播放参数2中vid必须相同
-					if(!str1.endsWith(str2))
+					String str1 = par1.substring(par1.indexOf("vid=") + 4, par1.indexOf("&siteid"));
+					String str2 = par2.substring(par2.indexOf("vid=") + 4, par2.indexOf("&siteid"));
+					// 课件类型是CC视频课件 播放参数1和播放参数2中vid必须相同
+					if (!str1.endsWith(str2))
 						return ReturnUtil.Error("播放参数1和播放参数2中vid必须相同", null, null);
 				}
 			}
 			kjkCourseware.setStatus(KjkEnum.KJK_COURSEWARE_STATUS_ENABLE.getValue().intValue());
 			kjkCourseware.setPlayFlag(ConstantEnum.KJK_COURSEWARE_PLY_FLAG_NOT.toString());
-			kjkCourseware.setClickCount(0);	//点击量
-			kjkCourseware.setShotYear(DateUtil.getCurrentYear());//拍摄年份
+			kjkCourseware.setClickCount(0); // 点击量
+			kjkCourseware.setShotYear(DateUtil.getCurrentYear());// 拍摄年份
 			kjkCourseware.setClassTime(new BigDecimal(DateUtil.dateToSS(kjkCourseware.getClassTimeStr())));
 			kjkCourseware.setClassHour(new BigDecimal(0));
 			kjkCourseware.setUpdateDate(DateUtil.getSysTime());
-			if(kjkCourseware.getId()!=null){
+			if (kjkCourseware.getId() != null) {
 				KjkCourseware tempKjk = kjkService.getById(kjkCourseware.getId());
 				kjkCourseware.setCreateDate(tempKjk.getCreateDate());
 				kjkCourseware.setAddDate(tempKjk.getAddDate());
@@ -371,86 +358,102 @@ public class KjkController {
 				kjkCourseware.setModifier(admin.getUid());
 				kjkService.save(kjkCourseware);
 				return ReturnUtil.Success("操作成功", 1, null);
-			}else{
+			} else {
 				kjkCourseware.setCreater(admin.getUid());
 				kjkCourseware.setCreateDate(DateUtil.getSysTime());
 				kjkCourseware.setAddDate(DateUtil.getSysTime());
 				kjkService.insert(kjkCourseware);
 			}
-			
+
 			return ReturnUtil.Success("操作成功", 2, null);
 		} catch (Exception e) {
-			logger.error("======",e);
-			e.printStackTrace();			
+			logger.error("======", e);
+			e.printStackTrace();
 			return ReturnUtil.Error("操作失败", null, null);
 		}
-	
-    } 
-    
-    /**
-     * 删除课件
-     * @param cwareids
-     * @param request
-     * @return
-     */
-    @RequiresPermissions("courseware:edit")
-    @RequestMapping(value = "/courseware/delete", method = { RequestMethod.POST })
-    @ResponseBody
-    public ModelMap delete(String cwareids, HttpServletRequest request) {
-        try {
-            if (StringUtils.isBlank(cwareids)) {
-                return ReturnUtil.Error("Error", null, null);
-            } else {
-                StringBuffer sbf = new StringBuffer();
-                KjkCourseware kjkCourseware = new KjkCourseware();
-                String[] ids = cwareids.split(",");
-                for (String id : ids) {
-                    kjkCourseware.setId(Long.valueOf(id));
-                    kjkCourseware.setStatus(KjkEnum.KJK_COURSEWARE_STATUS_DISABLE.getValue().intValue());
-                    kjkService.updateCourseCware(kjkCourseware);
-                    sbf.append(id).append(",");
-                }
-                // 记录删除课件日志
-                String ip = IpUtil.getIpAddr(request);
-                Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
-                logService.insertLoginLog(admin.getUsername(), ip,
-                        "删除课件" + sbf.toString().substring(0, sbf.toString().length() - 1));
-                return ReturnUtil.Success("1", null, null);
-            }
- 
-        } catch (Exception e) {
-            logger.error("======", e);
-            e.printStackTrace();
-            return ReturnUtil.Error("0", null, null);
-        }
-    }
-     /**
-     * yuguoliang 课件预览
-     * @param model
-     * @param id
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/courseware/view", method = {RequestMethod.GET})
-    public String view(ModelMap model, Long id,HttpServletRequest request){
-        Admin admin = (Admin)SecurityUtils.getSubject().getPrincipal();
-		if(admin==null){
+
+	}
+
+	/**
+	 * 删除课件
+	 * 
+	 * @param cwareids
+	 * @param request
+	 * @return
+	 */
+	@RequiresPermissions("courseware:edit")
+	@RequestMapping(value = "/courseware/delete", method = { RequestMethod.POST })
+	@ResponseBody
+	public ModelMap delete(String cwareids, HttpServletRequest request) {
+		try {
+			if (StringUtils.isBlank(cwareids)) {
+				return ReturnUtil.Error("Error", null, null);
+			} else {
+				StringBuffer sbf = new StringBuffer();
+				KjkCourseware kjkCourseware = new KjkCourseware();
+				String[] ids = cwareids.split(",");
+				for (String id : ids) {
+					kjkCourseware.setId(Long.valueOf(id));
+					kjkCourseware.setStatus(KjkEnum.KJK_COURSEWARE_STATUS_DISABLE.getValue().intValue());
+					kjkService.updateCourseCware(kjkCourseware);
+					sbf.append(id).append(",");
+				}
+				// 记录删除课件日志
+				String ip = IpUtil.getIpAddr(request);
+				Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
+				logService.insertLoginLog(admin.getUsername(), ip,
+						"删除课件" + sbf.toString().substring(0, sbf.toString().length() - 1));
+				return ReturnUtil.Success("1", null, null);
+			}
+
+		} catch (Exception e) {
+			logger.error("======", e);
+			e.printStackTrace();
+			return ReturnUtil.Error("0", null, null);
+		}
+	}
+
+	/**
+	 * yuguoliang 课件预览
+	 * 
+	 * @param model
+	 * @param id
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/courseware/view", method = { RequestMethod.GET })
+	public String view(ModelMap model, Long id, HttpServletRequest request) {
+		Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
+		if (admin == null) {
 			return "redirect:/console/login";
 		}
-    	KjkCourseware kjkCourseware =kjkService.getById(id);
-    	String url="";
-    	if(kjkCourseware!=null){
-    		if(kjkCourseware.getPlayType().equals("13")){//cc视频
-            	url="https://p.bokecc.com/player?vid="+kjkCourseware.getCode()+"&siteid=4066F9F39D08AB88&autoStart=false&width=600px&height=490px&playerid=5B8B3C4F1E5EBECF&playertype=1";
-            	model.addAttribute("url", url);
-            	return "console/kjk/ccView";
-    		}else if(kjkCourseware.getPlayType().equals("1")){//cme视频
-            	url="http://media.cmechina.net/cme_main.html?courseid="+kjkCourseware.getPar1()+"&coursewareNo="+kjkCourseware.getPar2()+"&userid=null&examurl=http://www.cmechina.net/study/course_quiz.jsp&examicon=null";
-            	model.addAttribute("url", url);
-        		return "console/kjk/cmeView";
-    		}
-    	}
-    	return null;
-    }
+		KjkCourseware kjkCourseware = kjkService.getById(id);
+		String url = "";
+		if (kjkCourseware != null) {
+			if (kjkCourseware.getPlayType().equals("13")) {// cc视频
+				url = "https://p.bokecc.com/player?vid=" + kjkCourseware.getCode()
+						+ "&siteid=4066F9F39D08AB88&autoStart=false&width=600px&height=490px&playerid=5B8B3C4F1E5EBECF&playertype=1";
+				model.addAttribute("url", url);
+				return "console/kjk/ccView";
+			} else if (kjkCourseware.getPlayType().equals("1")) {// cme视频
+				url = "http://media.cmechina.net/cme_main.html?courseid=" + kjkCourseware.getPar1() + "&coursewareNo="
+						+ kjkCourseware.getPar2()
+						+ "&userid=null&examurl=http://www.cmechina.net/study/course_quiz.jsp&examicon=null";
+				model.addAttribute("url", url);
+				return "console/kjk/cmeView";
+			}
+		}
+		return null;
+	}
+
+	private static List<String> getDuplicateElements(List<CoursewareVo> list) {
+		return list.stream() // list 对应的 Stream
+				.collect(Collectors.toMap(CoursewareVo::getName, e -> 1, (a, b) -> a + b)) // 获得元素出现频率的
+																							// Map，键为元素，值为元素出现的次数
+				.entrySet().stream() // 所有 entry 对应的 Stream
+				.filter(entry -> entry.getValue() > 1) // 过滤出元素出现次数大于 1 的 entry
+				.map(entry -> entry.getKey()) // 获得 entry 的键（重复元素）对应的 Stream
+				.collect(Collectors.toList()); // 转化为 List
+	}
 	/*** kjk end ***/
 }

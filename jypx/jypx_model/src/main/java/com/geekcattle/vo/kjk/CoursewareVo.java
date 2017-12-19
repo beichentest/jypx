@@ -182,11 +182,16 @@ public class CoursewareVo  implements Serializable{
     @Excel(name="标签")
     private String label;
     
-    @Excel(name="付费标志",replace= {"未付费_0","已付费_1","_null"})
+    @Excel(name="付费标志",replace= {"未付费_0","已付费_1","_0"})
     private String playFlag;
     
-    @Excel(name="项目级别",replace= {"普通_0","国家级_1","_null"})
+    @Excel(name="项目级别",replace= {"普通_0","国家级_1","_0"})
     private String projectLevel;
+    
+    /**
+     * 课件创建人id
+     */
+    private String creater;    
     /**
      * @return ID
      */
@@ -665,18 +670,13 @@ public class CoursewareVo  implements Serializable{
 
 	public void setProjectLevel(String projectLevel) {
 		this.projectLevel = projectLevel;
-	}  
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final CoursewareVo courseware = (CoursewareVo)obj;
-        if(this.getName()!=null&&this.getName().equals(courseware.getName())) {
-        	return true;
-        }
-		return super.equals(obj);
 	}
+
+	public String getCreater() {
+		return creater;
+	}
+
+	public void setCreater(String creater) {
+		this.creater = creater;
+	}  		
 }

@@ -6,6 +6,7 @@ package com.geekcattle.service.kjk;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ import com.geekcattle.model.kjk.KjkCourseware;
 import com.geekcattle.util.CamelCaseUtil;
 import com.geekcattle.vo.kjk.CoursewareVo;
 import com.github.pagehelper.PageHelper;
+
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 /**
  * author geekcattle date 2016/10/21 0021 下午 15:47
@@ -80,5 +84,13 @@ public class KjkService {
 		KjkCourseware kjkCourseware = new KjkCourseware();
 		kjkCourseware.setName(name);
 		return kjkCoursewareMapper.select(kjkCourseware);
+	}
+	
+	public List<CoursewareVo> getListByNames(List<CoursewareVo> list){
+		return kjkCoursewareMapper.findCoursewareByNames(list);
+	} 
+	
+	public void insertBatch(List<CoursewareVo> list){
+		kjkCoursewareMapper.insertCoursewareBatch(list);	
 	}
 }

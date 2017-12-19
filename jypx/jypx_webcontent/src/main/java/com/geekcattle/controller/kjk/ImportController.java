@@ -35,6 +35,8 @@ public class ImportController {
 			model.addAttribute("type", "err");
 			model.addAttribute("name", "下载错误文件");
 			model.addAttribute("errFile",errFile);
+		}else if("close".equals(type)) {
+			model.addAttribute("type", "close");
 		}		
 		return "console/kjk/importData";
 	}

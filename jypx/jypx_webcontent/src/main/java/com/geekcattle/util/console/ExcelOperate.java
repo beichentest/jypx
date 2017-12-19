@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import cn.afterturn.easypoi.entity.vo.NormalExcelConstants;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
-import cn.afterturn.easypoi.excel.export.ExcelExportService;
+import cn.afterturn.easypoi.excel.export.ExcelExportServer;
 
 public class ExcelOperate {
 	protected static final String HSSF         = ".xls";
@@ -34,7 +34,7 @@ public class ExcelOperate {
 					(Class<?>) list.get(0).get(NormalExcelConstants.CLASS),
 					(Collection<?>) list.get(0).get(NormalExcelConstants.DATA_LIST));
 			for (int i = 1; i < list.size(); i++) {
-				new ExcelExportService().createSheet(workbook,
+				new ExcelExportServer().createSheet(workbook,
 						(ExportParams) list.get(i).get(NormalExcelConstants.PARAMS),
 						(Class<?>) list.get(i).get(NormalExcelConstants.CLASS),
 						(Collection<?>) list.get(i).get(NormalExcelConstants.DATA_LIST));

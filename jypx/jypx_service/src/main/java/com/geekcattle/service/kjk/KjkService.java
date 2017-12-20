@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.geekcattle.conf.ConstantEnum;
 import com.geekcattle.conf.KjkEnum;
 import com.geekcattle.mapper.kjk.KjkCoursewareMapper;
 import com.geekcattle.model.kjk.KjkCourseware;
@@ -92,5 +93,13 @@ public class KjkService {
 	
 	public void insertBatch(List<CoursewareVo> list){
 		kjkCoursewareMapper.insertCoursewareBatch(list);	
+	}
+	
+	public Integer getCountNotPlay() {
+		Example example = new Example(KjkCourseware.class);
+		Criteria criteria = example.createCriteria();	
+		criteria.andEqualTo("status", KjkEnum.KJK_COURSEWARE_STATUS_ENABLE.getValue());
+		criteria.andEqualTo("playFlag", ConstantEnum.KJK_COURSEWARE_PLY_FLAG_NOT.toString());
+		return kjkCoursewareMapper.selectCountByExample(example);
 	}
 }

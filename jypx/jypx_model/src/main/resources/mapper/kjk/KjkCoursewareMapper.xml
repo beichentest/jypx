@@ -101,6 +101,9 @@
           <if test="keyword!=null and keyword!=''">
               and (cw.keyword like '%'||#{keyword}||'%' or cw.name like '%'||#{keyword}||'%' or cw.p_name like '%'||#{keyword}||'%')
           </if>
+          <if test="playFlag!=null and  playFlag!=''">
+              and cw.play_flag = #{playFlag} 
+          </if>
       </where>
   </sql>
   <select id="findCourseware"  resultMap="BaseResultMap">

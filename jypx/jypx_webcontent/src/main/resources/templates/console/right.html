@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="console/header">
 </head>
 <body>
@@ -50,14 +50,17 @@
                 </div>
             </div>
 
-            <div class="col-md-3 col-sm-6 col-xs-12">
+            <div shiro:hasPermission="courseware:index" class="col-md-3 col-sm-6 col-xs-12">
                 <div class="info-box">
                     <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">资源总数</span>
+                        <span class="info-box-text">未申请劳务费</span>
                     <span class="info-box-number">
-                        <span th:text="${menu}">0</span>
+                        <span th:text="${notPlay}">0</span>
                         <small>个</small>
+                    </span>
+                    <span class="info-box-number">
+                    	<a href="/console/kjk/courseware/index?playFlag=0" class="info-box-text" >查看</a>
                     </span>
                     </div>
                 </div>

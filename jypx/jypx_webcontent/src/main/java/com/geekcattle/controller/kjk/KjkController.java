@@ -105,10 +105,11 @@ public class KjkController {
 	/*** kjk begin…… ***/
 	@RequiresPermissions("courseware:index")
 	@RequestMapping(value = "/courseware/index", method = { RequestMethod.GET })
-	public String indexCourseware(Model model, String moduleCode) {
+	public String indexCourseware(Model model, String playFlag) {
 		// 课件库播放类型集合
 		List<KjkPlayType> list = kjkPlayTypeService.findAll();
 		model.addAttribute("kjkPlayTypeList", list);
+		model.addAttribute("playFlag", playFlag);
 		return "console/kjk/indexCourseware";
 	}
 

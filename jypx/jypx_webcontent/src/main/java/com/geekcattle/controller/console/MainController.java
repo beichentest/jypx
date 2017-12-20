@@ -1,13 +1,9 @@
 package com.geekcattle.controller.console;
 
-import com.geekcattle.conf.shiro.AdminShiroUtil;
-import com.geekcattle.model.console.Admin;
-import com.geekcattle.model.console.Menu;
-import com.geekcattle.model.console.Role;
-import com.geekcattle.service.console.*;
-import com.geekcattle.util.ReturnUtil;
-import com.geekcattle.util.console.MenuTreeUtil;
-import org.apache.shiro.SecurityUtils;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +11,19 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import tk.mybatis.mapper.entity.Example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.geekcattle.conf.shiro.AdminShiroUtil;
+import com.geekcattle.model.console.Admin;
+import com.geekcattle.model.console.Menu;
+import com.geekcattle.model.console.Role;
+import com.geekcattle.service.console.AdminService;
+import com.geekcattle.service.console.MenuService;
+import com.geekcattle.service.console.RoleService;
+import com.geekcattle.service.kjk.KjkService;
+import com.geekcattle.util.ReturnUtil;
+import com.geekcattle.util.console.MenuTreeUtil;
+
+import tk.mybatis.mapper.entity.Example;
 
 @Controller
 @RequestMapping(value = "/console")
@@ -33,6 +37,9 @@ public class MainController {
 
     @Autowired
     private RoleService roleService;
+    
+    @Autowired
+    private KjkService kjkService;
 
     @RequestMapping(value = "/index", method = {RequestMethod.GET})
     public String index(Model model) {
@@ -94,10 +101,12 @@ public class MainController {
         Integer roleCount = roleService.getCount(exampleRole);
         Example exampleMenu = new Example(Menu.class);
         Integer menuCount = menuService.getCount(exampleMenu);
+        Integer notPlayCount = kjkService.getCountNotPlay();
         Map<String, Object> mp = new HashMap<>();
         mp.put("admin", adminCount);
         mp.put("role", roleCount);
         mp.put("menu", menuCount);
+        mp.put("notPlay", notPlayCount);
         return mp;
     }
 

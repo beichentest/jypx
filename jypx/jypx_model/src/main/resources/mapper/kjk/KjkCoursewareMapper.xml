@@ -101,6 +101,9 @@
           <if test="keyword!=null and keyword!=''">
               and (cw.keyword like '%'||#{keyword}||'%' or cw.name like '%'||#{keyword}||'%' or cw.p_name like '%'||#{keyword}||'%')
           </if>
+          <if test="playFlag!=null and  playFlag!=''">
+              and cw.play_flag = #{playFlag} 
+          </if>
       </where>
   </sql>
   <select id="findCourseware"  resultMap="BaseResultMap">
@@ -180,4 +183,101 @@
       MODIFIER=#{modifier,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+  <select id="findCoursewareByNames"  resultMap="BaseResultExcelVo">  		
+        select * from KJK_COURSEWARE where name in
+	        <foreach collection="params"  item="courseware" separator="," open="(" close=")">
+	         #{courseware.name}
+	         </foreach>
+	         and status !=1
+    </select>
+    <insert id="insertCoursewareBatch" parameterType="java.util.List" useGeneratedKeys="false">
+        INSERT INTO KJK_COURSEWARE (
+         	ID, NAME, P_NAME,
+         	CODE, PATH, FILE_TYPE,
+         	PLAY_TYPE,SUBJECT, KEYWORD, 
+	      	INTRODUCE, EXPERT, EXPERT_UNIT, 
+	      	SOURCE, CREATE_DATE, ADD_DATE, 
+	      	UPDATE_DATE, CLICK_COUNT, STATUS, 
+	      	CLASS_TIME, CLASS_HOUR, REMARK, 
+	      	PAR1, PAR2, PAR3, PAR4, 
+	      	MOBILE_TYPE, SUBJECT2, SL_IMG, 
+	      	LOGO, PIANTOU, PIANWEI, 
+	      	SHOT_YEAR,CLASS_TIME_STR,LABEL,
+	      	CREATER,PLAY_FLAG,PROJECT_LEVEL     
+        )
+        SELECT kjk_courseware_seq.NEXTVAL ID, T1.* FROM ( 
+        <foreach item="courseware" index="index" collection="list" separator="union all">       
+            SELECT 
+            #{courseware.name,jdbcType=VARCHAR} NAME, 
+            #{courseware.pName,jdbcType=VARCHAR} P_NAME,	
+            #{courseware.code,jdbcType=VARCHAR} CODE, 
+            #{courseware.path,jdbcType=VARCHAR} PATH, 
+            #{courseware.fileType,jdbcType=VARCHAR} FILE_TYPE, 
+	      	#{courseware.playType,jdbcType=VARCHAR} PLAY_TYPE, 
+	      	#{courseware.subject,jdbcType=VARCHAR} SUBJECT, 
+	      	#{courseware.keyword,jdbcType=VARCHAR} KEYWORD, 
+	      	#{courseware.introduce,jdbcType=VARCHAR} INTRODUCE, 
+	      	#{courseware.expert,jdbcType=VARCHAR} EXPERT, 
+	      	#{courseware.expertUnit,jdbcType=VARCHAR} EXPERT_UNIT, 
+	      	#{courseware.source,jdbcType=VARCHAR} SOURCE, 
+	      	#{courseware.createDate,jdbcType=TIMESTAMP} CREATE_DATE, 
+	      	#{courseware.addDate,jdbcType=TIMESTAMP} ADD_DATE, 
+	      	#{courseware.updateDate,jdbcType=TIMESTAMP} UPDATE_DATE, 
+	      	#{courseware.clickCount,jdbcType=DECIMAL} CLICK_COUNT, 
+	      	#{courseware.status,jdbcType=DECIMAL} STATUS, 
+	      	#{courseware.classTime,jdbcType=DECIMAL} CLASS_TIME, 
+	      	#{courseware.classHour,jdbcType=DECIMAL} CLASS_HOUR,
+	      	#{courseware.remark,jdbcType=VARCHAR} REMARK, 
+	      	#{courseware.par1,jdbcType=VARCHAR} PAR1, 
+	      	#{courseware.par2,jdbcType=VARCHAR} PAR2, 
+	      	#{courseware.par3,jdbcType=VARCHAR} PAR3, 
+	      	#{courseware.par4,jdbcType=VARCHAR} PAR4, 
+	      	#{courseware.mobileType,jdbcType=VARCHAR} MOBILE_TYPE, 
+	      	#{courseware.subject2,jdbcType=VARCHAR} SUBJECT2, 
+	      	#{courseware.slImg,jdbcType=VARCHAR} SL_IMG, 
+	      	#{courseware.logo,jdbcType=VARCHAR} LOGO, 
+	      	#{courseware.piantou,jdbcType=VARCHAR} PIANTOU, 
+	      	#{courseware.pianwei,jdbcType=VARCHAR} PIANWEI, 
+	      	#{courseware.shotYear,jdbcType=VARCHAR} SHOT_YEAR,
+	      	#{courseware.classTimeStr,jdbcType=VARCHAR} CLASS_TIME_STR,
+	      	#{courseware.label,jdbcType=VARCHAR} LABEL,
+	      	#{courseware.creater,jdbcType=VARCHAR} CREATER,
+	      	#{courseware.playFlag,jdbcType=VARCHAR} PLAY_FLAG, 
+	      	#{courseware.projectLevel,jdbcType=VARCHAR} PROJECT_LEVEL
+	      FROM DUAL        
+        </foreach>
+        ) T1
+    </insert>
+    
+    <!-- <insert id ="insertCoursewareBatch" parameterType="java.util.List" useGeneratedKeys="false">        
+       insert into KJK_COURSEWARE (ID,NAME, P_NAME, 
+	      CODE, PATH, FILE_TYPE, 
+	      PLAY_TYPE, SUBJECT, KEYWORD, 
+	      INTRODUCE, EXPERT, EXPERT_UNIT, 
+	      SOURCE, CREATE_DATE, ADD_DATE, 
+	      UPDATE_DATE, CLICK_COUNT, STATUS, 
+	      CLASS_TIME, CLASS_HOUR, REMARK, 
+	      PAR1, PAR2, PAR3, PAR4, 
+	      MOBILE_TYPE, SUBJECT2, SL_IMG, 
+	      LOGO, PIANTOU, PIANWEI, 
+	      SHOT_YEAR,CLASS_TIME_STR,LABEL,
+	      CREATER,PLAY_FLAG,PROJECT_LEVEL)
+       SELECT kjk_courseware_seq.NEXTVAL ID, T1.* FROM (              	
+        <foreach collection ="list" item="courseware" index= "index" separator ="UNION ALL">
+          SELECT #{courseware.name,jdbcType=VARCHAR} NAME, #{courseware.pName,jdbcType=VARCHAR} P_NAME, 
+	      #{courseware.code,jdbcType=VARCHAR} CODE, #{courseware.path,jdbcType=VARCHAR} PATH, #{courseware.fileType,jdbcType=VARCHAR} FILE_TYPE, 
+	      #{courseware.playType,jdbcType=VARCHAR} PLAY_TYPE, #{courseware.subject,jdbcType=VARCHAR} SUBJECT, #{courseware.keyword,jdbcType=VARCHAR} KEYWORD, 
+	      #{courseware.introduce,jdbcType=VARCHAR} INTRODUCE, #{courseware.expert,jdbcType=VARCHAR} EXPERT, #{courseware.expertUnit,jdbcType=VARCHAR} EXPERT_UNIT, 
+	      #{courseware.source,jdbcType=VARCHAR} SOURCE, #{courseware.createDate,jdbcType=TIMESTAMP} CREATE_DATE, #{courseware.addDate,jdbcType=TIMESTAMP} ADD_DATE, 
+	      #{courseware.updateDate,jdbcType=TIMESTAMP} UPDATE_DATE, #{courseware.clickCount,jdbcType=DECIMAL} CLICK_COUNT, #{courseware.status,jdbcType=DECIMAL} STATUS, 
+	      #{courseware.classTime,jdbcType=DECIMAL} CLASS_TIME, #{courseware.classHour,jdbcType=DECIMAL} CLASS_HOUR, #{courseware.remark,jdbcType=VARCHAR} REMARK, 
+	      #{courseware.par1,jdbcType=VARCHAR} PAR1, #{courseware.par2,jdbcType=VARCHAR} PAR2, #{courseware.par3,jdbcType=VARCHAR} PAR3, #{courseware.par4,jdbcType=VARCHAR} PAR4, 
+	      #{courseware.mobileType,jdbcType=VARCHAR} MOBILE_TYPE, #{courseware.subject2,jdbcType=VARCHAR} SUBJECT2, #{courseware.slImg,jdbcType=VARCHAR} SL_IMG, 
+	      #{courseware.logo,jdbcType=VARCHAR} LOGO, #{courseware.piantou,jdbcType=VARCHAR} PIANTOU, #{courseware.pianwei,jdbcType=VARCHAR} PIANWEI, 
+	      #{courseware.shotYear,jdbcType=VARCHAR} SHOT_YEAR,#{courseware.classTimeStr,jdbcType=VARCHAR} CLASS_TIME_STR,#{courseware.label,jdbcType=VARCHAR} LABEL,
+	      #{courseware.creater,jdbcType=VARCHAR} CREATER,#{courseware.playFlag,jdbcType=VARCHAR} PLAY_FLAG,#{courseware.projectLevel,jdbcType=VARCHAR} PROJECT_LEVEL
+	      FROM DUAL
+        </foreach >
+        ) T1
+</insert > -->    
 </mapper>

@@ -19,9 +19,6 @@
         <dependent-module archiveName="jypx_security-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jypx_security/jypx_security">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="jypx_mq-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jypx_mq/jypx_mq">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="jypx"/>
         <property name="java-output-path" value="/jypx_webcontent/target/classes"/>
     </wb-module>

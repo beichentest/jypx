@@ -109,7 +109,7 @@ public class KjkController {
 		// 课件库播放类型集合
 		List<KjkPlayType> list = kjkPlayTypeService.findAll();
 		model.addAttribute("kjkPlayTypeList", list);
-		model.addAttribute("playFlag", playFlag);
+		model.addAttribute("playFlag", playFlag==null?"":playFlag);
 		return "console/kjk/indexCourseware";
 	}
 

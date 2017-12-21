@@ -14,54 +14,54 @@
 				 <div th:if="${not #strings.isEmpty(info.id)}">
 					<input type="hidden" name="id" th:value="${info.id}" />	
 				</div>							
-				<label style="width:85px;">课件名称：</label><input style="width:270px;" type="text" class="input" required="true" th:value="${info.name}" name="name" placeholder="请输入课件名称"/><br/>
-	       		<label style="width:85px;">项目名称：</label><input style="width:270px;" type="text" class="input" required="true" th:value="${info.pName}" name="pName" placeholder="请输入项目名称"/><br/>
-	       		<label style="width:85px;">课件编号：</label><input style="width:270px;" type="text" class="input" maxlength="32" th:value="${info.code}" name="code" placeholder="请输入课件编号"/><br/>
-	       		<label style="width:85px;">物理路径：</label><input style="width:270px;" type="text" class="input" th:value="${info.path}" name="path" placeholder="请输入物理路径"/><br/>
-	       		<label style="width:85px;">文件类型：</label><input style="width:170px;" type="text" class="input" th:value="${info.fileType}" name="fileType" placeholder="请输入文件类型"/><br/>
-	       		<label style="width:85px;">二级学科：</label>
+				<h5 style="width:85px; display: inline-block;">课件名称：</h5><input style="width:270px;" type="text" class="input" required="true" th:value="${info.name}" name="name" placeholder="请输入课件名称"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">项目名称：</h5><input style="width:270px;" type="text" class="input" required="true" th:value="${info.pName}" name="pName" placeholder="请输入项目名称"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">课件编号：</h5><input style="width:270px;" type="text" class="input" maxlength="32" th:value="${info.code}" name="code" placeholder="请输入课件编号"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">物理路径：</h5><input style="width:270px;" type="text" class="input" th:value="${info.path}" name="path" placeholder="请输入物理路径"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">文件类型：</h5><input style="width:170px;" type="text" class="input" th:value="${info.fileType}" name="fileType" placeholder="请输入文件类型"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">二级学科：</h5>
 	       			<select id="subject2Name" class="bt-select" name="subject2" th:value="${info.subject2}" required="true" style="height: 26px;width: 167px;">
 	       				<option></option>
 	        	 		<option th:each="module:${subjectList}" th:value="${module.subject2Name}" th:selected="${#strings.equals(info.subject2, module.subject2Name)}" ><div th:text="${module.subject2Name}"/></option>
 	       			</select><br/>
-	       		<label style="width:85px;">三级学科：</label>	
+	       		<h5 style="width:85px; display: inline-block;">三级学科：</h5>	
 	       			<select class="bt-select" id="subject" name="subject" required="true" style="height: 26px;width: 167px;">
 	       				<option th:value="${info.subject}"><div th:text="${info.subject}"/></option>
 	       			</select><br/>
-	       		<label style="width:85px;">关键字：</label><input style="width:170px;" type="text" class="input" th:value="${info.keyword}" maxlength="10"  name="keyword" placeholder="请输入关键字"/><br/>	
-	       		<label style="width:85px;">介绍：</label><input style="width:270px;" type="text" class="input" th:value="${info.introduce}" name="introduce" placeholder="请输入介绍"/><br/>	
-	       		<label style="width:85px;">专家：</label><input style="width:270px;" type="text" class="input" required="true" th:value="${info.expert}" name="expert" placeholder="请输入专家"/><br/>	
-	       		<label style="width:85px;">专家单位：</label><input style="width:270px;" type="text" class="input" required="true" th:value="${info.expertUnit}" name="expertUnit" placeholder="请输入专家单位"/><br/>	
-	       		<label style="width:85px;">来源：</label>
+	       		<h5 style="width:85px; display: inline-block;">关键字：</h5><input style="width:170px;" type="text" class="input" th:value="${info.keyword}" maxlength="10"  name="keyword" placeholder="请输入关键字"/><br/>	
+	       		<h5 style="width:85px; display: inline-block;">介绍：</h5><input style="width:270px;" type="text" class="input" th:value="${info.introduce}" name="introduce" placeholder="请输入介绍"/><br/>	
+	       		<h5 style="width:85px; display: inline-block;">专家：</h5><input style="width:270px;" type="text" class="input" required="true" th:value="${info.expert}" name="expert" placeholder="请输入专家"/><br/>	
+	       		<h5 style="width:85px; display: inline-block;">专家单位：</h5><input style="width:270px;" type="text" class="input" required="true" th:value="${info.expertUnit}" name="expertUnit" placeholder="请输入专家单位"/><br/>	
+	       		<h5 style="width:85px; display: inline-block;">来源：</h5>
 	       			<select class="bt-select" name="source" required="true" style="height: 26px;width: 167px;">
 	       				<option></option>
 	        	 		<option th:each="module:${courSourceList}" th:value="${module}" th:selected="${#strings.equals(info.source, module)}" ><div th:text="${module}"/></option>
 	       			</select><br/>
-	       		<label style="width:85px;">是否国家级项目：</label>
+	       		<h5 style="width:85px; display: inline-block;">是否国家级项目：</h5>
 	       			<select class="bt-select" name="projectLevel" required="true" style="height: 26px;width: 167px;">
 	       				<option th:each="module:${moduleMap}" th:value="${module.key}" th:selected="${#strings.equals(info.projectLevel, module.key)}"><div th:text="${module.value}"/></option>
 	       			</select><br/>		
-	       		<label style="width:85px;">电脑版播放类型：</label>
+	       		<h5 style="width:85px; display: inline-block;">电脑版播放类型：</h5>
 	       			<select class="bt-select" name="playType" required="true" style="height: 26px;width: 167px;">
 	       				<option></option>
 	        	 		<option th:each="module:${kjkPlayTypeList}" th:value="${module.playType}" th:selected="${#strings.equals(info.playType, module.playType)}"><div th:text="${module.playTypeName}"/></option>
 	       			</select><br/>
-	       		<label style="width:85px;">手机版播放类型：</label>
+	       		<h5 style="width:85px; display: inline-block;">手机版播放类型：</h5>
 	       			<select  class="bt-select" name="mobileType" required="true" style="height: 26px;width: 167px;">
 	       				<option></option>
 	       				<option th:each="module:${kjkPlayTypeList}" th:value="${module.playType}" th:selected="${#strings.equals(info.mobileType, module.playType)}"><div th:text="${module.playTypeName}"/></option>
 	       			</select><br/>	
-	       		<label style="width:85px;">播放参数1：</label><textarea rows="2" style="width: 300px;" name="par1" th:text="${info.par1}" placeholder="请输入播放参数1"  ></textarea><br/>
-	       		<label style="width:85px;">播放参数2：</label><textarea rows="2" style="width: 300px;" name="par2"  th:text="${info.par2}" placeholder="请输入播放参数2" ></textarea><br/>
-	       		<label style="width:85px;">播放参数3：</label><textarea rows="2" style="width: 300px;" name="par3" th:text="${info.par3}" placeholder="请输入播放参数3" ></textarea><br/>
-	       		<label style="width:85px;">时长（时:分:秒）：</label><input style="width:270px;" type="text" required="true" class="input" th:value="${info.classTimeStr}" name="classTimeStr" placeholder="请输入时长"/><br/>
-	       		<label style="width:85px;">标签：</label>	<textarea rows="2" style="width: 300px;" name="label" th:text="${info.label}" placeholder="请输入标签" ></textarea><br/>
-	       		<label style="width:85px;">缩略图：</label><input style="width:270px;" type="text" class="input" th:value="${info.slImg}" name="slImg" placeholder="请输入缩略图"/><br/>
-	       		<label style="width:85px;">logo：</label><input style="width:270px;" type="text" class="input" th:value="${info.logo}" name="logo" placeholder="请输入logo"/><br/>
-	       		<label style="width:85px;">片头：</label><input style="width:270px;" type="text" class="input" th:value="${info.piantou}" name="piantou" placeholder="请输入片头"/><br/>
-	       		<label style="width:85px;">片尾：</label><input style="width:270px;" type="text" class="input" th:value="${info.pianwei}" name="pianwei" placeholder="请输入片尾"/><br/>
-	       		<label style="width:85px;">拍摄年份：</label><input size="16" type="text" readonly="readonly" th:value="${info.shotYear}"  name="shotYear" class="form_datetime" /><br/>		
-				<label style="width:85px;">备注：</label><textarea rows="2" style="width: 300px;" name="remark" placeholder="请输入备注" th:text="${info.remark}"></textarea><br/>
+	       		<h5 style="width:85px; display: inline-block;">播放参数1：</h5><textarea rows="2" style="width: 300px;" name="par1" th:text="${info.par1}" placeholder="请输入播放参数1"  ></textarea><br/>
+	       		<h5 style="width:85px; display: inline-block;">播放参数2：</h5><textarea rows="2" style="width: 300px;" name="par2"  th:text="${info.par2}" placeholder="请输入播放参数2" ></textarea><br/>
+	       		<h5 style="width:85px; display: inline-block;">播放参数3：</h5><textarea rows="2" style="width: 300px;" name="par3" th:text="${info.par3}" placeholder="请输入播放参数3" ></textarea><br/>
+	       		<h5 style="width:85px; display: inline-block;">时长（时:分:秒）：</h5><input style="width:270px;" type="text" required="true" class="input" th:value="${info.classTimeStr}" name="classTimeStr" placeholder="请输入时长"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">标签：</h5>	<textarea rows="2" style="width: 300px;" name="label" th:text="${info.label}" placeholder="请输入标签" ></textarea><br/>
+	       		<h5 style="width:85px; display: inline-block;">缩略图：</h5><input style="width:270px;" type="text" class="input" th:value="${info.slImg}" name="slImg" placeholder="请输入缩略图"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">logo：</h5><input style="width:270px;" type="text" class="input" th:value="${info.logo}" name="logo" placeholder="请输入logo"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">片头：</h5><input style="width:270px;" type="text" class="input" th:value="${info.piantou}" name="piantou" placeholder="请输入片头"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">片尾：</h5><input style="width:270px;" type="text" class="input" th:value="${info.pianwei}" name="pianwei" placeholder="请输入片尾"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">拍摄年份：</h5><input size="16" type="text" readonly="readonly" th:value="${info.shotYear}"  name="shotYear" class="form_datetime" /><br/>		
+				<h5 style="width:85px; display: inline-block;">备注：</h5><textarea rows="2" style="width: 300px;" name="remark" placeholder="请输入备注" th:text="${info.remark}"></textarea><br/>
 				
 				<br/><div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">

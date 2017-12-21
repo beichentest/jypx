@@ -8,7 +8,12 @@ import com.geekcattle.model.BaseEntity;
 
 @Table(name = "NCME_EXPERT_NEW")
 public class NcmeExpert extends BaseEntity implements Serializable{
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -534555978321347338L;
+
+	@Id
     @Column(name = "EXP_ID")
     private String expId;
 

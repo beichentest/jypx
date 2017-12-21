@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+<style type="text/css">
+.c_i{width: 280px;}
+</style>	
+</head>
+<body>
+<section class="content">
+<div class="row">
+	<div class="col-md-12 col-md-offset-0">
+		<div class="box-body">
+			<form class="form-horizontal js-ajax-layer-form" action="/console/kjk/ncmeExpert/edit" method="post">
+				 <div th:if="${not #strings.isEmpty(info.expId)}">
+					<input type="hidden" name="expId" th:value="${info.expId}" />	
+				</div>							
+				<label style="width:85px;">专家姓名：</label><input <h5 style="width:85px; display: inline-block;"> type="text" class="input" required="required" maxlength="20" th:value="${info.expName}" name="expName" placeholder="请输入专家姓名"/><br/>
+	       		<label style="width:85px;">地区：</label><input style="width:270px;display: inline-block;" type="text" class="input" th:value="${info.area}" maxlength="50" name="area" placeholder="请输入地区"/><br/>
+	       		<label style="width:85px;">专业：</label><input style="width:270px;display: inline-block;" type="text" class="input" maxlength="32" th:value="${info.major}" name="major" placeholder="请输入专业"/><br/>
+	       		<label style="width:85px;">职务/职称：</label><input style="width:270px;display: inline-block;" type="text" class="input" th:value="${info.title}" name="title" placeholder="请输入职务/职称"/><br/>
+	       		<label style="width:85px;">单位：</label><input style="width:270px;display: inline-block;" type="text" class="input" maxlength="50" th:value="${info.unit}" name="unit" placeholder="请输入单位"/><br/>
+	       		<label style="width:85px;">座机：</label><input style="width:170px;display: inline-block;" type="text" class="input" th:value="${info.tel}" maxlength="15" name="tel" placeholder="请输入座机号"/><br/>
+	       		<label style="width:85px;">手机：</label><input style="width:170px;display: inline-block;" type="text" class="input" th:value="${info.mobile}" maxlength="15" name="mobile" placeholder="请输入手机号"/><br/>
+	       		<label style="width:85px;">邮箱：</label><input style="width:170px;display: inline-block;" type="text" class="input" th:value="${info.email}" maxlength="30"  name="email" placeholder="请输入邮箱地址"/><br/>	
+	       		<label style="width:85px;">身份证：</label><input style="width:270px;display: inline-block;" type="text" class="input" required="required" th:value="${info.idCard}" name="idCard" placeholder="请输入介绍"/><br/>	
+	       		<label style="width:85px;">银行：</label><input style="width:270px;display: inline-block;" type="text" class="input"  th:value="${info.bankName}" name="bankName" placeholder="请输入专家"/><br/>	
+	       		<label style="width:85px;">银行卡：</label><input style="width:270px;display: inline-block;" type="text" class="input"  th:value="${info.bankCard}" name="bankCard" placeholder="请输入专家单位"/><br/>	
+	       		<label style="width:85px;">地址：</label><input style="width:270px;display: inline-block;" type="text" class="input" th:value="${info.address}" name="address" placeholder="请输入文件类型"/><br/>
+	       		<label style="width:85px;">简介：</label><textarea rows="2" style="width: 300px;display: inline-block;" name="remark" placeholder="请输入简介" th:text="${info.remark}"></textarea><br/>		
+				
+				<br/><div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</section>
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/assets/bootstrap-3.3.5/js/laydate.js"></script>
+<script type="text/javascript" src="/static/assets/fileinput/fileinput.min.js"></script>
+<script type="text/javascript" src="/static/assets/fileinput/zh.js"></script>
+<script type="text/javascript" src="/static/assets/fileinput/theme.min.js"></script>
+
+<script th:inline="javascript">	
+$(function() {
+	
+	//年选择器
+	laydate.render({
+	  elem: '.form_datetime'
+	  ,type: 'year'
+	});
+	
+	$('#subject2Name').change(function(){
+		var name=this.value;
+		if(name !=''){
+			$.ajax({  
+	            type: "get",  
+	            url: "/console/kjk/ajaxSubjectName",  
+	            data: {subjectName2:name},  
+	            dataType: "json",  
+	            success: function (data) {  
+	            	var itemHTML="";
+	            	$.each(data, function(index, element) {  
+	            		/*<![CDATA[*/
+	            		itemHTML += "<option value='"+element.subjectName+"'>"+element.subjectName+"</option>";
+	            		/*]]>*/
+	            	});
+	            	$("#subject").empty();
+                    $("#subject").html(itemHTML);  
+	            }  
+	        });
+		}
+    });  
+	
+});
+
+
+</script>		
+</body>
+</html>

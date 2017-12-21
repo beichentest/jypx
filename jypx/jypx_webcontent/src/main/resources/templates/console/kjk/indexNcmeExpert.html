@@ -1,0 +1,270 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="console/header">
+<style>
+html, body {
+	margin: 0;
+	padding: 0;
+	font-size: 75%;
+}
+</style>
+</head>
+<body>
+	<section class="content-header">
+		<h1>专家管理</h1>
+	</section>
+
+	<section class="content table-content">
+		<div id="opt">
+			<div id="query">
+				<input type="button" class="btn btn-primary" id="add_btn"
+					value="新 增" /> <input type="button" class="btn btn-primary"
+					id="del_btn" value="删 除" /> <label>地区：</label><input type="text"
+					class="input" id="area" /> <label>姓名：</label><input type="text"
+					class="input" id="expName" /> <label>专业：</label><input type="text"
+					class="input" id="major" /> <label>单位：</label><input type="text"
+					class="input" id="unit" /> <input type="submit"
+					class="btn btn-primary" id="find_btn" value="查 询" />
+			</div>
+		</div>
+		<table id="mygrid"></table>
+		<div id="jqgrid-pager"></div>
+	</section>
+	<div th:include="console/footer"></div>
+	<script type="text/javascript" src="/static/js/jquery-1.7.1.js"></script>
+	<script type="text/javascript"
+		src="/static/assets/jqgrid/js/jquery.jqGrid.src.js"></script>
+	<script type="text/javascript"
+		src="/static/assets/jqgrid/js/i18n/grid.locale-cn.js"></script>
+	<script th:inline="javascript">    
+$('#mygrid').jqGrid({  
+    url : '/console/kjk/ncmeExpert/list',  
+    //postData:{'menuId':$('#menuId').val(),'type':$('#type').val()},  
+    mtype : "GET",  
+    contentType : "application/json",  
+    datatype : "json", 
+    prmNames : {  
+    	page:"page",    // 表示请求页码的参数名称  
+    	rows:"limit",    // 表示请求行数的参数名称  
+    	sort: "sort", // 表示用于排序的列名的参数名称  
+    	order: "order", // 表示采用的排序方式的参数名称  
+    	search:"_search", // 表示是否是搜索请求的参数名称  
+    	nd:"nd", // 表示已经发送请求的次数的参数名称  
+    	id:"id", // 表示当在编辑数据模块中发送数据时，使用的id的名称  
+    	oper:"oper",    // operation参数名称（我暂时还没用到）  
+    	editoper:"edit", // 当在edit模式中提交数据时，操作的名称  
+    	addoper:"add", // 当在add模式中提交数据时，操作的名称  
+    	deloper:"del", // 当在delete模式中提交数据时，操作的名称  
+    	subgridid:"id", // 当点击以载入数据到子表时，传递的数据名称  
+    	npage: null,   
+    	totalrows:"totalrows" // 表示需从Server得到总共多少行数据的参数名称，参见jqGrid选项中的rowTotal  ,
+    },
+   styleUI: 'Bootstrap',
+    colModel : [
+    {  
+        label : '专家id',  
+        name : 'expId'  ,
+        key:true
+    }, {  
+        label : '专家姓名',  
+        name : 'expName'
+    },
+    {  
+        label : '地区',  
+        name : 'area'
+    },
+    {  
+        label : '专业',  
+        name : 'major'
+    },
+    {
+        label : '职称/职务',  
+        name : 'title' ,
+    },
+    {  
+        label : '单位',  
+        name : 'unit',
+    },
+    {  
+        label : '座机',  
+        name : 'tel',
+    },
+    {  
+        label : '手机',  
+        name : 'mobile',
+    },
+    {  
+        label : '邮箱',  
+        name : 'email',
+    },
+    {  
+        label : '身份证',  
+        name : 'idCard',
+    },
+    {  
+        label : '银行',  
+        name : 'bankName'      
+    },
+    {  
+        label : '银行卡',  
+        name : 'bankCard'
+    },
+    {  
+        label : '地址',  
+        name : 'address'
+    },
+    {  
+        label : '简介',  
+        name : 'remark'
+    },
+    {  
+        label : '添加时间',  
+        name : 'addDate'
+    },
+    {  
+        label : '修改时间',  
+        name : 'updateDate'
+    }
+    ],  
+    height : '100%',  
+    pager : '#jqgrid-pager',  
+    autowidth : true,
+    rowNum : 20, 
+    rowList : [ 10, 20, 30 ],  
+    sortname : 'addDate',  
+    sortable : true,  
+    sortorder : 'desc', 
+    viewrecords:true,
+    caption:'专家表',
+    jsonReader : {  
+        root : "result.pageInfo.list", // json中代表实际模型数据的入口  
+        records : "result.pageInfo.total", // json中代表数据行总数的数据  
+        page : "result.pageInfo.pageNum", // json中代表当前页码的数据  
+        total : "result.pageInfo.pages", // json中代表页码总数的数据  
+        repeatitems : false  
+    },    
+    multiselect : true,  
+    onSelectRow : function(rowid,  
+            status) {  
+        selId = rowid;  
+    }  
+});
+function changeDateFormat(value) {    	
+    if (value != null) {        	
+    	return getSmpFormatDateByLong(value,true);        	
+    } 
+} 
+
+
+function openPop(id){
+    layer.open({
+        type: 2,
+        title: '修改',
+        shadeClose: true,
+        shade: false,
+        maxmin: true, //开启最大化最小化按钮
+        area: ['500px', '650px'],
+        content: '/console/kjk/courseware/edit?id=' +id
+    });
+}
+$(function(){ 
+	//查询数据
+    $("#find_btn").click(function(){ 
+    	var area = $('#area').val();
+        var expName = $("#expName").val(); 
+        var major = $("#major").val();
+        var unit = $("#unit").val(); 
+        $("#mygrid").jqGrid('setGridParam',{ 
+            url:"/console/kjk/ncmeExpert/list", 
+            postData:{'area':area,'expName':expName,'major':major,'unit':unit}, //发送数据 
+            page:1 
+        }).trigger("reloadGrid"); //重新载入 
+    });
+	
+	//添加专家
+	$("#add_btn").click(function(){
+		layer.open({
+            type: 2,
+            title: '添加专家',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['500px', '545px'],
+            content: '/console/kjk/ncmeExpert/edit'
+        });
+	 });
+	
+	//删除数据)
+	$("#del_btn").click(function(){
+		var selectedRowIds = $("#mygrid").jqGrid("getGridParam", "selarrrow");
+		//判断是否为空  
+        if(selectedRowIds==""){  
+			layer.msg("请选择要删除的行！");
+        }
+        $.ajax({  
+            type: "post",  
+            url: "/console/kjk/ncmeExpert/delete",  
+            data: {expIds:selectedRowIds.toString()},  
+            dataType: "json",  
+            success: function (data) {  
+                //判断后台是否删除成功  
+                //如果成功则调用jqGrid的reloadGrid方法重新加载表格  
+                if(data.msg==1){ 
+                	layer.msg("删除成功！");
+                    $("#mygrid").trigger("reloadGrid"); //重新载入 
+                }else{
+                	layer.msg("删除异常，请联系管理员");
+                }  
+            }  
+        });
+		 
+	});
+
+}); 
+
+
+//刷新当前表格type=1修改，2添加
+function reloadCurrentGrid(type){
+	if(type==1){
+		 $("#mygrid").trigger("reloadGrid"); //重新载入 
+	}else{
+		 $("#mygrid").jqGrid('setGridParam',{page:1}).trigger("reloadGrid"); //重新载入 
+	}
+}
+
+	function playType(value){
+	var str='';
+	/*<![CDATA[*/
+	var  list = [[${kjkPlayTypeList}]];
+	for(var i=0;i<list.length;i++){
+		if(list[i].playType==value){
+			str=list[i].playTypeName;
+			break;
+		}
+	}
+	/*]]>*/
+	return str;
+	}
+	//课件预览
+	function preview(id,name){
+		 $.ajax({  
+	            type: "get",  
+	            url: "/console/kjk/courseware/view?id="+id,  
+	            data: {id:id},  
+	            dataType: "json",  
+	            success: function (data) {  
+	                //判断后台是否删除成功  
+	                //如果成功则调用jqGrid的reloadGrid方法重新加载表格  
+	                alert(data.result);
+                	window.open(data.result,"_blank");
+	                if(data.msg==1){ 
+	                	window.open(data.result,"_blank");
+	                }  
+	            }  
+	        });
+
+	}
+</script>
+</body>
+</html>

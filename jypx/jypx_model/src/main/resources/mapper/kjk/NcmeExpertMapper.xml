@@ -23,4 +23,25 @@
     <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="LOG" property="log" jdbcType="VARCHAR" />
   </resultMap>
+    <sql id="Courseware_Where">
+      <where>
+          <if test="area!=null and area!=''">
+              ne.area like '%'||#{area}||'%'
+          </if>
+          <if test="expName!=null and expName!=''">
+              and ne.exp_name like '%'||#{expName}||'%'
+          </if>
+          <if test="major!=null and major!=''">
+              and ne.major like '%'||#{major}||'%'
+          </if>
+          <if test="unit!=null and unit!=''">
+              and ne.unit like '%'||#{unit}||'%'
+          </if>
+
+      </where>
+  </sql>
+  <select id="getNcmeExpertPageList"  resultMap="BaseResultMap">
+        select * from NCME_EXPERT_NEW ne
+        <include refid="Courseware_Where" />
+    </select>
 </mapper>

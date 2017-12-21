@@ -2,8 +2,13 @@ package com.geekcattle.model.kjk;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.geekcattle.model.BaseEntity;
 
 @Table(name = "NCME_EXPERT_NEW")
@@ -59,7 +64,30 @@ public class NcmeExpert extends BaseEntity implements Serializable{
 
     @Column(name = "LOG")
     private String log;
+    
+    public String getSort() {
+		return sort;
+	}
 
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+	public String getOrder() {
+		return order;
+	}
+
+	public void setOrder(String order) {
+		this.order = order;
+	}
+
+	@Transient
+    @JsonIgnore
+    private String sort = "";
+
+    @Transient
+    @JsonIgnore
+    private String order = "";
     /**
      * @return EXP_ID
      */

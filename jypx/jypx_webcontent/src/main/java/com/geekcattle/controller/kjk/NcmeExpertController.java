@@ -76,37 +76,49 @@ public class NcmeExpertController {
 		return ReturnUtil.Success("加载成功", map, null);
 	}
 
-	@RequiresPermissions("ncmeExpert:edit")
-	@RequestMapping(value = "/ncmeExpert/delete", method = { RequestMethod.POST })
-	@ResponseBody
-	public ModelMap delete(String expIds, HttpServletRequest request) {
-		try {
-			if (StringUtils.isBlank(expIds)) {
-				return ReturnUtil.Error("Error", null, null);
-			} else {
-				StringBuffer sbf = new StringBuffer();
-				NcmeExpert ncmeExpert = new NcmeExpert();
-				String[] ids = expIds.split(",");
-				for (String id : ids) {
-					ncmeExpert.setExpId(String.valueOf(id));
-					ncmeExpertService.deleteNcmeExpert(ncmeExpert);
-					sbf.append(id).append(",");
-				}
-				// 记录删除专家日志
-				String ip = IpUtil.getIpAddr(request);
-				Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
-				logService.insertLoginLog(admin.getUsername(), ip,
-						"删除专家" + sbf.toString().substring(0, sbf.toString().length() - 1));
-				return ReturnUtil.Success("1", null, null);
-			}
+	/**
+	 * 专家删除
+	 * @param expIds
+	 * @param request
+	 * @return
+	 */
+//	@RequiresPermissions("ncmeExpert:edit")
+//	@RequestMapping(value = "/ncmeExpert/delete", method = { RequestMethod.POST })
+//	@ResponseBody
+//	public ModelMap delete(String expIds, HttpServletRequest request) {
+//		try {
+//			if (StringUtils.isBlank(expIds)) {
+//				return ReturnUtil.Error("Error", null, null);
+//			} else {
+//				StringBuffer sbf = new StringBuffer();
+//				NcmeExpert ncmeExpert = new NcmeExpert();
+//				String[] ids = expIds.split(",");
+//				for (String id : ids) {
+//					ncmeExpert.setExpId(String.valueOf(id));
+//					ncmeExpertService.deleteNcmeExpert(ncmeExpert);
+//					sbf.append(id).append(",");
+//				}
+//				// 记录删除专家日志
+//				String ip = IpUtil.getIpAddr(request);
+//				Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
+//				logService.insertLoginLog(admin.getUsername(), ip,
+//						"删除专家" + sbf.toString().substring(0, sbf.toString().length() - 1));
+//				return ReturnUtil.Success("1", null, null);
+//			}
+//
+//		} catch (Exception e) {
+//			logger.error("======", e);
+//			e.printStackTrace();
+//			return ReturnUtil.Error("0", null, null);
+//		}
+//	}
 
-		} catch (Exception e) {
-			logger.error("======", e);
-			e.printStackTrace();
-			return ReturnUtil.Error("0", null, null);
-		}
-	}
-
+	/**
+	 * 跳转到专家添加或编辑页面
+	 * @param ncmeExpert
+	 * @param model
+	 * @return
+	 */
 	@RequiresPermissions("ncmeExpert:edit")
 	@RequestMapping(value = "/ncmeExpert/edit", method = { RequestMethod.GET })
 	public String from(NcmeExpert ncmeExpert, Model model) {
@@ -117,6 +129,13 @@ public class NcmeExpertController {
 		return "console/kjk/fromNcmeExpertEdit";
 	}
 	
+	/**
+	 * 专家添加或编辑
+	 * @param ncmeExpert
+	 * @param result
+	 * @param request
+	 * @return
+	 */
 	@RequiresPermissions("ncmeExpert:edit")
 	@RequestMapping(value = "/ncmeExpert/edit", method = { RequestMethod.POST })
 	@ResponseBody
@@ -141,6 +160,7 @@ public class NcmeExpertController {
 				str="添加专家-"+ncmeExpert.getExpName()+" idCard-"+ncmeExpert.getIdCard();
 				ncmeExpert.setAddDate(DateUtil.getSysTime());
 				ncmeExpertService.insert(ncmeExpert);
+				
 			}
 			String ip = IpUtil.getIpAddr(request);
 			logService.insertLoginLog(admin.getUsername(), ip,str);

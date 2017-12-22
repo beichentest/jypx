@@ -1,47 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.geekcattle.mapper.kjk.NcmeExpertMapper" >
-  <resultMap id="BaseResultMap" type="com.geekcattle.model.kjk.NcmeExpert" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="EXP_ID" property="expId" jdbcType="VARCHAR" />
-    <result column="AREA" property="area" jdbcType="VARCHAR" />
-    <result column="MAJOR" property="major" jdbcType="VARCHAR" />
-    <result column="EXP_NAME" property="expName" jdbcType="VARCHAR" />
-    <result column="TITLE" property="title" jdbcType="VARCHAR" />
-    <result column="UNIT" property="unit" jdbcType="VARCHAR" />
-    <result column="TEL" property="tel" jdbcType="VARCHAR" />
-    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
-    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
-    <result column="ID_CARD" property="idCard" jdbcType="VARCHAR" />
-    <result column="BANK_NAME" property="bankName" jdbcType="VARCHAR" />
-    <result column="BANK_CARD" property="bankCard" jdbcType="VARCHAR" />
-    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
-    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
-    <result column="ADD_DATE" property="addDate" jdbcType="TIMESTAMP" />
-    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
-    <result column="LOG" property="log" jdbcType="VARCHAR" />
-  </resultMap>
-    <sql id="Courseware_Where">
-      <where>
-          <if test="area!=null and area!=''">
-              ne.area like '%'||#{area}||'%'
-          </if>
-          <if test="expName!=null and expName!=''">
-              and ne.exp_name like '%'||#{expName}||'%'
-          </if>
-          <if test="major!=null and major!=''">
-              and ne.major like '%'||#{major}||'%'
-          </if>
-          <if test="unit!=null and unit!=''">
-              and ne.unit like '%'||#{unit}||'%'
-          </if>
+<mapper namespace="com.geekcattle.mapper.kjk.NcmeExpertMapper">
+	<resultMap id="BaseResultMap" type="com.geekcattle.model.kjk.NcmeExpert">
+		<!-- WARNING - @mbg.generated -->
+		<id column="EXP_ID" property="expId" jdbcType="VARCHAR" />
+		<result column="AREA" property="area" jdbcType="VARCHAR" />
+		<result column="MAJOR" property="major" jdbcType="VARCHAR" />
+		<result column="EXP_NAME" property="expName" jdbcType="VARCHAR" />
+		<result column="TITLE" property="title" jdbcType="VARCHAR" />
+		<result column="UNIT" property="unit" jdbcType="VARCHAR" />
+		<result column="TEL" property="tel" jdbcType="VARCHAR" />
+		<result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="ID_CARD" property="idCard" jdbcType="VARCHAR" />
+		<result column="BANK_NAME" property="bankName" jdbcType="VARCHAR" />
+		<result column="BANK_CARD" property="bankCard" jdbcType="VARCHAR" />
+		<result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="ADD_DATE" property="addDate" jdbcType="TIMESTAMP" />
+		<result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+		<result column="LOG" property="log" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Courseware_Where">
+		<where>
+			<if test="area!=null and area!=''">
+				ne.area like '%'||#{area}||'%'
+			</if>
+			<if test="expName!=null and expName!=''">
+				and ne.exp_name like '%'||#{expName}||'%'
+			</if>
+			<if test="major!=null and major!=''">
+				and ne.major like '%'||#{major}||'%'
+			</if>
+			<if test="unit!=null and unit!=''">
+				and ne.unit like '%'||#{unit}||'%'
+			</if>
 
-      </where>
-  </sql>
-  <select id="getNcmeExpertPageList"  resultMap="BaseResultMap">
-        select * from NCME_EXPERT_NEW ne
-        <include refid="Courseware_Where" />
-    </select>
+		</where>
+	</sql>
+	<select id="getNcmeExpertPageList" resultMap="BaseResultMap">
+		select * from NCME_EXPERT_NEW ne
+		<include refid="Courseware_Where" />
+	</select>
+	<insert id="insertNcmeExpert" parameterType="com.geekcattle.model.kjk.NcmeExpert" >
+		<selectKey keyProperty="expId" resultType="java.lang.String" order="BEFORE">  
+            select NCME_EXPERT_SEQ.NEXTVAL from dual  
+    	</selectKey>
+		insert into NCME_EXPERT_NEW
+		(EXP_ID,AREA,MAJOR,EXP_NAME,TITLE,UNIT,TEL,MOBILE,EMAIL,
+		ID_CARD,BANK_NAME,BANK_CARD,ADDRESS,REMARK,ADD_DATE,
+		UPDATE_DATE,LOG) values (
+			#{expId,jdbcType=VARCHAR},
+			#{area,jdbcType=VARCHAR},
+			#{ major,jdbcType=VARCHAR},
+			#{ expName,jdbcType=VARCHAR},
+			#{ title,jdbcType=VARCHAR},
+			#{ unit,jdbcType=VARCHAR},
+			#{ tel,jdbcType=VARCHAR},
+			#{ mobile,jdbcType=VARCHAR},
+			#{ email,jdbcType=VARCHAR},
+			#{ idCard,jdbcType=VARCHAR},
+			#{ bankName,jdbcType=VARCHAR},
+			#{ bankCard,jdbcType=VARCHAR},
+			#{ address,jdbcType=VARCHAR},
+			#{ remark,jdbcType=VARCHAR},
+			#{ addDate,jdbcType=TIMESTAMP},
+			#{ updateDate,jdbcType=TIMESTAMP},
+			#{ log,jdbcType=VARCHAR}
+		)
+	</insert>
 </mapper>

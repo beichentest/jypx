@@ -20,11 +20,12 @@ html, body {
 			<div id="query">
 				<input type="button" class="btn btn-primary" id="add_btn"
 					value="新 增" /> <input type="button" class="btn btn-primary"
-					id="del_btn" value="删 除" /> <label>地区：</label><input type="text"
-					class="input" id="area" /> <label>姓名：</label><input type="text"
-					class="input" id="expName" /> <label>专业：</label><input type="text"
-					class="input" id="major" /> <label>单位：</label><input type="text"
-					class="input" id="unit" /> <input type="submit"
+					id="edit_btn" value="编  辑" />
+				<!--<input type="button" class="btn btn-primary" id="del_btn" value="删 除" />-->
+				<label>地区：</label><input type="text" class="input" id="area" /> <label>姓名：</label><input
+					type="text" class="input" id="expName" /> <label>专业：</label><input
+					type="text" class="input" id="major" /> <label>单位：</label><input
+					type="text" class="input" id="unit" /> <input type="submit"
 					class="btn btn-primary" id="find_btn" value="查 询" />
 			</div>
 		</div>
@@ -120,11 +121,19 @@ $('#mygrid').jqGrid({
     },
     {  
         label : '添加时间',  
-        name : 'addDate'
+        name : 'addDate',
+        formatter : changeDateFormat
     },
     {  
         label : '修改时间',  
-        name : 'updateDate'
+        name : 'updateDate',
+        formatter : changeDateFormat
+    },
+    {  
+        label : '操作',  
+        name : 'expId',  
+        formatter : operateFormatter,
+        align : 'center'
     }
     ],  
     height : '100%',  
@@ -156,6 +165,13 @@ function changeDateFormat(value) {
     } 
 } 
 
+function operateFormatter(value, row, index) {
+    return [           
+        '<a href="javascript:openPop(\''+value+'\');" >',         
+        '<i class="glyphicon glyphicon-edit"></i>修改',
+        '</a>'
+    ].join('');
+}
 
 function openPop(id){
     layer.open({
@@ -165,7 +181,7 @@ function openPop(id){
         shade: false,
         maxmin: true, //开启最大化最小化按钮
         area: ['500px', '650px'],
-        content: '/console/kjk/courseware/edit?id=' +id
+        content: '/console/kjk/ncmeExpert/edit?expId=' +id
     });
 }
 $(function(){ 
@@ -194,6 +210,7 @@ $(function(){
             content: '/console/kjk/ncmeExpert/edit'
         });
 	 });
+	
 	
 	//删除数据)
 	$("#del_btn").click(function(){

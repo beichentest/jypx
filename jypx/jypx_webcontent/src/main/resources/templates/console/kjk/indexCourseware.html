@@ -163,10 +163,17 @@ $('#mygrid').jqGrid({
         name : 'path'
     },
     {  
-        label : '操作',  
+        label : '编辑',  
         name : 'id',  
         formatter : operateFormatter,
-        align : 'center'
+        align : 'center',
+    },
+    {  
+        label : '操作',  
+        name : 'id',  
+        formatter : costFormatter,
+        align : 'center',
+        width:300
     }
     ],  
     height : '100%',  
@@ -218,6 +225,12 @@ function operateFormatter(value, row, index) {
         '</a>'
     ].join('');
 }
+function costFormatter(value, row, index) {
+	if(index.playFlag==1)
+        return '已设置'
+    else
+    	return '<a href="javascript:openCost(\''+value+'\');" ><i class="glyphicon glyphicon-cog"></i>设置劳务费</a>'
+}
 function openPop(id){
     layer.open({
         type: 2,
@@ -226,10 +239,28 @@ function openPop(id){
         shade: false,
         maxmin: true, //开启最大化最小化按钮
         area: ['500px', '545px'],
-        content: '/console/kjk/courseware/eidt?id=' +id
+        content: '/console/kjk/courseware/edit?id=' +id
     });
 }
-$(function(){ 
+//打开劳务费模态框
+function openCost(id){
+    layer.open({
+        type: 2,
+        title: '劳务费设置',
+        shadeClose: true,
+        shade: false,
+        maxmin: true, //开启最大化最小化按钮
+        area: ['500px', '500px'],
+        content: '/console/kjk/cost/edit?id=' +id
+    });
+}
+
+$(function(){
+	//自适应宽度
+	$(window).resize(function(){		 
+        $("#mygrid").setGridWidth($(window).width());
+    });
+	
 	//查询数据
     $("#find_btn").click(function(){ 
         var cwId = $("#cw_id").val(); 
@@ -276,6 +307,7 @@ $(function(){
 		//判断是否为空  
         if(selectedRowIds==""){  
 			layer.msg("请选择要删除的行！");
+			return;
         }
 		
         $.ajax({  
@@ -306,7 +338,7 @@ $(function(){
             shade: false,
             maxmin: true, //开启最大化最小化按钮
             area: ['500px', '545px'],
-            content: '/console/kjk/courseware/eidt'
+            content: '/console/kjk/courseware/edit'
         });
 	 });
 }); 

@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content">
+<div class="row">
+	<div class="col-md-12 col-md-offset-0">
+		<div class="box-body">
+			<form class="form-horizontal js-ajax-layer-form" action="/console/kjk/cost/save" method="post">
+				<h5 style="width:85px; display: inline-block;">课件id：</h5><input style="width:270px;" type="text" class="input" name="cwId" th:value="${cwId}" readonly="readonly"/><br/>
+				<h5 style="width:85px; display: inline-block;">劳务费用：</h5><input style="width:270px;" type="text" class="input" required="true" name="cost" onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="请输入劳务费用"/><br/>
+				<h5 style="width:85px; display: inline-block;">专家姓名：</h5><input style="width:270px;" type="text" class="input" required="true" name="expertName"  placeholder="请输入专家姓名"/><br/>
+				<h5 style="width:85px; display: inline-block;">身份证号：</h5><input style="width:270px;" type="text" class="input" required="true" name="idCard" maxlength="18" placeholder="请输入身份证号"/><br/>
+				<h5 style="width:85px; display: inline-block;">手机号：</h5><input style="width:270px;" type="text" class="input" required="true" name="mobile" maxlength="11" onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="请输入手机号"/><br/>
+				<h5 style="width:85px; display: inline-block;">银行卡号：</h5><input style="width:270px;" type="text" class="input" required="true" name="cardNo" maxlength="19" onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="请输入银行卡号"/><br/>
+				<h5 style="width:85px; display: inline-block;">银行名称：</h5><input style="width:270px;" type="text" class="input" required="true" name="openingBank" placeholder="请输入开户行"/><br/>
+				<h5 style="width:85px; display: inline-block;">归属项目：</h5>
+	       			<select class="bt-select" name="system" required="true" style="height: 26px;width: 167px;">
+	       				<option></option>
+	        	 		<option th:each="module:${kjkDicList}" th:value="${module.dicId}"><div th:text="${module.dicDesc}"/></option>
+	       			</select><br/>
+				<h5 style="width:85px; display: inline-block;">支付描述：</h5><textarea rows="2" style="width: 300px;" name="payDesc" placeholder="请输入支付描述"></textarea><br/>
+				<br/><div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</section>
+<div th:include="console/footer"></div>
+
+</body>
+</html>

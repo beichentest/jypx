@@ -54,13 +54,13 @@
 	       		<h5 style="width:85px; display: inline-block;">播放参数1：</h5><textarea rows="2" style="width: 300px;" name="par1" th:text="${info.par1}" placeholder="请输入播放参数1"  ></textarea><br/>
 	       		<h5 style="width:85px; display: inline-block;">播放参数2：</h5><textarea rows="2" style="width: 300px;" name="par2"  th:text="${info.par2}" placeholder="请输入播放参数2" ></textarea><br/>
 	       		<h5 style="width:85px; display: inline-block;">播放参数3：</h5><textarea rows="2" style="width: 300px;" name="par3" th:text="${info.par3}" placeholder="请输入播放参数3" ></textarea><br/>
-	       		<h5 style="width:85px; display: inline-block;">时长（时:分:秒）：</h5><input style="width:270px;" type="text" required="true" class="input" th:value="${info.classTimeStr}" name="classTimeStr" placeholder="请输入时长"/><br/>
+	       		<h5 style="width:85px; display: inline-block;">时长（时:分:秒）：</h5><input style="width:270px;" type="text" required="true" readonly="readonly" th:value="${info.classTimeStr}" name="classTimeStr" class="time_str"/><br/>
 	       		<h5 style="width:85px; display: inline-block;">标签：</h5>	<textarea rows="2" style="width: 300px;" name="label" th:text="${info.label}" placeholder="请输入标签" ></textarea><br/>
 	       		<h5 style="width:85px; display: inline-block;">缩略图：</h5><input style="width:270px;" type="text" class="input" th:value="${info.slImg}" name="slImg" placeholder="请输入缩略图"/><br/>
 	       		<h5 style="width:85px; display: inline-block;">logo：</h5><input style="width:270px;" type="text" class="input" th:value="${info.logo}" name="logo" placeholder="请输入logo"/><br/>
 	       		<h5 style="width:85px; display: inline-block;">片头：</h5><input style="width:270px;" type="text" class="input" th:value="${info.piantou}" name="piantou" placeholder="请输入片头"/><br/>
 	       		<h5 style="width:85px; display: inline-block;">片尾：</h5><input style="width:270px;" type="text" class="input" th:value="${info.pianwei}" name="pianwei" placeholder="请输入片尾"/><br/>
-	       		<h5 style="width:85px; display: inline-block;">拍摄年份：</h5><input size="16" type="text" readonly="readonly" th:value="${info.shotYear}"  name="shotYear" class="form_datetime" /><br/>		
+	       		<h5 style="width:85px; display: inline-block;">拍摄年份：</h5><input size="16" type="text" required="true" readonly="readonly" th:value="${info.shotYear}"  name="shotYear" class="form_datetime" /><br/>		
 				<h5 style="width:85px; display: inline-block;">备注：</h5><textarea rows="2" style="width: 300px;" name="remark" placeholder="请输入备注" th:text="${info.remark}"></textarea><br/>
 				
 				<br/><div class="form-group">
@@ -86,6 +86,11 @@ $(function() {
 	laydate.render({
 	  elem: '.form_datetime'
 	  ,type: 'year'
+	});
+	//年选择器
+	laydate.render({
+	  elem: '.time_str'
+	  ,type: 'time'
 	});
 	
 	$('#subject2Name').change(function(){

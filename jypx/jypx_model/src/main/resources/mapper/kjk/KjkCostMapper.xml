@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.kjk.KjkCostMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.kjk.KjkCost" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="COST_ID" property="costId" jdbcType="VARCHAR" />
+    <result column="CW_ID" property="cwId" jdbcType="BIGINT" />
+    <result column="EXPERT_ID" property="expertId" jdbcType="VARCHAR" />
+    <result column="COST" property="cost" jdbcType="BIGINT" />
+    <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+    <result column="OPENING_BANK" property="openingBank" jdbcType="VARCHAR" />
+    <result column="SYSTEM" property="system" jdbcType="VARCHAR" />
+    <result column="PAY_DESC" property="payDesc" jdbcType="VARCHAR" />
+    <result column="APPLY_TIME" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="PAY_TIME" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="AUDIT_STATUS" property="auditStatus" jdbcType="VARCHAR" />
+    <result column="OPERATOR" property="operator" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="EXPERT_NAME" property="expertName" jdbcType="VARCHAR" />
+    <result column="ID_CARD" property="idCard" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="CWARE_NAME" property="cwareName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    COST_ID, CW_ID, EXPERT_ID, COST, CARD_NO, OPENING_BANK, SYSTEM, PAY_DESC, APPLY_TIME, 
+    PAY_TIME, AUDIT_STATUS, OPERATOR, STATUS, REMARK,EXPERT_NAME,ID_CARD,MOBILE,CWARE_NAME
+  </sql>
+  
+  <sql id="kjkCost_Where">
+      <where>
+          <if test="status!=null and status!=''">
+              kc.status = #{status}
+          </if>
+          <if test="cwId!=null and cwId!=''">
+              and kc.cw_id= #{cwId}
+          </if>
+          <if test="system!=null and system!=''">
+              and kc.play_flag = #{playFlag} 
+          </if>
+          <if test="beginTime!=null and beginTime!=''">
+		      <![CDATA[ and kc.apply_time>= to_date(#{beginTime}, 'yyyy-mm-dd') ]]>
+		  </if>
+		  <if test="endTime!=null and endTime!=''">
+		      <![CDATA[ and kc.apply_time<= to_date(#{endTime}, 'yyyy-mm-dd') ]]>
+		  </if>
+      </where>
+  </sql>
+  
+  <select id="findKjkCost"  resultMap="BaseResultMap">
+        select * from kjk_cost kc
+        <include refid="kjkCost_Where" />
+  </select>
+  
+  <insert id="insertKjkCost" parameterType="com.geekcattle.model.kjk.KjkCost" >
+    insert into KJK_COST (COST_ID, CW_ID, EXPERT_ID, 
+      COST, CARD_NO, OPENING_BANK, 
+      SYSTEM, PAY_DESC, PAY_TIME, 
+      AUDIT_STATUS, OPERATOR, 
+      STATUS, REMARK,EXPERT_NAME,ID_CARD,MOBILE)
+    values (#{costId,jdbcType=VARCHAR}, #{cwId,jdbcType=BIGINT}, #{expertId,jdbcType=VARCHAR}, 
+      #{cost,jdbcType=BIGINT}, #{cardNo,jdbcType=VARCHAR}, #{openingBank,jdbcType=VARCHAR}, 
+      #{system,jdbcType=VARCHAR}, #{payDesc,jdbcType=VARCHAR}, #{payTime,jdbcType=DATE}, 
+      #{auditStatus,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR},#{status,jdbcType=CHAR},
+      #{remark,jdbcType=VARCHAR},#{expertName,jdbcType=VARCHAR},#{idCard,jdbcType=VARCHAR},
+      #{mobile,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateBatch" parameterType="Map">    
+        update KJK_COST set     
+            AUDIT_STATUS=1,    
+            PAY_TIME=SYSDATE    
+        where COST_ID in  
+        <foreach collection="ids" open="(" separator="," close=")" item="id" index="index">
+   		#{id}
+   		</foreach>
+</update> 
+
+</mapper>

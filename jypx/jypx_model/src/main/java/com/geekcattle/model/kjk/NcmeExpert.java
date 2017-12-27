@@ -70,7 +70,20 @@ public class NcmeExpert extends BaseEntity implements Serializable{
     @Column(name = "LOG")
     private String log;
     
-    public String getSort() {
+    public NcmeExpert(){};
+	
+    public NcmeExpert(String expName,String mobile, String idCard, String bankName, String bankCard, Date addDate) {
+		super();
+		this.expName = expName;
+		this.mobile = mobile;
+		this.idCard = idCard;
+		this.bankName = bankName;
+		this.bankCard = bankCard;
+		this.addDate = addDate;
+	}
+
+
+	public String getSort() {
 		return sort;
 	}
 

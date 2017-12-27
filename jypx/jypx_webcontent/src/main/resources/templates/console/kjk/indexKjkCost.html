@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">      
+<head th:include="console/header">
+<style> html, body { margin: 0; padding: 0; font-size: 75%; }</style>
+</head>
+<body>
+<section class="content-header">
+    <h1>劳务费管理</h1>
+</section>
+
+<section class="content table-content">
+	<div id="opt"> 
+	    <div id="query">
+	       	<label>课件id：</label><input type="text" class="input" id="cw_id" /> 
+	      	<label>归属项目：</label>
+	      	<select id="system" class="bt-select" style="height: 26px;width: 115px;">
+	      		 <option value="">全部</option>
+	        	 <option th:each="module:${kjkDicList}" th:value="${module.dicId}"><div th:text="${module.dicDesc}"/></option>
+	       	</select>
+	       	<label>申请日期：</label> 
+	       	<input type="text" style="font-family: laydate-icon!important;" readonly="readonly" id="beginTime" class="form_datetime" />ㅡ
+	       	<input type="text" readonly="readonly" id="endTime" class="form_endtime" />
+	       	<input type="submit" class="btn btn-primary" id="find_btn" value="查 询" /> 
+	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出" />
+	        <input type="button" class="btn btn-primary" id="audit_btn" value="批量审核" />
+	    </div> 	     
+ </div>
+    <table id="mygrid"></table>
+    <div id="jqgrid-pager"></div>
+</section>
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/assets/bootstrap-3.3.5/js/laydate.js"></script>
+<script type="text/javascript" src="/static/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/static/assets/jqgrid/js/jquery.jqGrid.src.js"></script>				
+<script type="text/javascript" src="/static/assets/jqgrid/js/i18n/grid.locale-cn.js"></script>
+<script th:inline="javascript">    
+$('#mygrid').jqGrid({  
+    url : '/console/kjk/cost/list',  
+    mtype : "GET",  
+    contentType : "application/json",  
+    datatype : "json", 
+    prmNames : {  
+    	page:"page",    // 表示请求页码的参数名称  
+    	rows:"limit",    // 表示请求行数的参数名称  
+    	sort: "sort", // 表示用于排序的列名的参数名称  
+    	order: "order", // 表示采用的排序方式的参数名称  
+    	search:"_search", // 表示是否是搜索请求的参数名称  
+    	nd:"nd", // 表示已经发送请求的次数的参数名称  
+    	id:"id", // 表示当在编辑数据模块中发送数据时，使用的id的名称  
+    	oper:"oper",    // operation参数名称（我暂时还没用到）  
+    	editoper:"edit", // 当在edit模式中提交数据时，操作的名称  
+    	addoper:"add", // 当在add模式中提交数据时，操作的名称  
+    	deloper:"del", // 当在delete模式中提交数据时，操作的名称  
+    	subgridid:"id", // 当点击以载入数据到子表时，传递的数据名称  
+    	npage: null,   
+    	totalrows:"totalrows" // 表示需从Server得到总共多少行数据的参数名称，参见jqGrid选项中的rowTotal  
+    },
+   styleUI: 'Bootstrap',
+    colModel : [
+	{  
+	    name : 'costId',
+	    key : true,
+	    hidden:true
+	   
+	},            
+    {  
+        label : '课件id',  
+        name : 'cwId'  
+    },
+    {  
+        label : '课件名称',  
+        name : 'cwareName'
+    },
+    {  
+        label : '专家姓名',  
+        name : 'expertName'
+    },
+    {
+        label : '电话',  
+        name : 'mobile'
+    },
+    {  
+        label : '身份证号',  
+        name : 'idCard'
+    },
+    {  
+        label : '劳务费金额',  
+        name : 'cost'
+    },
+    {  
+        label : '银行卡号',  
+        name : 'cardNo'    
+    },
+    {  
+        label : '开户行',  
+        name : 'openingBank'
+    },
+    {  
+        label : '申请时间',  
+        name : 'applyTime',
+        formatter : applyDateFormat
+    },
+    {  
+        label : '归属项目',  
+        name : 'system',
+        formatter : systemFormat
+    },
+    {  
+        label : '支付时间',  
+        name : 'auditStatus',
+        align : 'center',
+        formatter : payDateFormat
+    }
+    ],  
+    height : '100%',  
+    pager : '#jqgrid-pager',  
+    autowidth : true,
+    rowNum : 20, 
+    rowList : [ 10, 20, 30 ],  
+    sortname : 'applyTime',  
+    sortable : true,  
+    sortorder : 'desc', 
+    viewrecords:true,
+    caption:'劳务费表',
+    jsonReader : {  
+        root : "result.pageInfo.list", // json中代表实际模型数据的入口  
+        records : "result.pageInfo.total", // json中代表数据行总数的数据  
+        page : "result.pageInfo.pageNum", // json中代表当前页码的数据  
+        total : "result.pageInfo.pages", // json中代表页码总数的数据  
+        repeatitems : false  
+    },    
+    multiselect : true,  
+    onSelectRow : function(rowid,  
+            status) {  
+        selId = rowid;  
+    }
+});
+
+//申请时间格式化
+function applyDateFormat(value) {    	
+    if (value != null) {        	
+    	return getSmpFormatDateByLong(value,false);        	
+    } 
+} 
+
+//支付时间格式化
+function payDateFormat(value, row, index) { 
+    if (value == 1) {        	
+    	return '已审核';        	
+    } else{
+    	/*<![CDATA[*/
+    	        
+    	return '<input type="button" class="glyphicon glyphicon-wrench" onclick="checkPayTime(\''+index.costId+'\');" value="审核"/>';
+    	/*]]>*/
+    }
+}
+
+function checkPayTime(costId){
+ 	$.ajax({  
+        type: "post",  
+        url: "/console/kjk/cost/aduit",  
+        data: {id:costId},  
+        dataType: "json",  
+        success: function (data) {  
+            //判断后台是否删除成功  
+            //如果成功则调用jqGrid的reloadGrid方法重新加载表格  
+            if(data.msg==1){ 
+            	layer.msg("审核成功！");
+                $("#mygrid").trigger("reloadGrid"); //重新载入 
+            }else{
+            	layer.msg("审核异常，请联系管理员");
+            }  
+        }  
+    });
+}
+//归属项目转换
+function systemFormat(value){
+	var str='';
+	/*<![CDATA[*/
+	var  list = [[${kjkDicList}]];
+	for(var i=0;i<list.length;i++){
+		if(list[i].dicId==value){
+			str=list[i].dicDesc;
+			break;
+		}
+	}
+	/*]]>*/
+	return str;
+}
+
+$(function(){
+	//自适应宽度
+	$(window).resize(function(){		 
+        $("#mygrid").setGridWidth($(window).width());
+    });
+	
+	//年选择器
+	laydate.render({
+	  elem: '.form_datetime'
+	  ,type: 'date'
+	});
+	//年选择器
+	laydate.render({
+	  elem: '.form_endtime'
+	  ,type: 'date'
+	});
+	
+	//查询数据
+    $("#find_btn").click(function(){ 
+        var cwId = $("#cw_id").val();
+        var system = $("#system").val(); 
+        var beginTime = $("#beginTime").val();
+        var endTime = $("#endTime").val();
+        $("#mygrid").jqGrid('setGridParam',{ 
+            url:"/console/kjk/cost/list", 
+            postData:{'cwId':cwId,'system':system,'beginTime':beginTime,'endTime':endTime}, //发送数据 
+            page:1 
+        }).trigger("reloadGrid"); //重新载入 
+    });     
+	
+	//添加课件
+	$("#add_btn").click(function(){
+		layer.open({
+            type: 2,
+            title: '新增课件',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['500px', '545px'],
+            content: '/console/kjk/courseware/edit'
+        });
+	 });
+	
+	//批量审核
+	$("#audit_btn").click(function(){
+		var selectedRowIds = $("#mygrid").jqGrid("getGridParam", "selarrrow");
+		//判断是否为空  
+        if(selectedRowIds==""){  
+			layer.msg("请选择要审核的行！");
+			return;
+        }
+		
+        $.ajax({  
+            type: "post",  
+            url: "/console/kjk/cost/batchAduit",  
+            data: {costIds:selectedRowIds.toString()},  
+            dataType: "json",  
+            success: function (data) {  
+                //判断后台是否审核成功  
+                //如果成功则调用jqGrid的reloadGrid方法重新加载表格  
+                if(data.msg==1){ 
+                	layer.msg("审核成功！");
+                    $("#mygrid").trigger("reloadGrid"); //重新载入 
+                }else{
+                	layer.msg("删除异常，请联系管理员");
+                }  
+            }  
+        });
+		 
+	});
+	
+	//导出数据
+    $("#download_btn").click(function(){ 
+    	var cwId = $("#cw_id").val();
+        var system = $("#system").val(); 
+        var beginTime = $("#beginTime").val();
+        var endTime = $("#endTime").val();
+        /*<![CDATA[*/
+        window.location.href = "/console/kjk/cost/download?cwId="+cwId+"&system="+system+"&beginTime="+beginTime+"&endTime="+endTime;
+        /*]]>*/
+    }); 
+}); 
+
+
+//刷新当前表格type=1修改，2添加
+function reloadCurrentGrid(type){
+	if(type==1){
+		 $("#mygrid").trigger("reloadGrid"); //重新载入 
+	}else{
+		 $("#mygrid").jqGrid('setGridParam',{page:1}).trigger("reloadGrid"); //重新载入 
+	}
+}
+</script>
+</body>
+</html>

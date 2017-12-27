@@ -253,7 +253,7 @@ public class KjkController {
 	 * @return
 	 */
 	@RequiresPermissions("courseware:edit")
-	@RequestMapping(value = "/courseware/eidt", method = { RequestMethod.GET })
+	@RequestMapping(value = "/courseware/edit", method = { RequestMethod.GET })
 	public String from(KjkCourseware kjkCourseware, Model model) {
 		if (kjkCourseware.getId() != null) {
 			kjkCourseware = kjkService.getById(kjkCourseware.getId());

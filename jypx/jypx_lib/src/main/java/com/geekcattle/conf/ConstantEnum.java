@@ -56,6 +56,18 @@ public enum ConstantEnum {
 	 * 下载课件表EXCEL sheet名称
 	 */
 	DOWNLOAD_COURSEWARE_SHEETNAME("课件表"),	
+	/**
+	 * 下载劳务费表EXCEL文件名
+	 */
+	DOWNLOAD_COST_FILENAME("劳务费表"),
+	/**
+	 * 下载劳务费表EXCEL标题名
+	 */
+	DOWNLOAD_COST_TITLENAME("劳务费表"),
+	/**
+	 * 下载劳务费表EXCEL sheet名称
+	 */
+	DOWNLOAD_COST_SHEETNAME("劳务费表"),
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * 项目级别 普通项目	

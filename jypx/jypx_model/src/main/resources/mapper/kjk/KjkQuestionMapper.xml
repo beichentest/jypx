@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.kjk.KjkQuestionMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.kjk.KjkQuestion" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Q_ID" property="qId" jdbcType="VARCHAR" />
+    <result column="CW_ID" property="cwId" jdbcType="BIGINT" />
+    <result column="Q_TYPE" property="qType" jdbcType="VARCHAR" />
+    <result column="Q_CLASS" property="qClass" jdbcType="VARCHAR" />
+    <result column="Q_LEVEL" property="qLevel" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="Q_KEY" property="qKey" jdbcType="VARCHAR" />
+    <result column="RESOLVE" property="resolve" jdbcType="VARCHAR" />
+    <result column="EXECUTE_TIME" property="executeTime" jdbcType="VARCHAR" />
+    <result column="Q_DATA" property="qData" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="MODIFY_DATE" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="OPERATOR" property="operator" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="SEQ" property="seq" jdbcType="INTEGER" />
+    <result column="Q_TYPE_V" property="qTypeV" jdbcType="VARCHAR" />
+    <result column="Q_CLASS_V" property="qClassV" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Question_Where">
+      <where>
+          <if test="status!=null">
+              q.status = #{status}
+          </if>         
+          <if test="qType!=null and  qType!=''">
+              and q.q_type = #{qType} 
+          </if>
+          <if test="qClass!=null and qClass!=''">
+          	  and q.q_class = #{qClass}             
+          </if>
+          <if test="cwId!=null and  cwId!=''">
+              and q.cw_id = #{cwId} 
+          </if>
+          <if test="content!=null and  content!=''">
+              and q.content like '%'||#{content}||'%'
+          </if>
+      </where>
+  </sql>
+  <select id="findQuestions"  resultMap="BaseResultMap">
+        select q.*,d_type.dic_desc Q_TYPE_V,d_class.dic_desc Q_CLASS_V from KJK_QUESTION q
+        	left join kjk_dic d_type on d_type.dic_id=q.q_type
+        	left join kjk_dic d_class on d_class.dic_id=q.q_class
+        <include refid="Question_Where" />
+    </select>
+  <insert id="insertQuestion" parameterType="com.geekcattle.model.kjk.KjkQuestion">
+  	INSERT INTO KJK_QUESTION
+	  (Q_ID,
+	   CW_ID,
+	   Q_TYPE,
+	   Q_CLASS,
+	   Q_LEVEL,
+	   CONTENT,
+	   Q_KEY,
+	   RESOLVE,
+	   EXECUTE_TIME,
+	   Q_DATA,
+	   CREATE_DATE,
+	   MODIFY_DATE,
+	   OPERATOR,
+	   REMARK)
+	VALUES
+	  (#{qId,jdbcType=VARCHAR}, 
+	   #{cwId,jdbcType=BIGINT}, 
+	   #{qType,jdbcType=VARCHAR}, 
+	   #{qClass,jdbcType=VARCHAR}, 
+	   #{qLevel,jdbcType=VARCHAR}, 
+	   #{content,jdbcType=VARCHAR}, 
+	   #{qKey,jdbcType=VARCHAR}, 
+	   #{resolve,jdbcType=VARCHAR}, 
+	   #{executeTime,jdbcType=VARCHAR}, 
+	   #{qData,jdbcType=VARCHAR}, 
+	   #{createDate,jdbcType=TIMESTAMP}, 
+	   #{modifyDate,jdbcType=TIMESTAMP}, 
+	   #{operator,jdbcType=VARCHAR}, 
+	   #{remark,jdbcType=VARCHAR}
+	  )	 
+  </insert>
+  <update id="updateQuestion" parameterType="com.geekcattle.model.kjk.KjkQuestion">
+  	UPDATE KJK_QUESTION
+	   SET CW_ID   = #{cwId,jdbcType=VARCHAR},
+	       Q_TYPE   = #{qType,jdbcType=VARCHAR},
+	       Q_CLASS     = #{qClass,jdbcType=VARCHAR},
+	       Q_LEVEL     = #{qLevel,jdbcType=VARCHAR},
+	       CONTENT    = #{content,jdbcType=VARCHAR},
+	       Q_KEY    = #{qKey,jdbcType=VARCHAR},
+	       RESOLVE    = #{resolve,jdbcType=VARCHAR},
+	       EXECUTE_TIME    = #{executeTime,jdbcType=VARCHAR},
+	       Q_DATA    = #{qData,jdbcType=VARCHAR},
+	       <if test="createDate!=null">
+	       CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+	       </if>
+	       <if test="seq!=null">
+	       SEQ = #{seq,jdbcType=INTEGER},
+	       </if>	       
+	       MODIFY_DATE  = #{modifyDate,jdbcType=TIMESTAMP},
+	       OPERATOR        = #{operator,jdbcType=VARCHAR},
+	       REMARK      = #{remark,jdbcType=VARCHAR}	       
+	 WHERE Q_ID = #{qId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateQuestionBatch" parameterType="java.util.List" useGeneratedKeys="false">
+  		 <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+	        update KJK_QUESTION 
+	        set
+	        status= #{item.status,jdbcType=VARCHAR}
+	        where Q_ID = #{item.qId,jdbcType=VARCHAR}
+	    </foreach>         
+    </update>
+    <insert id="insertQuestionBatch" parameterType="java.util.List" useGeneratedKeys="false">
+        INSERT INTO KJK_QUESTION
+		  (Q_ID,
+		   CW_ID,
+		   Q_TYPE,
+		   Q_CLASS,
+		   CONTENT,
+		   Q_KEY,
+		   RESOLVE,
+		   EXECUTE_TIME,
+		   Q_DATA,		   
+		   OPERATOR
+		   )
+        SELECT T1.* FROM ( 
+        <foreach item="question" index="index" collection="list" separator="union all">       
+            SELECT 
+            #{question.qId,jdbcType=VARCHAR} Q_ID, 
+            #{question.cwId,jdbcType=VARCHAR} CW_ID,	
+            #{question.qType,jdbcType=VARCHAR} Q_TYPE, 
+            #{question.qClass,jdbcType=VARCHAR} Q_CLASS, 
+            #{question.content,jdbcType=VARCHAR} CONTENT, 
+	      	#{question.qKey,jdbcType=VARCHAR} Q_KEY, 
+	      	#{question.resolve,jdbcType=VARCHAR} RESOLVE, 
+	      	#{question.executeTime,jdbcType=VARCHAR} EXECUTE_TIME, 
+	      	#{question.option,jdbcType=VARCHAR} Q_DATA, 
+	      	#{question.operator,jdbcType=VARCHAR} OPERATOR
+	      FROM DUAL        
+        </foreach>
+        ) T1
+    </insert>    
+</mapper>

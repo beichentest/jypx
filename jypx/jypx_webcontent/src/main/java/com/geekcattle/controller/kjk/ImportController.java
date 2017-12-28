@@ -37,6 +37,10 @@ public class ImportController {
 			model.addAttribute("errFile",errFile);
 		}else if("close".equals(type)) {
 			model.addAttribute("type", "close");
+		}else if("question".equals(type)) {
+			model.addAttribute("type", "import");
+			model.addAttribute("action", "/console/kjk/question/importQuestion");
+			model.addAttribute("name", "上传试题");
 		}		
 		return "console/kjk/importData";
 	}

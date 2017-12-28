@@ -86,6 +86,8 @@
    <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
    <result column="PROJECT_LEVEL" jdbcType="VARCHAR" property="projectLevel" />
    <result column="PLAY_FLAG" jdbcType="VARCHAR" property="playFlag" />
+   <result column="PLAY_TYPE_TEXT" jdbcType="VARCHAR" property="playTypeText" />
+   <result column="MOBILE_TYPE_TEXT" jdbcType="VARCHAR" property="mobileTypeText" />
   </resultMap>  
   <sql id="Courseware_Where">
       <where>
@@ -111,7 +113,9 @@
         <include refid="Courseware_Where" />
     </select>
     <select id="findCoursewareVo"  resultMap="BaseResultExcelVo">
-        select * from KJK_COURSEWARE cw
+        select cw.*,k1.play_type_name PLAY_TYPE_TEXT,k1.play_type_name MOBILE_TYPE_TEXT from KJK_COURSEWARE cw
+        left join kjk_play_type k1 on cw.play_type=k1.play_type
+        left join kjk_play_type k2 on cw.mobile_type=k2.play_type
         <include refid="Courseware_Where" />
     </select>
     

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +39,13 @@ import com.geekcattle.util.CardCodeVerify;
 import com.geekcattle.util.IpUtil;
 import com.geekcattle.util.ReturnUtil;
 import com.geekcattle.util.UuidUtil;
+import com.geekcattle.util.console.ExcelOperate;
+import com.geekcattle.vo.kjk.KjkCostVo;
 import com.github.pagehelper.PageInfo;
+
+import cn.afterturn.easypoi.entity.vo.NormalExcelConstants;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 
 @Controller
 @RequestMapping("/console/kjk/cost")
@@ -228,17 +235,18 @@ public class KjkCostController {
 		}
 	}
 	
-	/*@RequiresPermissions("courseware:download")
+	@RequiresPermissions("courseware:download")
 	@RequestMapping("/download")
 	public void downloadfile(KjkCost kjkCost, ModelMap model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		List<CoursewareVo> list = kjkService.getExcelList(kjkCourseware);
-		ExportParams params = new ExportParams(ConstantEnum.DOWNLOAD_COURSEWARE_TITLENAME.toString(),
-				ConstantEnum.DOWNLOAD_COURSEWARE_SHEETNAME.toString(), ExcelType.XSSF);
+		List<KjkCostVo> list = kjkCostService.getExcelList(kjkCost);
+		ExportParams params = new ExportParams(ConstantEnum.DOWNLOAD_COST_TITLENAME.toString(),
+				ConstantEnum.DOWNLOAD_COST_SHEETNAME.toString(), ExcelType.XSSF);
 		model.put(NormalExcelConstants.DATA_LIST, list); // 数据集合
-		model.put(NormalExcelConstants.CLASS, CoursewareVo.class);// 导出实体
+		model.put(NormalExcelConstants.CLASS, KjkCostVo.class);// 导出实体
 		model.put(NormalExcelConstants.PARAMS, params);// 参数
-		model.put(NormalExcelConstants.FILE_NAME, ConstantEnum.DOWNLOAD_COURSEWARE_FILENAME.toString());// 文件名称
+		model.put(NormalExcelConstants.FILE_NAME, ConstantEnum.DOWNLOAD_COST_FILENAME.toString());// 文件名称
 		ExcelOperate.renderMergedOutputModel(model, request, response);
-	}*/
+	}
+
 }

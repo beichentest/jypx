@@ -9,6 +9,7 @@ import com.geekcattle.conf.ConstantEnum;
 import com.geekcattle.mapper.kjk.KjkCostMapper;
 import com.geekcattle.model.kjk.KjkCost;
 import com.geekcattle.util.CamelCaseUtil;
+import com.geekcattle.vo.kjk.KjkCostVo;
 import com.github.pagehelper.PageHelper;
 
 @Service
@@ -41,5 +42,14 @@ public class KjkCostService {
 	
 	public void batchAudit(List<String> ids){
 		kjkCostMapper.updateBatch(ids);
+	}
+
+	/**
+	 * 导出
+	 * @param kjkCost
+	 * @return
+	 */
+	public List<KjkCostVo> getExcelList(KjkCost kjkCost) {
+		return kjkCostMapper.findKjkCostVo(kjkCost);
 	}
 }

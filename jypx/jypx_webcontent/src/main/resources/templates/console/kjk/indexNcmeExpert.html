@@ -18,14 +18,13 @@ html, body {
 	<section class="content table-content">
 		<div id="opt">
 			<div id="query">
-				<input type="button" class="btn btn-primary" id="add_btn"
-					value="新 增" /> 
 				<!--<input type="button" class="btn btn-primary" id="del_btn" value="删 除" />-->
 				<label>地区：</label><input type="text" class="input" id="area" /> <label>姓名：</label><input
 					type="text" class="input" id="expName" /> <label>专业：</label><input
 					type="text" class="input" id="major" /> <label>单位：</label><input
 					type="text" class="input" id="unit" /> <input type="submit"
-					class="btn btn-primary" id="find_btn" value="查 询" />
+					class="btn btn-primary" id="find_btn" value="查 询" /> <input
+					type="button" class="btn btn-primary" id="add_btn" value="新 增" />
 			</div>
 		</div>
 		<table id="mygrid"></table>
@@ -238,6 +237,11 @@ $(function(){
 	});
 
 }); 
+
+//自适应宽度
+$(window).resize(function(){		 
+    $("#mygrid").setGridWidth($(window).width());
+});
 
 
 //刷新当前表格type=1修改，2添加

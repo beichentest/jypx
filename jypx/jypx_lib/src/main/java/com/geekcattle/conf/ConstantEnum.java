@@ -106,7 +106,49 @@ public enum ConstantEnum {
 	/**
 	 * 劳务费归属项目字典类型
 	 */
-	KJK_DIC_TYPE_SYSTEM("SYSTEM")
+	KJK_DIC_TYPE_SYSTEM("SYSTEM"),
+	/**
+	 * 试题类型字典类型
+	 */
+	KJK_DIC_TYPE_QUESTION_TYPE("QUESTION_TYPE"),		
+	/**
+	 * 题型字典类型
+	 */
+	KJK_DIC_TYPE_QUESTION_CLASS("QUESTION_CLASS"),
+	/**
+	 * 试题类型 过程题
+	 */
+	KJK_DIC_TYPE_QUESTION_TYPE_PROCESS("87E22427CE6BA835F4AB980F493399CA"),
+	
+	KJK_DIC_TYPE_QUESTION_TYPE_PROCESS_DESC("过程题"),
+	/**
+	 * 试题类型 课后题
+	 */
+	KJK_DIC_TYPE_QUESTION_TYPE_AFTER("3D37A7871085712D1DCC91C9CC5E146B"),
+	
+	KJK_DIC_TYPE_QUESTION_TYPE_AFTER_DESC("课后题"),
+	/**
+	 * 题型 单选
+	 */
+	KJK_DIC_TYPE_QUESTION_CLASS_SINGLE("5809018CBDDEB97C6C44C7D50CBB2986"),
+	
+	KJK_DIC_TYPE_QUESTION_CLASS_SINGLE_DESC("单选题"),
+	/**
+	 * 题型 多选
+	 */
+	KJK_DIC_TYPE_QUESTION_CLASS_MULTIPLE("64C930533F5FF58771151F18E6084CAB"),
+	
+	KJK_DIC_TYPE_QUESTION_CLASS_MULTIPLE_DESC("多选题"),
+///////////////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * 试题表 数据状态
+	 */
+	KJK_QUESTION_STATUS_ENABLE("0"),
+	/**
+	 * 试题表 数据状态
+	 */
+	KJK_QUESTION_STATUS_DISABLE("1"),
+//////////////////////////////////////////////////////////////////////////////////////////////////
 	;
 	private String value;
 	private ConstantEnum(String value) {

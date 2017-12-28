@@ -27,8 +27,7 @@
 	       	<label>课件id：</label><input type="text" class="input" id="cw_id" /> 
 	       	<label>关键字：</label><input type="text" class="input" id="keyword" />	       	
 	       	<input type="submit" class="btn btn-primary" id="find_btn" value="查 询" /> 
-	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出课件" />
-	       <input type="button" class="btn btn-primary" id="template_btn" value="下载模板" />
+	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出课件" />	       
            <input type="button" class="btn btn-primary" id="upload_btn" value="导入课件" />
 	    </div> 	     
  </div>
@@ -279,15 +278,12 @@ $(function(){
         var keyword = $("#keyword").val();
         var playType = $("#play_type").val();
         var playFlag = $("#play_flag").val();
+        this.disabled=true;
         /*<![CDATA[*/
         window.location.href = "/console/kjk/courseware/download?id="+cwId+"&keyword="+keyword+"&playType="+playType+"&playFlay="+playFlag;
         /*]]>*/
-    });  
-
-  //下载导入模板
-    $("#template_btn").click(function(){                
-        window.location.href = "/console/kjk/courseware/downloadTemplate";        
-    });      
+        this.disabled=false;
+    });         
     //导入课件
     $("#upload_btn").click(function(){                
          layer.open({

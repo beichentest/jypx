@@ -3,9 +3,7 @@ package com.geekcattle.vo.kjk;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
- 
-import javax.persistence.Column;
- 
+
 import cn.afterturn.easypoi.excel.annotation.Excel;
  
 public class CoursewareVo  implements Serializable{
@@ -45,12 +43,11 @@ public class CoursewareVo  implements Serializable{
     private String fileType;
     /**
      * 播放类型（PC）
-     */
-    @Excel(name="播放类型（PC）")
+     */    
     private String playType;
     /**
      * 三级学科
-     */
+     */   
     @Excel(name="三级学科")
     private String subject;
     /**
@@ -140,12 +137,11 @@ public class CoursewareVo  implements Serializable{
     private String par4;
     /**
      * 播放类型（手机）
-     */
-    @Excel(name="播放类型（手机）")
+     */    
     private String mobileType;
     /**
      * 二级学科
-     */
+     */  
     @Excel(name="二级学科")
     private String subject2;
     /**
@@ -187,7 +183,10 @@ public class CoursewareVo  implements Serializable{
     
     @Excel(name="项目级别",replace= {"普通_0","国家级_1","_0"})
     private String projectLevel;
-    
+    @Excel(name="播放类型（PC）")   
+    private String playTypeText;
+    @Excel(name="播放类型（手机）")
+    private String mobileTypeText;
     /**
      * 课件创建人id
      */
@@ -678,5 +677,21 @@ public class CoursewareVo  implements Serializable{
 
 	public void setCreater(String creater) {
 		this.creater = creater;
-	}  		
+	}
+
+	public String getPlayTypeText() {
+		return playTypeText;
+	}
+
+	public void setPlayTypeText(String playTypeText) {
+		this.playTypeText = playTypeText;
+	}
+
+	public String getMobileTypeText() {
+		return mobileTypeText;
+	}
+
+	public void setMobileTypeText(String mobileTypeText) {
+		this.mobileTypeText = mobileTypeText;
+	} 
 }

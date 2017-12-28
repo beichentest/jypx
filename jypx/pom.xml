@@ -42,8 +42,7 @@
 		<module>jypx_security</module>
 		<module>jypx_core</module>
 		<module>jypx_service</module>
-		<module>jypx_webcontent</module>
-		<module>jypx_mq</module>
+		<module>jypx_webcontent</module>		
 	</modules>
 	 <repositories>
         <repository>

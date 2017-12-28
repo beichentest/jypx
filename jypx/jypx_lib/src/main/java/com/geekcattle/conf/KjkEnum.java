@@ -16,7 +16,11 @@ public enum KjkEnum {
 	/**
 	 * 课件表状态（下架）
 	 */
-	KJK_COURSEWARE_STATUS_DOWN(-1L);
+	KJK_COURSEWARE_STATUS_DOWN(-1L),
+	/**
+	 * 题库中默认选项数量
+	 */
+	KJK_QUESTION_OPTION_NUMBER(4L);
 	private Long value;
 	private KjkEnum(Long value) {
 		this.value = value;

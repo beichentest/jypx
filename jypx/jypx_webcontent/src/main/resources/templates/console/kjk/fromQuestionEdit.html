@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+<style type="text/css">
+.c_i{width: 280px;}
+</style>	
+</head>
+<body>
+<section class="content">
+<div class="row">
+	<div class="col-md-12 col-md-offset-0">
+		<div class="box-body">
+			<form class="form-horizontal js-ajax-layer-form" action="/console/kjk/question/save" method="post">
+				 <div th:if="${not #strings.isEmpty(question.qId)}">
+					<input type="hidden" name="qId" th:value="${question.qId}" />	
+				</div>							
+				<div><h5 style="width:85px; display: inline-block;">课件ID：</h5><input style="width:270px;" type="text" class="input" required="true" th:value="${question.cwId}" name="cwId" /></div>
+	       		<div>
+	       			<h5 style="width:85px; display: inline-block;">试题类型：</h5>
+	       			<select id="qType" class="bt-select" name="qType" th:value="${question.qType}" required="true" style="height: 26px;width: 167px;">	       				
+	        	 		<option th:each="questionType:${questionTypeList}" th:value="${questionType.dicId}" th:selected="${#strings.equals(question.qType, questionType.dicId)}" ><div th:text="${questionType.dicDesc}"/></option>
+	       			</select>
+	       			<!-- <input style="width:270px;" type="text" class="input" required="true" th:value="${question.qType}" name="qType" placeholder="请输入项目名称"/> -->
+	       		</div>
+	       		<div>
+	       			<h5 style="width:85px; display: inline-block;">题型：</h5>
+	       			<select id="qClass" class="bt-select" name="qClass" th:value="${question.qClass}" required="true" style="height: 26px;width: 167px;" onchange="changeClass(this);">	       				
+	        	 		<option th:each="questionClass:${questionClassList}" th:value="${questionClass.dicId}" th:selected="${#strings.equals(question.qClass, questionClass.dicId)}" ><div th:text="${questionClass.dicDesc}"/></option>
+	       			</select>
+	       			<!-- <input style="width:270px;" type="text" class="input" maxlength="32" th:value="${question.qClass}" name="qClass" placeholder="请输入课件编号"/> -->
+	       		</div>
+	       		<div>
+	       			<h5 style="width:82px; display: inline-block;">题干：</h5>
+	       			<textarea rows="2" maxlength="320" name="content" required="true" placeholder="请输入题干" style="width:270px;"  th:text="${question.content}"></textarea>	       			
+	       		</div>
+	       		<div th:each="option:${question.options}">
+	       		<h5 style="width:85px; display: inline-block;" th:text="'选项'+${option.alisa}+':'"></h5><input th:type="${option.type}" th:checked="${option.checked}" name="keys" th:value="${option.alisa}"/>
+	       		<input style="width:270px;" type="text" class="input" required="true" th:value="${option.text}" name="opts"  th:placeholder="'请输入选项'+${option.alisa}" /><br/>
+	       		</div>
+	       		
+	       		<!-- <div><h5 style="width:85px; display: inline-block;">答案：</h5><input style="width:270px;" required="true" type="text" class="input" th:value="${question.qKey}" name="qKey" placeholder="请输入答案"/></div> -->
+	       		<div>
+	       			<h5 style="width:82px; display: inline-block;">解析：</h5>
+	       			<textarea rows="2" maxlength="320" name="resolve" placeholder="请输入解析" style="width:270px;"  th:text="${question.resolve}"></textarea>	       			
+	       		</div>
+	       		<div><h5 style="width:85px; display: inline-block;">出现时间：</h5><input style="width:270px;" type="text" class="form_datetime" th:value="${question.executeTime}" name="executeTime" placeholder="请输入过程出现时间（时:分:秒）"/></div>	       		
+	       		<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</section>
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/assets/bootstrap-3.3.5/js/laydate.js"></script>
+<script type="text/javascript" src="/static/assets/fileinput/fileinput.min.js"></script>
+<script type="text/javascript" src="/static/assets/fileinput/zh.js"></script>
+<script type="text/javascript" src="/static/assets/fileinput/theme.min.js"></script>
+
+<script th:inline="javascript">	
+$(function() {
+	
+	//年选择器
+	laydate.render({
+	  elem: '.form_datetime'
+	  ,type: 'time'
+	});
+});
+function changeClass(obj){
+	var keys = $('input[name="keys"]');
+	if(obj.value=='5809018CBDDEB97C6C44C7D50CBB2986'){		
+		$.each(keys, function(){
+			$(this).attr('type','radio');
+		});
+	}else if(obj.value=='64C930533F5FF58771151F18E6084CAB'){
+		$.each(keys, function(){
+			$(this).attr('type','checkbox');
+		});
+	}
+}
+
+</script>		
+</body>
+</html>

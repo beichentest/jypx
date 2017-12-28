@@ -5,8 +5,10 @@
 package com.geekcattle.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JsonUtil {
@@ -19,6 +21,10 @@ public class JsonUtil {
 
     public static Object parse(String json) {
         return JSON.parse(json);
+    }
+    
+    public static <T> List<T> parse(String json,Class<T> t){
+    	return JSONObject.parseArray(json, t);
     }
 
     public static String toJsonSuccess(String msg, Object obj){

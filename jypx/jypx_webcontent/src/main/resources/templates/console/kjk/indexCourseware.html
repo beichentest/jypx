@@ -168,6 +168,12 @@ $('#mygrid').jqGrid({
         align : 'center',
     },
     {  
+        label : '试题',  
+        name : 'id',  
+        formatter : questionFormatter,
+        align : 'center',
+    },
+    {  
         label : '操作',  
         name : 'id',  
         formatter : costFormatter,
@@ -230,6 +236,13 @@ function costFormatter(value, row, index) {
     else
     	return '<a href="javascript:openCost(\''+value+'\');" ><i class="glyphicon glyphicon-cog"></i>设置劳务费</a>'
 }
+function questionFormatter(value, row, index){
+	return [           
+        '<a href="javascript:openQuestion(\''+value+'\');" >',         
+        '<i class="glyphicon glyphicon-edit"></i>增加',
+        '</a>'
+    ].join('');
+}
 function openPop(id){
     layer.open({
         type: 2,
@@ -239,6 +252,17 @@ function openPop(id){
         maxmin: true, //开启最大化最小化按钮
         area: ['500px', '545px'],
         content: '/console/kjk/courseware/edit?id=' +id
+    });
+}
+function openQuestion(id){
+	layer.open({
+        type: 2,
+        title: '增加试题',
+        shadeClose: true,
+        shade: false,
+        maxmin: true, //开启最大化最小化按钮
+        area: ['500px', '545px'],
+        content: '/console/kjk/question/eidt?cwId=' +id
     });
 }
 //打开劳务费模态框

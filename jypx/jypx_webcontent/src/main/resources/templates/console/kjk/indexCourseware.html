@@ -82,21 +82,11 @@ $('#mygrid').jqGrid({
         label : '电脑版播放类型',  
         name : 'playType' ,
         formatter : playType
-    },
-    {  
-        label : '预览',  
-        name : 'playType',
-        formatter : previewForPc
-    },
+    },    
     {  
         label : '手机版播放类型',  
         name : 'mobileType',
         formatter :playType
-    },
-    {  
-        label : '预览',  
-        name : 'mobileType',
-        formatter : previewForPc       
     },
     {  
         label : '最后修改时间',  
@@ -123,11 +113,7 @@ $('#mygrid').jqGrid({
     {  
         label : '三级学科',  
         name : 'subject'
-    },
-    {  
-        label : '关键字',  
-        name : 'keyword'
-    },
+    },  
     {  
         label : '时长（时:分:秒）',  
         name : 'classTimeStr'
@@ -135,31 +121,21 @@ $('#mygrid').jqGrid({
     {  
         label : '缩略图地址',  
         name : 'slImg'
-    },
-    {  
-        label : 'logo',  
-        name : 'logo'     
-    },
-    {  
-        label : '片头',  
-        name : 'piantou'
-    },
-    {  
-        label : '片尾',  
-        name : 'pianwei'
-    },
-    {  
-        label : '拍摄年份',  
-        name : 'shotYear'
-    },
+    },    
     {  
         label : '上传时间',  
         name : 'addDate',
         formatter : changeDateFormat
     },
     {  
-        label : '物理路径',  
-        name : 'path'
+        label : '项目类型',  
+        name : 'projectLevel',
+        formatter : projectLevelFormat
+    },
+    {  
+        label : '状态',  
+        name : 'status',
+        formatter : statusFormat
     },
     {  
         label : '编辑',  
@@ -219,6 +195,20 @@ function previewForPc(value, row, index){
 }
 function previewForPhone(value, row, index){
 	return '<a href="javascript:void(0)" onclick="preview()">预览</a>';
+}
+function projectLevelFormat(value, row, index){
+	if(value=='1'){
+		return "国家级项目";
+	}else{
+		return "普通项目";
+	}
+}
+function statusFormat(value, row, index){
+	if(value=='-1'){
+		return "下架";
+	}else{
+		return "有效";
+	}
 }
 function nullDateFormat(value){
 	return "未知列";
@@ -374,7 +364,7 @@ function reloadCurrentGrid(type){
 	}
 }
 
-	function playType(value){
+	function playType(value,row, index){
 	var str='';
 	/*<![CDATA[*/
 	var  list = [[${kjkPlayTypeList}]];
@@ -385,7 +375,11 @@ function reloadCurrentGrid(type){
 		}
 	}
 	/*]]>*/
-	return str;
+	if(value=='13'||value=='1'){
+		return '<a href="/console/kjk/courseware/view?id='+index.id+'" target="_blank">'+str+'</a>';
+	}else{
+		return str;
+	}
 	}
 	//课件预览
 	function preview(id,name){

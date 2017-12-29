@@ -28,7 +28,6 @@ public class KjkCost extends BaseEntity implements Serializable{
     private String expertId;
 
     @Column(name = "COST")
-    @NotBlank(message="劳务费不能为空")
     private Long cost;
 
     @Column(name = "CARD_NO")

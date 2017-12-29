@@ -171,6 +171,8 @@ public class KjkCostController {
 		try {
 			Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
 			//验证非空begin========================
+			if(kjkCost.getCost()==null)
+				return ReturnUtil.Error("劳务费不能为空", null, null);
 			if (kjkCost.getIdCard().length() == 15 || kjkCost.getIdCard().length() == 18) {
 			    if (!CardCodeVerify.cardCodeVerifySimple(kjkCost.getIdCard())) {
 			        return ReturnUtil.Error("15位或18位身份证号码不正确", null, null);

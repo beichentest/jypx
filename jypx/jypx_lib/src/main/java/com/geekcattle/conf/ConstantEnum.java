@@ -128,6 +128,10 @@ public enum ConstantEnum {
 	 */
 	KJK_DIC_TYPE_QUESTION_CLASS("QUESTION_CLASS"),
 	/**
+	 * 课件库标签字典类型
+	 */
+	KJK_DIC_TYPE_QUESTION_TAGS("TAGS"),	
+	/**
 	 * 试题类型 过程题
 	 */
 	KJK_DIC_TYPE_QUESTION_TYPE_PROCESS("87E22427CE6BA835F4AB980F493399CA"),

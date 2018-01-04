@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.geekcattle.model.BaseEntity;
 
@@ -22,11 +25,13 @@ public class KjkCourseware extends BaseEntity implements Serializable{
      * 课件名称
      */
     @Column(name = "NAME")
+    @NotBlank(message="课件名称不能为空")
     private String name;
     /**
      * 项目名称
      */
     @Column(name = "P_NAME")
+    @NotBlank(message="项目名称不能为空")
     private String pName;
     /**
      * 编号
@@ -52,6 +57,7 @@ public class KjkCourseware extends BaseEntity implements Serializable{
      * 三级学科
      */
     @Column(name = "SUBJECT")
+    @NotBlank(message="三级学科不能为空")
     private String subject;
     /**
      * 关键字
@@ -67,11 +73,13 @@ public class KjkCourseware extends BaseEntity implements Serializable{
      * 专家
      */
     @Column(name = "EXPERT")
+    @NotBlank(message="专家不能为空")
     private String expert;
     /**
      * 专家单位
      */
     @Column(name = "EXPERT_UNIT")
+    @NotBlank(message="专家单位不能为空")
     private String expertUnit;
     /**
      * 来源
@@ -122,11 +130,13 @@ public class KjkCourseware extends BaseEntity implements Serializable{
      * 参数1
      */
     @Column(name = "PAR1")
+    @NotBlank(message="播放参数1不能为空")
     private String par1;
     /**
      * 参数2
      */
     @Column(name = "PAR2")
+    @NotBlank(message="播放参数2不能为空")
     private String par2;
     /**
      * 参数3
@@ -147,6 +157,7 @@ public class KjkCourseware extends BaseEntity implements Serializable{
      * 二级学科
      */
     @Column(name = "SUBJECT2")
+    @NotBlank(message="二级学科不能为空")
     private String subject2;
     /**
      * 缩略图
@@ -177,6 +188,7 @@ public class KjkCourseware extends BaseEntity implements Serializable{
      * 时长(时:分:秒)
      */
     @Column(name = "CLASS_TIME_STR")
+    @NotBlank(message="时长不能为空")
     private String classTimeStr;        
     /**
      *标签 
@@ -210,6 +222,14 @@ public class KjkCourseware extends BaseEntity implements Serializable{
     @Transient
     @JsonIgnore
     private String order = "";
+    
+    //开始时间
+    @Transient
+    private String beginTime;
+    //结束时间
+    @Transient
+    private String endTime;
+    
     /**
      * @return ID
      */
@@ -720,5 +740,22 @@ public class KjkCourseware extends BaseEntity implements Serializable{
 
 	public void setProjectLevel(String projectLevel) {
 		this.projectLevel = projectLevel;
-	}    		
+	}
+
+	public String getBeginTime() {
+		return beginTime;
+	}
+
+	public void setBeginTime(String beginTime) {
+		this.beginTime = beginTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+	
 }

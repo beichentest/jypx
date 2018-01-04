@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -40,10 +41,12 @@ import com.geekcattle.conf.ConstantEnum;
 import com.geekcattle.conf.KjkEnum;
 import com.geekcattle.model.console.Admin;
 import com.geekcattle.model.kjk.KjkCourseware;
+import com.geekcattle.model.kjk.KjkDic;
 import com.geekcattle.model.kjk.KjkPlayType;
 import com.geekcattle.model.kjk.NcmeSubject;
 import com.geekcattle.service.console.LogService;
 import com.geekcattle.service.importdata.CoursewareVerify;
+import com.geekcattle.service.kjk.KjkDicService;
 import com.geekcattle.service.kjk.KjkPlayTypeService;
 import com.geekcattle.service.kjk.KjkService;
 import com.geekcattle.service.kjk.NcmeSubjectService;
@@ -86,6 +89,9 @@ public class KjkController {
 	private LogService logService;
 	@Autowired
 	private NcmeSubjectService ncmeSubjectService;
+	@Autowired
+	private KjkDicService kjkDicService;
+	
 	private final static List<String> COURSEWARE_SOURCE = new ArrayList<String>() {
 		{
 			add(ConstantEnum.KJK_COURSEWARE_SOURCE_CME.toString());
@@ -97,11 +103,17 @@ public class KjkController {
 	};
 	private final static Map<String, Object> PROJECT_LEVEL = new HashMap<String, Object>() {
 		{
-			put(ConstantEnum.KJK_COURSEWARE_PROJECT_LEVEL_COMMON.toString(), "普通项目    ");
+			put(ConstantEnum.KJK_COURSEWARE_PROJECT_LEVEL_COMMON.toString(), "普通项目 ");
 			put(ConstantEnum.KJK_COURSEWARE_PROJECT_LEVEL_NATION.toString(), "国家级项目");
 		}
 	};
-
+	private final static Map<String, Object> COURSEWARE_STATUS = new HashMap<String, Object>() {
+		{
+			put(KjkEnum.KJK_COURSEWARE_STATUS_ENABLE.toString(), "有效");
+			put(KjkEnum.KJK_COURSEWARE_STATUS_DOWN.toString(), "下架");
+		}
+	};
+	
 	/*** kjk begin…… ***/
 	@RequiresPermissions("courseware:index")
 	@RequestMapping(value = "/courseware/index", method = { RequestMethod.GET })
@@ -110,6 +122,7 @@ public class KjkController {
 		List<KjkPlayType> list = kjkPlayTypeService.findAll();
 		model.addAttribute("kjkPlayTypeList", list);
 		model.addAttribute("playFlag", playFlag==null?"":playFlag);
+		model.addAttribute("subjectList", ncmeSubjectService.getNcmeSubject2());
 		return "console/kjk/indexCourseware";
 	}
 
@@ -258,6 +271,8 @@ public class KjkController {
 		if (kjkCourseware.getId() != null) {
 			kjkCourseware = kjkService.getById(kjkCourseware.getId());
 		}
+		//标签集合
+		List<KjkDic> labelDicList = kjkDicService.findDicByType(ConstantEnum.KJK_DIC_TYPE_QUESTION_TAGS.toString());
 		// 课件播放类型
 		List<KjkPlayType> list = kjkPlayTypeService.findAll();
 		model.addAttribute("kjkPlayTypeList", list);
@@ -265,9 +280,25 @@ public class KjkController {
 		model.addAttribute("moduleMap", PROJECT_LEVEL);
 		model.addAttribute("subjectList", ncmeSubjectService.getNcmeSubject2());
 		model.addAttribute("info", kjkCourseware);
+		model.addAttribute("labelDicList", labelDicList);
 		return "console/kjk/fromCoursewareEdit";
 	}
 
+	/**
+	 * 编辑课件
+	 * 
+	 * @param kjkCourseware
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("courseware:edit")
+	@RequestMapping(value = "/courseware/toEditStatus", method = { RequestMethod.GET })
+	public String toEditStatus(Long id,Model model) {
+		model.addAttribute("moduleMap", COURSEWARE_STATUS);
+		model.addAttribute("id", id);
+		return "console/kjk/fromCwareStatusEdit";
+	}
+	
 	/**
 	 * 根据三级学科获取二级学科
 	 * 
@@ -292,7 +323,7 @@ public class KjkController {
 	@RequiresPermissions("courseware:edit")
 	@RequestMapping(value = "/courseware/save", method = { RequestMethod.POST })
 	@ResponseBody
-	public ModelMap save(KjkCourseware kjkCourseware, BindingResult result, HttpServletRequest request) {
+	public ModelMap save(@Valid KjkCourseware kjkCourseware, BindingResult result, HttpServletRequest request) {
 		if (result.hasErrors()) {
 			for (ObjectError er : result.getAllErrors())
 				return ReturnUtil.Error(er.getDefaultMessage(), null, null);
@@ -300,27 +331,8 @@ public class KjkController {
 		try {
 
 			Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
-			if (StringUtils.isEmpty(kjkCourseware.getName()))
-				return ReturnUtil.Error("课程名称不能为空", null, null);
 			if (kjkCourseware.getId() == null && kjkService.getListByName(kjkCourseware.getName()).size() > 0)
 				return ReturnUtil.Error("课程名称已存在", null, null);
-			if (StringUtils.isEmpty(kjkCourseware.getpName()))
-				return ReturnUtil.Error("项目名称不能为空", null, null);
-			if (StringUtils.isEmpty(kjkCourseware.getExpert()))
-				return ReturnUtil.Error("专家不能为空", null, null);
-			if (StringUtils.isEmpty(kjkCourseware.getExpertUnit()))
-				return ReturnUtil.Error("专家单位不能为空", null, null);
-			if (StringUtils.isEmpty(kjkCourseware.getClassTimeStr()))
-				return ReturnUtil.Error("时长不能为空", null, null);
-			if (StringUtils.isEmpty(kjkCourseware.getSubject2()))
-				return ReturnUtil.Error("二级学科不能为空", null, null);
-			if (StringUtils.isEmpty(kjkCourseware.getSubject()))
-				return ReturnUtil.Error("三级学科不能为空", null, null);
-			if (StringUtils.isEmpty(kjkCourseware.getPar1()))
-				return ReturnUtil.Error("播放参数1不能为空", null, null);
-			if (StringUtils.isEmpty(kjkCourseware.getPar2()))
-				return ReturnUtil.Error("播放参数2不能为空", null, null);
-
 			if (StringUtils.isEmpty(kjkCourseware.getPlayType())
 					&& StringUtils.isEmpty(kjkCourseware.getMobileType())) {
 				return ReturnUtil.Error("播放类型不能为空", null, null);
@@ -431,12 +443,12 @@ public class KjkController {
 		KjkCourseware kjkCourseware = kjkService.getById(id);
 		String url = "";
 		if (kjkCourseware != null) {
-			if (kjkCourseware.getPlayType().equals("13")) {// cc视频
+			if (kjkCourseware.getPlayType().equals(ConstantEnum.KJK_PLAY_TYPE_CC.toString())) {// cc视频
 				url = "https://p.bokecc.com/player?vid=" + kjkCourseware.getCode()
 						+ "&siteid=4066F9F39D08AB88&autoStart=false&width=600px&height=490px&playerid=5B8B3C4F1E5EBECF&playertype=1";
 				model.addAttribute("url", url);
 				return "console/kjk/ccView";
-			} else if (kjkCourseware.getPlayType().equals("1")) {// cme视频
+			} else if (kjkCourseware.getPlayType().equals(ConstantEnum.KJK_PLAY_TYPE_CME.toString())) {// cme视频
 				url = "http://media.cmechina.net/cme_main.html?courseid=" + kjkCourseware.getPar1() + "&coursewareNo="
 						+ kjkCourseware.getPar2()
 						+ "&userid=null&examurl=http://www.cmechina.net/study/course_quiz.jsp&examicon=null";
@@ -447,6 +459,29 @@ public class KjkController {
 		return null;
 	}
 
+	/**
+	 * 设置状态
+	 * 
+	 * @param kjkCourseware
+	 * @param result
+	 * @param request
+	 * @return
+	 */
+	@RequiresPermissions("courseware:edit")
+	@RequestMapping(value = "/courseware/editStatus", method = { RequestMethod.POST })
+	@ResponseBody
+	public ModelMap editStatus(KjkCourseware kjkCourseware, HttpServletRequest request) {
+		try {
+			kjkService.updateCourseCware(kjkCourseware);
+			return ReturnUtil.Success("操作成功", 1, null);
+		} catch (Exception e) {
+			logger.error("======", e);
+			e.printStackTrace();
+			return ReturnUtil.Error("操作失败", null, null);
+		}
+		
+	}
+	
 	private static List<String> getDuplicateElements(List<CoursewareVo> list) {
 		return list.stream() // list 对应的 Stream
 				.collect(Collectors.toMap(CoursewareVo::getName, e -> 1, (a, b) -> a + b)) // 获得元素出现频率的

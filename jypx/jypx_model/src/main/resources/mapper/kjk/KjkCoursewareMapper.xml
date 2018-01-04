@@ -100,12 +100,24 @@
           <if test="playType!=null and playType!=-1 and  playType!=''">
               and (cw.play_type = #{playType} or cw.MOBILE_TYPE = #{playType} ) 
           </if>
-          <if test="keyword!=null and keyword!=''">
-              and (cw.keyword like '%'||#{keyword}||'%' or cw.name like '%'||#{keyword}||'%' or cw.p_name like '%'||#{keyword}||'%')
+          <if test="label != null and label != ''">
+              and cw.label like '%'||#{label}||'%'
           </if>
           <if test="playFlag!=null and  playFlag!=''">
               and cw.play_flag = #{playFlag} 
           </if>
+          <if test="beginTime!=null and beginTime!=''">
+		      <![CDATA[ and cw.add_date>= to_date(#{beginTime}, 'yyyy-mm-dd') ]]>
+		  </if>
+		  <if test="endTime!=null and endTime!=''">
+		      <![CDATA[ and cw.add_date<= to_date(#{endTime}, 'yyyy-mm-dd') ]]>
+		  </if>
+		  <if test="subject2 != null and subject2 != ''">
+		  	  	and cw.subject2=#{subject2}
+		  </if>
+		  <if test="subject != null and subject != ''">
+		  	  	and cw.subject=#{subject}
+		  </if>
       </where>
   </sql>
   <select id="findCourseware"  resultMap="BaseResultMap">

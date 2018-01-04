@@ -24,8 +24,22 @@
 	        	 <option th:selected="${#strings.equals(playFlag, 1)}" value="1">已付费</option>
 	        	 <option th:selected="${#strings.equals(playFlag, 0)}" value="0">未付费</option>
 	       	</select>
-	       	<label>课件id：</label><input type="text" class="input" id="cw_id" /> 
-	       	<label>关键字：</label><input type="text" class="input" id="keyword" />	       	
+	       	<label>上传时间：</label> 
+	       	<input type="text" style="font-family: laydate-icon!important;" readonly="readonly" id="beginTime" class="form_datetime" />ㅡ
+	       	<input type="text" readonly="readonly" id="endTime" class="form_endtime" />
+	       	
+	       	<label>课件id：</label><input type="text" class="input" id="cw_id" /> <br/>
+	       	<label>标签：</label><input type="text" class="input" id="keyword" />	 
+	       	<label>二级学科：</label>
+       			<select id="subject2Name" class="bt-select" style="height: 26px;width: 167px;">
+       				<option value="">请选择</option>
+        	 		<option th:each="module:${subjectList}" th:value="${module.subject2Name}"><div th:text="${module.subject2Name}"/></option>
+       			</select>
+       		<label>三级学科：</label>
+       			<select class="bt-select" id="subject" style="height: 26px;width: 167px;">
+       				<option value="">请选择</option>
+       			</select>
+	       	      	
 	       	<input type="submit" class="btn btn-primary" id="find_btn" value="查 询" /> 
 	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出课件" />	       
            <input type="button" class="btn btn-primary" id="upload_btn" value="导入课件" />
@@ -35,6 +49,7 @@
     <div id="jqgrid-pager"></div>
 </section>
 <div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/assets/bootstrap-3.3.5/js/laydate.js"></script>
 <script type="text/javascript" src="/static/js/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="/static/assets/jqgrid/js/jquery.jqGrid.src.js"></script>				
 <script type="text/javascript" src="/static/assets/jqgrid/js/i18n/grid.locale-cn.js"></script>
@@ -205,9 +220,9 @@ function projectLevelFormat(value, row, index){
 }
 function statusFormat(value, row, index){
 	if(value=='-1'){
-		return "下架";
+		return '<a href="javascript:openStatus(\''+index.id+'\');" ><i class="glyphicon glyphicon-wrench"></i>下架</a>';
 	}else{
-		return "有效";
+		return '<a href="javascript:openStatus(\''+index.id+'\');" ><i class="glyphicon glyphicon-wrench"></i>有效</a>';
 	}
 }
 function nullDateFormat(value){
@@ -229,7 +244,7 @@ function costFormatter(value, row, index) {
 function questionFormatter(value, row, index){
 	return [           
         '<a href="javascript:openQuestion(\''+value+'\');" >',         
-        '<i class="glyphicon glyphicon-edit"></i>增加',
+        '<i class="glyphicon glyphicon-plus"></i>增加',
         '</a>'
     ].join('');
 }
@@ -255,6 +270,18 @@ function openQuestion(id){
         content: '/console/kjk/question/eidt?cwId=' +id
     });
 }
+//状态设置模态框
+function openStatus(id){
+    layer.open({
+        type: 2,
+        title: '状态设置',
+        shadeClose: true,
+        shade: false,
+        maxmin: true, //开启最大化最小化按钮
+        area: ['450px', '220px'],
+        content: '/console/kjk/courseware/toEditStatus?id=' +id
+    });
+}
 //打开劳务费模态框
 function openCost(id){
     layer.open({
@@ -273,16 +300,29 @@ $(function(){
 	$(window).resize(function(){		 
         $("#mygrid").setGridWidth($(window).width());
     });
-	
+	//年选择器
+	laydate.render({
+	  elem: '.form_datetime'
+	  ,type: 'date'
+	});
+	//年选择器
+	laydate.render({
+	  elem: '.form_endtime'
+	  ,type: 'date'
+	});
 	//查询数据
     $("#find_btn").click(function(){ 
         var cwId = $("#cw_id").val(); 
         var keyword = $("#keyword").val();
         var playType = $("#play_type").val(); 
         var playFlag = $("#play_flag").val();
+        var beginTime = $("#beginTime").val();
+        var endTime = $("#endTime").val();
+        var subject2 = $("#subject2Name").val();
+        var subject = $("#subject").val();
         $("#mygrid").jqGrid('setGridParam',{ 
             url:"/console/kjk/courseware/list", 
-            postData:{'id':cwId,'keyword':keyword,'playType':playType,'playFlag':playFlag}, //发送数据 
+            postData:{'id':cwId,'label':keyword,'playType':playType,'playFlag':playFlag,'beginTime':beginTime,'endTime':endTime,'subject2':subject2,'subject':subject}, //发送数据 
             page:1 
         }).trigger("reloadGrid"); //重新载入 
     });     
@@ -292,9 +332,14 @@ $(function(){
         var keyword = $("#keyword").val();
         var playType = $("#play_type").val();
         var playFlag = $("#play_flag").val();
+        var beginTime = $("#beginTime").val();
+        var endTime = $("#endTime").val();
+        var subject2 = $("#subject2Name").val();
+        var subject = $("#subject").val();
         this.disabled=true;
         /*<![CDATA[*/
-        window.location.href = "/console/kjk/courseware/download?id="+cwId+"&keyword="+keyword+"&playType="+playType+"&playFlay="+playFlag;
+        var param = "id="+cwId+"&label="+keyword+"&playType="+playType+"&playFlay="+playFlag+"&beginTime="+beginTime+"&endTime="+endTime+"&subject2="+subject2+"&subject="+subject2;
+        window.location.href = "/console/kjk/courseware/download?"+param
         /*]]>*/
         this.disabled=false;
     });         
@@ -351,6 +396,30 @@ $(function(){
             content: '/console/kjk/courseware/edit'
         });
 	 });
+	
+	$('#subject2Name').change(function(){
+		var name=this.value;
+		if(name !=''){
+			$.ajax({  
+	            type: "get",  
+	            url: "/console/kjk/ajaxSubjectName",  
+	            data: {subjectName2:name},  
+	            dataType: "json",  
+	            success: function (data) {  
+	            	/*<![CDATA[*/
+	            	var itemHTML="<option value=''>请选择</option>";
+	            	/*]]>*/
+	            	$.each(data, function(index, element) {  
+	            		/*<![CDATA[*/
+	            		itemHTML += "<option value='"+element.subjectName+"'>"+element.subjectName+"</option>";
+	            		/*]]>*/
+	            	});
+	            	$("#subject").empty();
+                    $("#subject").html(itemHTML);  
+	            }  
+	        });
+		}
+    });
 }); 
 
 

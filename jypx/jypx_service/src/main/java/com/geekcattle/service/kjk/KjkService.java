@@ -41,7 +41,7 @@ public class KjkService {
 		 if(StringUtils.isNotBlank(kjkCourseware.getKeyword())){
 			 criteria.andLike("keyword", "%"+kjkCourseware.getKeyword()+"%");
 		 }*/
-		kjkCourseware.setStatus(KjkEnum.KJK_COURSEWARE_STATUS_ENABLE.getValue().intValue());
+		//kjkCourseware.setStatus(KjkEnum.KJK_COURSEWARE_STATUS_ENABLE.getValue().intValue());
 		return kjkCoursewareMapper.findCourseware(kjkCourseware);
 	}
 	

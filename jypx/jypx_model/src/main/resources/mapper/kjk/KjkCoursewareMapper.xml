@@ -91,9 +91,7 @@
   </resultMap>  
   <sql id="Courseware_Where">
       <where>
-          <if test="status!=null">
-              cw.status = #{status}
-          </if>
+          and cw.status != '1'
           <if test="id!=null">
               and cw.id = #{id}
           </if>

@@ -187,6 +187,7 @@ public class KjkCostController {
 			
 			//操作专家表begin=================
 			List<NcmeExpert> ncmeExpertList = ncmeExpertService.getListByName(kjkCost.getIdCard());
+			KjkCourseware courseware = kjkService.getById(kjkCost.getCwId().longValue());
 			if(null!=ncmeExpertList && ncmeExpertList.size()>0){
 				//修改专家银行卡号
 				NcmeExpert ncmeExpert = ncmeExpertList.get(0);
@@ -195,6 +196,8 @@ public class KjkCostController {
 				ncmeExpert.setUpdateDate(new Date());
 				ncmeExpert.setIdCard(kjkCost.getIdCard());
 				ncmeExpert.setExpName(kjkCost.getExpertName().trim());
+				ncmeExpert.setMajor(courseware.getSubject());
+				ncmeExpert.setUnit(courseware.getExpertUnit());
 				//手机号如果存并且不相等在则追加，不存在则添加
 				ncmeExpert.setMobile(StringUtils.isEmpty(ncmeExpert.getMobile())?kjkCost.getMobile():ncmeExpert.getMobile().equals(kjkCost.getMobile())?ncmeExpert.getMobile():ncmeExpert.getMobile()+","+kjkCost.getMobile());
 				ncmeExpertService.update(ncmeExpert);
@@ -203,6 +206,8 @@ public class KjkCostController {
 			}else{
 				//新增专家信息
 				NcmeExpert ncmeExpert = new NcmeExpert(kjkCost.getExpertName(),kjkCost.getMobile(), kjkCost.getIdCard(), kjkCost.getOpeningBank(), kjkCost.getCardNo(), new Date());
+				ncmeExpert.setMajor(courseware.getSubject());
+				ncmeExpert.setUnit(courseware.getExpertUnit());
 				ncmeExpertService.insert(ncmeExpert);
 				kjkCost.setExpertId(ncmeExpert.getExpId());
 			}
@@ -216,8 +221,7 @@ public class KjkCostController {
 			kjkService.updateCourseCware(kjkCourseware);
 			//修改课件库表的付费状态end================
 			
-			//劳务费属性设置
-			KjkCourseware courseware = kjkService.getById(kjkCost.getCwId().longValue());
+			//劳务费属性设置			
 			kjkCost.setCwareName(courseware.getName());
 			kjkCost.setCostId(UuidUtil.getUUID());//主键id
 			kjkCost.setAuditStatus(ConstantEnum.KJK_COST_AUDIT_STATUS_NOT.toString());

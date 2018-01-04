@@ -237,7 +237,7 @@ public class KjkCostController {
 		}
 	}
 	
-	@RequiresPermissions("courseware:download")
+	@RequiresPermissions("kjkCost:index")
 	@RequestMapping("/download")
 	public void downloadfile(KjkCost kjkCost, ModelMap model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {

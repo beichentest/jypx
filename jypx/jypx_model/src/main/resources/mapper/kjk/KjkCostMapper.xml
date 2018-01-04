@@ -112,7 +112,24 @@
 		</foreach>
 	</update>
 	<select id="findKjkCostVo" resultMap="BaseResultExcelVo">
-		select * from kjk_cost kc
+				select k.cost_id,k.cost_id,
+                   k.cw_id,
+                   k.expert_id,
+                   k.cost,
+                   k.card_no,
+                   k.opening_bank,
+                   d.dic_desc system,
+                   k.pay_desc,
+                   k.apply_time,
+                   k.pay_time,
+                   k.audit_status,
+                   k.operator,
+                   k.status,
+                   k.remark,
+                   k.expert_name,
+                   k.id_card,
+                   k.mobile,
+                   k.cware_name from kjk_cost k left join kjk_dic d on k.system=d.dic_id
 		<include refid="kjkCost_Where" />
 	</select>
 </mapper>

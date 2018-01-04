@@ -20,78 +20,11 @@ public class KjkCostVo  implements Serializable{
      */
     @Excel(name = "课件ID")
     private Long cwId;
-
     /**
-     * 专家
+     * 课件名称
      */
-    @Excel(name = "专家")
-    private String expertId;
-
-    /**
-     * 劳务费用
-     */
-    @Excel(name = "劳务费用")
-    private Long cost;
-
-    /**
-     * 银行卡号
-     */
-    @Excel(name = "银行卡号")
-    private String cardNo;
-
-    /**
-     * 开户行
-     */
-    @Excel(name = "开户行")
-    private String openingBank;
-
-    /**
-     * 归属项目
-     */
-    @Excel(name = "归属项目")
-    private String system;
-
-    /**
-     * 支付描述
-     */
-    @Excel(name = "支付描述")
-    private String payDesc;
-
-    /**
-     * 申请时间
-     */
-    @Excel(name = "申请时间",format="yyyy-MM-dd")
-    private Date applyTime;
-
-    /**
-     * 支付时间
-     */
-    @Excel(name = "支付时间",format="yyyy-MM-dd")
-    private Date payTime;
-
-    /**
-     * 审核状态(0 未审核，1 已审核)
-     */
-    @Excel(name = "审核状态",replace= {"未审核_0","已审核_1"})
-    private String auditStatus;
-
-    /**
-     * 操作人
-     */
-    @Excel(name = "操作人")
-    private String operator;
-
-    /**
-     * 数据状态(0 正常，1 失效)
-     */
-    @Excel(name = "数据状态",replace= {"正常_0","失效_1"})
-    private String status;
-
-    /**
-     * 备注
-     */
-    @Excel(name = "备注")
-    private String remark;
+    @Excel(name="课件名称")
+    private String cwareName;
     /**
      * 专家姓名
      */
@@ -107,12 +40,69 @@ public class KjkCostVo  implements Serializable{
      */
     @Excel(name="手机号")
     private String mobile;
-    
     /**
-     * 课件名称
+     * 劳务费用
      */
-    @Excel(name="课件名称")
-    private String cwareName;
+    @Excel(name = "劳务费用")
+    private Long cost;
+    /**
+     * 银行卡号
+     */
+    @Excel(name = "银行卡号")
+    private String cardNo;
+    /**
+     * 开户行
+     */
+    @Excel(name = "开户行")
+    private String openingBank;
+    /**
+     * 归属项目
+     */
+    @Excel(name = "归属项目")
+    private String system;
+    /**
+     * 支付描述
+     */
+    @Excel(name = "支付描述")
+    private String payDesc;
+    /**
+     * 申请时间
+     */
+    @Excel(name = "申请时间",format="yyyy-MM-dd")
+    private Date applyTime;
+    /**
+     * 支付时间
+     */
+    @Excel(name = "支付时间",format="yyyy-MM-dd")
+    private Date payTime;
+    /**
+     * 专家id
+     */
+    //@Excel(name = "专家ID")
+    private String expertId;
+    /**
+     * 审核状态(0 未审核，1 已审核)
+     */
+    //@Excel(name = "审核状态",replace= {"未审核_0","已审核_1"})
+    private String auditStatus;
+
+    /**
+     * 操作人
+     */
+    //@Excel(name = "操作人")
+    private String operator;
+
+    /**
+     * 数据状态(0 正常，1 失效)
+     */
+    //@Excel(name = "数据状态",replace= {"正常_0","失效_1"})
+    private String status;
+
+    /**
+     * 备注
+     */
+    //@Excel(name = "备注")
+    private String remark;
 
 	public String getCostId() {
 		return costId;

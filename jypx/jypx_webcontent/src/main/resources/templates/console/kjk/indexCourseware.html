@@ -41,7 +41,8 @@
        			</select>
 	       	      	
 	       	<input type="submit" class="btn btn-primary" id="find_btn" value="查 询" /> 
-	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出课件" />	       
+	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出课件" />
+	       	<input type="button" class="btn btn-primary" id="download_btn_c" value="导出勾选课件" />	       
            <input type="button" class="btn btn-primary" id="upload_btn" value="导入课件" />
 	    </div> 	     
  </div>
@@ -342,7 +343,20 @@ $(function(){
         window.location.href = "/console/kjk/courseware/download?"+param
         /*]]>*/
         this.disabled=false;
-    });         
+    }); 
+    $("#download_btn_c").click(function(){ 
+    	var selectedRowIds = $("#mygrid").jqGrid("getGridParam", "selarrrow");
+    	if(selectedRowIds==""){  
+			layer.msg("请选择要导出数据！");
+			return;
+        }
+        this.disabled=true;
+        /*<![CDATA[*/        
+        window.location.href = "/console/kjk/courseware/downloadCheck?ids="+selectedRowIds.toString();
+        /*]]>*/
+        this.disabled=false;
+    });
+	
     //导入课件
     $("#upload_btn").click(function(){                
          layer.open({

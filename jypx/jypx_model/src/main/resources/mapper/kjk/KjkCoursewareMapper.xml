@@ -262,7 +262,15 @@
         </foreach>
         ) T1
     </insert>
-    
+    <select id="findCoursewareByIds" resultMap="BaseResultExcelVo">
+    	select cw.*,k1.play_type_name PLAY_TYPE_TEXT,k1.play_type_name MOBILE_TYPE_TEXT from KJK_COURSEWARE cw
+        left join kjk_play_type k1 on cw.play_type=k1.play_type
+    	left join kjk_play_type k2 on cw.mobile_type=k2.play_type where id in
+        <foreach collection="array" item="ids" index="index"  
+            open="(" close=")" separator=",">  
+            #{ids}  
+    	</foreach>  	
+    </select>    
     <!-- <insert id ="insertCoursewareBatch" parameterType="java.util.List" useGeneratedKeys="false">        
        insert into KJK_COURSEWARE (ID,NAME, P_NAME, 
 	      CODE, PATH, FILE_TYPE, 

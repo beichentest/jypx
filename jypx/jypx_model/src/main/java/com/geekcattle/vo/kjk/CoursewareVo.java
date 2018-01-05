@@ -191,6 +191,8 @@ public class CoursewareVo  implements Serializable{
      * 课件创建人id
      */
     private String creater;    
+    
+    private String modifier;
     /**
      * @return ID
      */
@@ -693,5 +695,13 @@ public class CoursewareVo  implements Serializable{
 
 	public void setMobileTypeText(String mobileTypeText) {
 		this.mobileTypeText = mobileTypeText;
-	} 
+	}
+
+	public String getModifier() {
+		return modifier;
+	}
+
+	public void setModifier(String modifier) {
+		this.modifier = modifier;
+	} 	
 }

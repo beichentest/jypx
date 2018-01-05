@@ -23,6 +23,7 @@
 	       	<input type="text" readonly="readonly" id="endTime" class="form_endtime" />
 	       	<input type="submit" class="btn btn-primary" id="find_btn" value="查 询" /> 
 	       	<input type="button" class="btn btn-primary" id="download_btn" value="导出" />
+	       	<input type="button" class="btn btn-primary" id="download_btn_c" value="导出勾选课件" />
 	        <input type="button" class="btn btn-primary" id="audit_btn" value="批量审核" />
 	    </div> 	     
  </div>
@@ -269,7 +270,19 @@ $(function(){
         /*<![CDATA[*/
         window.location.href = "/console/kjk/cost/download?cwId="+cwId+"&system="+system+"&beginTime="+beginTime+"&endTime="+endTime;
         /*]]>*/
-    }); 
+    });
+    $("#download_btn_c").click(function(){ 
+    	var selectedRowIds = $("#mygrid").jqGrid("getGridParam", "selarrrow");
+    	if(selectedRowIds==""){  
+			layer.msg("请选择要导出数据！");
+			return;
+        }
+        this.disabled=true;
+        /*<![CDATA[*/        
+        window.location.href = "/console/kjk/cost/downloadCheck?ids="+selectedRowIds.toString();
+        /*]]>*/
+        this.disabled=false;
+    });
 }); 
 
 

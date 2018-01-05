@@ -24,12 +24,17 @@ import com.geekcattle.util.IdUtil;
 public class ImportController {	
 	private final static Logger logger = LoggerFactory.getLogger(ImportController.class);
 	@Value("${upload.courseware.errfilepath}")
-	private String uploadCoursewareErrPath;		
+	private String uploadCoursewareErrPath;	
+	@Value("${upload.courseware.template}")
+	private String coursewareTemplate;
+	@Value("${upload.question.template}")
+	private String questionTemplate;
 	@RequestMapping("/console/fromImport")
 	public String fromImport(Model model, String type,String errFile) {
 		if("courseware".equals(type)) {
 			model.addAttribute("type", "import");
 			model.addAttribute("action", "/console/kjk/courseware/importCourseware");
+			model.addAttribute("template", coursewareTemplate);
 			model.addAttribute("name", "上传课件");			
 		}else if("err".equals(type)) {
 			model.addAttribute("type", "err");
@@ -40,6 +45,7 @@ public class ImportController {
 		}else if("question".equals(type)) {
 			model.addAttribute("type", "import");
 			model.addAttribute("action", "/console/kjk/question/importQuestion");
+			model.addAttribute("template", questionTemplate);
 			model.addAttribute("name", "上传试题");
 		}		
 		return "console/kjk/importData";

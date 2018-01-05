@@ -15,9 +15,9 @@
 						<form class="form-horizontal js-ajax-form"  th:action="${action}" method="post" enctype="multipart/form-data">
 							
 							<div class="form-group">
-								<label for="imgUrl" class="col-sm-2 control-label">导入文件</label>
+								<label for="imgUrl" class="col-sm-2 control-label">导入文件 <a th:href="@{'/console/kjk/courseware/downloadTemplate?template='+${template}}">下载模板</a></label>
 								<div class="col-md-10 tl th">				      
-									<input type="file" name="imgFile" id="imgFile"  required="true"/>
+									<input type="file" name="imgFile" id="imgFile"  required="true"/>									
 									<p class="help-block">支持xls，xlsx格式，大小不超过2.0M;</p>	
 								</div>
 							</div>							

@@ -52,4 +52,7 @@ public class KjkCostService {
 	public List<KjkCostVo> getExcelList(KjkCost kjkCost) {
 		return kjkCostMapper.findKjkCostVo(kjkCost);
 	}
+	public List<KjkCostVo> getExcelListById(String[] ids) {
+		return kjkCostMapper.findKjkCostVoByIds(ids);
+	}	
 }

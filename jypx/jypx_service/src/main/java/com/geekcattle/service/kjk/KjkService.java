@@ -101,4 +101,8 @@ public class KjkService {
 		criteria.andEqualTo("playFlag", ConstantEnum.KJK_COURSEWARE_PLY_FLAG_NOT.toString());
 		return kjkCoursewareMapper.selectCountByExample(example);
 	}
+	
+	public List<CoursewareVo> getListByIds(String[] ids){
+		return kjkCoursewareMapper.findCoursewareByIds(ids);
+	}
 }

@@ -74,9 +74,7 @@ import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 @Controller
 @RequestMapping("/console/kjk")
 public class KjkController {
-	private final static Logger logger = LoggerFactory.getLogger(KjkController.class);
-	@Value("${upload.courseware.template}")
-	private String coursewareTemplate;
+	private final static Logger logger = LoggerFactory.getLogger(KjkController.class);	
 	@Value("${upload.courseware.filepath}")
 	private String uploadCoursewarePath;
 	@Value("${upload.courseware.errfilepath}")
@@ -150,11 +148,25 @@ public class KjkController {
 		model.put(NormalExcelConstants.FILE_NAME, ConstantEnum.DOWNLOAD_COURSEWARE_FILENAME.toString());// 文件名称
 		ExcelOperate.renderMergedOutputModel(model, request, response);
 	}
+	
+	@RequiresPermissions("courseware:download")
+	@RequestMapping("/courseware/downloadCheck")
+	public void downloadCheckfile(String ids, ModelMap model, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		List<CoursewareVo> list = kjkService.getListByIds(ids.split(","));
+		ExportParams params = new ExportParams(ConstantEnum.DOWNLOAD_COURSEWARE_TITLENAME.toString(),
+				ConstantEnum.DOWNLOAD_COURSEWARE_SHEETNAME.toString(), ExcelType.XSSF);
+		model.put(NormalExcelConstants.DATA_LIST, list); // 数据集合
+		model.put(NormalExcelConstants.CLASS, CoursewareVo.class);// 导出实体
+		model.put(NormalExcelConstants.PARAMS, params);// 参数
+		model.put(NormalExcelConstants.FILE_NAME, ConstantEnum.DOWNLOAD_COURSEWARE_FILENAME.toString());// 文件名称
+		ExcelOperate.renderMergedOutputModel(model, request, response);
+	}
 
 	@RequiresPermissions("courseware:download")
 	@RequestMapping("/courseware/downloadTemplate")
-	public void downloadCoursewareTemplate(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		URL url = Thread.currentThread().getContextClassLoader().getResource(coursewareTemplate);
+	public void downloadCoursewareTemplate(HttpServletRequest request, HttpServletResponse response,String template) throws Exception {
+		URL url = Thread.currentThread().getContextClassLoader().getResource(template);
 		File file = new File(url.toURI());
 		response.setHeader("content-type", "application/octet-stream");
 		response.setContentType("application/octet-stream");

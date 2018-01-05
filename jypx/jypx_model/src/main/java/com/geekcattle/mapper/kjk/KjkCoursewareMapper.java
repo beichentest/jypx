@@ -20,4 +20,6 @@ public interface KjkCoursewareMapper extends CustomerMapper<KjkCourseware> {
 	List<CoursewareVo> findCoursewareByNames(@Param("params") List<CoursewareVo> coursewareList);
 	
 	void insertCoursewareBatch(List<CoursewareVo> coursewareList);
+	
+	List<CoursewareVo> findCoursewareByIds(String[] ids);
 }

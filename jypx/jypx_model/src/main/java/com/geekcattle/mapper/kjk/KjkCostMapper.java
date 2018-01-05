@@ -19,4 +19,5 @@ public interface KjkCostMapper extends CustomerMapper<KjkCost> {
 	//导出查询
 	List<KjkCostVo> findKjkCostVo(KjkCost kjkCost);
 	
+	List<KjkCostVo> findKjkCostVoByIds(String[] ids);	
 }

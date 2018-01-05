@@ -254,5 +254,17 @@ public class KjkCostController {
 		model.put(NormalExcelConstants.FILE_NAME, ConstantEnum.DOWNLOAD_COST_FILENAME.toString());// 文件名称
 		ExcelOperate.renderMergedOutputModel(model, request, response);
 	}
-
+	@RequiresPermissions("kjkCost:index")
+	@RequestMapping("/downloadCheck")
+	public void downloadCheckfile(String ids, ModelMap model, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		List<KjkCostVo> list = kjkCostService.getExcelListById(ids.split(","));
+		ExportParams params = new ExportParams(ConstantEnum.DOWNLOAD_COST_TITLENAME.toString(),
+				ConstantEnum.DOWNLOAD_COST_SHEETNAME.toString(), ExcelType.XSSF);
+		model.put(NormalExcelConstants.DATA_LIST, list); // 数据集合
+		model.put(NormalExcelConstants.CLASS, KjkCostVo.class);// 导出实体
+		model.put(NormalExcelConstants.PARAMS, params);// 参数
+		model.put(NormalExcelConstants.FILE_NAME, ConstantEnum.DOWNLOAD_COST_FILENAME.toString());// 文件名称
+		ExcelOperate.renderMergedOutputModel(model, request, response);
+	}
 }

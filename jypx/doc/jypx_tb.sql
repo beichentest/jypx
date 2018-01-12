@@ -1,5 +1,5 @@
 -----------------------------------------------------
--- Export file for user HYSH                       --
+-- Export file for user HYSH                         --
 -- Created by Administrator on 2018/1/12, 10:09:31 --
 -----------------------------------------------------
 
@@ -64,41 +64,41 @@ create table JYPX_CMS_INFO
 )
 ;
 comment on table JYPX_CMS_INFO
-  is 'ÄÚÈÝÐÅÏ¢';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢';
 comment on column JYPX_CMS_INFO.INFO_ID
   is 'ID';
 comment on column JYPX_CMS_INFO.INFO_NAME
-  is 'Ãû³Æ';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_INFO.MODULE_ID
-  is 'Ä£¿éID';
+  is 'Ä£ï¿½ï¿½ID';
 comment on column JYPX_CMS_INFO.IMG_URL
   is 'Í¼Æ¬URL';
 comment on column JYPX_CMS_INFO.IS_OPEN
-  is 'ÊÇ·ñ¿ª·Å 0£º·ñ1£ºÊÇ';
+  is 'ï¿½Ç·ñ¿ª·ï¿½ 0ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_INFO.LINK_URL
-  is 'Á´½ÓµØÖ·';
+  is 'ï¿½ï¿½ï¿½Óµï¿½Ö·';
 comment on column JYPX_CMS_INFO.CREATE_DATE
-  is '´´½¨ÈÕÆÚ';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_INFO.UPDTE_DATE
-  is 'ÐÞ¸ÄÈÕÆÚ';
+  is 'ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_INFO.CODE
-  is '±àºÅ';
+  is 'ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_INFO.REMARK
-  is '±¸×¢';
+  is 'ï¿½ï¿½×¢';
 comment on column JYPX_CMS_INFO.CONTENT
-  is 'ÄÚÈÝ';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_INFO.ORG_ID
-  is 'ÏÞÖÆ»ú¹¹';
+  is 'ï¿½ï¿½ï¿½Æ»ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_INFO.AUTHOR
-  is '×÷Õß/ÀÏÊ¦';
+  is 'ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½Ê¦';
 comment on column JYPX_CMS_INFO.CREATE_USER
-  is '´´½¨ÈË';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_INFO.TAG
-  is '±êÇ©';
+  is 'ï¿½ï¿½Ç©';
 comment on column JYPX_CMS_INFO.SUMMARY
-  is '¼ò½é';
+  is 'ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_INFO.DEL_FLAG
-  is 'ÊÇ·ñÉ¾³ý 0£º·ñ1£ºÊÇ';
+  is 'ï¿½Ç·ï¿½É¾ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½';
 alter table JYPX_CMS_INFO
   add constraint PK_JYPX_CMS_INFO primary key (INFO_ID);
 
@@ -114,13 +114,13 @@ create table JYPX_CMS_MODULE
 )
 ;
 comment on table JYPX_CMS_MODULE
-  is 'ÐÅÏ¢À¸Ä¿';
+  is 'ï¿½ï¿½Ï¢ï¿½ï¿½Ä¿';
 comment on column JYPX_CMS_MODULE.MODULE_ID
-  is 'Ä£¿éID';
+  is 'Ä£ï¿½ï¿½ID';
 comment on column JYPX_CMS_MODULE.MODULE_NAME
-  is 'Ä£¿éÃû³Æ';
+  is 'Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column JYPX_CMS_MODULE.PARENT_ID
-  is '¸¸ID';
+  is 'ï¿½ï¿½ID';
 alter table JYPX_CMS_MODULE
   add constraint PK_JYPX_CMS_MODULE primary key (MODULE_ID);
 
@@ -178,7 +178,7 @@ create table JYPX_MENU
 )
 ;
 comment on column JYPX_MENU.MENU_TYPE
-  is '×ÊÔ´ÀàÐÍ£¬²Ëµ¥»ò¶¼°´Å¥(menu,button)';
+  is 'ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Í£ï¿½ï¿½Ëµï¿½ï¿½ò¶¼°ï¿½Å¥(menu,button)';
 alter table JYPX_MENU
   add primary key (MENU_ID);
 
@@ -239,37 +239,37 @@ create table KJK_COST
 )
 ;
 comment on column KJK_COST.CW_ID
-  is '¿Î¼þID';
+  is 'ï¿½Î¼ï¿½ID';
 comment on column KJK_COST.EXPERT_ID
-  is '×¨¼ÒID';
+  is '×¨ï¿½ï¿½ID';
 comment on column KJK_COST.COST
-  is 'ÀÍÎñ·ÑÓÃ';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COST.CARD_NO
-  is 'ÒøÐÐ¿¨ºÅ';
+  is 'ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½';
 comment on column KJK_COST.OPENING_BANK
-  is '¿ª»§ÐÐ';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COST.SYSTEM
-  is '¹éÊôÏîÄ¿(¶ÔÓ¦KJK_DIC±íSYSTEM)';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿(ï¿½ï¿½Ó¦KJK_DICï¿½ï¿½SYSTEM)';
 comment on column KJK_COST.PAY_DESC
-  is 'Ö§¸¶ÃèÊö';
+  is 'Ö§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COST.APPLY_TIME
-  is 'ÉêÇëÊ±¼ä';
+  is 'ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½';
 comment on column KJK_COST.PAY_TIME
-  is 'Ö§¸¶Ê±¼ä';
+  is 'Ö§ï¿½ï¿½Ê±ï¿½ï¿½';
 comment on column KJK_COST.AUDIT_STATUS
-  is 'ÉóºË×´Ì¬(0 Î´ÉóºË£¬1 ÒÑÉóºË)';
+  is 'ï¿½ï¿½ï¿½×´Ì¬(0 Î´ï¿½ï¿½Ë£ï¿½1 ï¿½ï¿½ï¿½ï¿½ï¿½)';
 comment on column KJK_COST.OPERATOR
-  is '²Ù×÷ÈË';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COST.STATUS
-  is 'Êý¾Ý×´Ì¬(0 Õý³££¬1 Ê§Ð§)';
+  is 'ï¿½ï¿½ï¿½ï¿½×´Ì¬(0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1 Ê§Ð§)';
 comment on column KJK_COST.EXPERT_NAME
-  is '×¨¼ÒÐÕÃû';
+  is '×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COST.ID_CARD
-  is 'Éí·ÝÖ¤ºÅ';
+  is 'ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½';
 comment on column KJK_COST.MOBILE
-  is 'ÊÖ»úºÅ';
+  is 'ï¿½Ö»ï¿½ï¿½ï¿½';
 comment on column KJK_COST.CWARE_NAME
-  is '¿Î¼þÃû³Æ';
+  is 'ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½';
 alter table KJK_COST
   add constraint PK_KJK_COST primary key (COST_ID);
 
@@ -320,61 +320,61 @@ create table KJK_COURSEWARE
 )
 ;
 comment on column KJK_COURSEWARE.ID
-  is '¿Î¼þID';
+  is 'ï¿½Î¼ï¿½ID';
 comment on column KJK_COURSEWARE.NAME
-  is '¿Î¼þÃû³Æ';
+  is 'ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COURSEWARE.P_NAME
-  is 'ÏîÄ¿Ãû³Æ';
+  is 'ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COURSEWARE.CODE
-  is '±àºÅ';
+  is 'ï¿½ï¿½ï¿½';
 comment on column KJK_COURSEWARE.PATH
-  is 'Â·¾¶';
+  is 'Â·ï¿½ï¿½';
 comment on column KJK_COURSEWARE.FILE_TYPE
-  is 'ÎÄ¼þÀàÐÍ';
+  is 'ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COURSEWARE.PLAY_TYPE
-  is '²¥·ÅÀàÐÍ£¨PC£©';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½PCï¿½ï¿½';
 comment on column KJK_COURSEWARE.SUBJECT
-  is 'Èý¼¶Ñ§¿Æ';
+  is 'ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½';
 comment on column KJK_COURSEWARE.KEYWORD
-  is '¹Ø¼ü×Ö';
+  is 'ï¿½Ø¼ï¿½ï¿½ï¿½';
 comment on column KJK_COURSEWARE.INTRODUCE
-  is '¼ò½é';
+  is 'ï¿½ï¿½ï¿½';
 comment on column KJK_COURSEWARE.EXPERT
-  is '×¨¼Ò';
+  is '×¨ï¿½ï¿½';
 comment on column KJK_COURSEWARE.EXPERT_UNIT
-  is '×¨¼Òµ¥Î»';
+  is '×¨ï¿½Òµï¿½Î»';
 comment on column KJK_COURSEWARE.SOURCE
-  is 'À´Ô´';
+  is 'ï¿½ï¿½Ô´';
 comment on column KJK_COURSEWARE.CREATE_DATE
-  is '´´½¨Ê±¼ä';
+  is 'ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½';
 comment on column KJK_COURSEWARE.ADD_DATE
-  is 'Ìí¼ÓÊ±¼ä';
+  is 'ï¿½ï¿½ï¿½Ê±ï¿½ï¿½';
 comment on column KJK_COURSEWARE.UPDATE_DATE
-  is 'ÐÞ¸ÄÊ±¼ä';
+  is 'ï¿½Þ¸ï¿½Ê±ï¿½ï¿½';
 comment on column KJK_COURSEWARE.CLICK_COUNT
-  is 'µã»÷Á¿';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COURSEWARE.STATUS
-  is '×´Ì¬ -1ÏÂ¼Ü,0ÓÐÐ§,1É¾³ý';
+  is '×´Ì¬ -1ï¿½Â¼ï¿½,0ï¿½ï¿½Ð§,1É¾ï¿½ï¿½';
 comment on column KJK_COURSEWARE.CLASS_TIME
-  is 'Ê±³¤(Ãë)';
+  is 'Ê±ï¿½ï¿½(ï¿½ï¿½)';
 comment on column KJK_COURSEWARE.CLASS_HOUR
-  is '¿ÎÊ±/Ñ§Ê±';
+  is 'ï¿½ï¿½Ê±/Ñ§Ê±';
 comment on column KJK_COURSEWARE.REMARK
-  is '±¸×¢';
+  is 'ï¿½ï¿½×¢';
 comment on column KJK_COURSEWARE.PAR1
-  is '²ÎÊý1';
+  is 'ï¿½ï¿½ï¿½ï¿½1';
 comment on column KJK_COURSEWARE.PAR2
-  is '²ÎÊý2';
+  is 'ï¿½ï¿½ï¿½ï¿½2';
 comment on column KJK_COURSEWARE.PAR3
-  is '²ÎÊý3';
+  is 'ï¿½ï¿½ï¿½ï¿½3';
 comment on column KJK_COURSEWARE.PAR4
-  is '²ÎÊý4';
+  is 'ï¿½ï¿½ï¿½ï¿½4';
 comment on column KJK_COURSEWARE.MOBILE_TYPE
-  is '²¥·ÅÀàÐÍ£¨ÊÖ»ú£©';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½Ö»ï¿½ï¿½ï¿½';
 comment on column KJK_COURSEWARE.SUBJECT2
-  is '¶þ¼¶Ñ§¿Æ';
+  is 'ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½';
 comment on column KJK_COURSEWARE.SL_IMG
-  is 'ËõÂÔÍ¼';
+  is 'ï¿½ï¿½ï¿½ï¿½Í¼';
 comment on column KJK_COURSEWARE.LOGO
   is 'logo';
 comment on column KJK_COURSEWARE.PIANTOU
@@ -382,19 +382,19 @@ comment on column KJK_COURSEWARE.PIANTOU
 comment on column KJK_COURSEWARE.PIANWEI
   is 'Æ¬Î²';
 comment on column KJK_COURSEWARE.SHOT_YEAR
-  is 'ÅÄÉãÄê·Ý';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_COURSEWARE.CLASS_TIME_STR
-  is 'Ê±³¤(Ê±:·Ö:Ãë)';
+  is 'Ê±ï¿½ï¿½(Ê±:ï¿½ï¿½:ï¿½ï¿½)';
 comment on column KJK_COURSEWARE.LABEL
-  is '±êÇ©';
+  is 'ï¿½ï¿½Ç©';
 comment on column KJK_COURSEWARE.PLAY_FLAG
-  is '¸¶·Ñ±êÖ¾£¨0 Î´¸¶·Ñ£¬1 ¸¶·Ñ£©';
+  is 'ï¿½ï¿½ï¿½Ñ±ï¿½Ö¾ï¿½ï¿½0 Î´ï¿½ï¿½ï¿½Ñ£ï¿½1 ï¿½ï¿½ï¿½Ñ£ï¿½';
 comment on column KJK_COURSEWARE.CREATER
-  is '¿Î¼þ´´½¨ÈËid';
+  is 'ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½id';
 comment on column KJK_COURSEWARE.MODIFIER
-  is '¿Î¼þ×îºóÐÞ¸ÄÈËid';
+  is 'ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½id';
 comment on column KJK_COURSEWARE.PROJECT_LEVEL
-  is 'ÏîÄ¿¼¶±ð£¨0 ÆÕÍ¨ÏîÄ¿£¬1 ¹ú¼Ò¼¶ÏîÄ¿£©';
+  is 'ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½0 ï¿½ï¿½Í¨ï¿½ï¿½Ä¿ï¿½ï¿½1 ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½';
 alter table KJK_COURSEWARE
   add constraint PK_KJK_COURSEWARE primary key (ID);
 
@@ -414,13 +414,13 @@ create table KJK_CW_PLAY_TYPE
 )
 ;
 comment on column KJK_CW_PLAY_TYPE.PAR1
-  is '²ÎÊý1';
+  is 'ï¿½ï¿½ï¿½ï¿½1';
 comment on column KJK_CW_PLAY_TYPE.PAR2
-  is '²ÎÊý2';
+  is 'ï¿½ï¿½ï¿½ï¿½2';
 comment on column KJK_CW_PLAY_TYPE.PAR3
-  is '²ÎÊý3';
+  is 'ï¿½ï¿½ï¿½ï¿½3';
 comment on column KJK_CW_PLAY_TYPE.PAR4
-  is '²ÎÊý4';
+  is 'ï¿½ï¿½ï¿½ï¿½4';
 alter table KJK_CW_PLAY_TYPE
   add constraint PK_KJK_CW_PLAY_TYPE primary key (ID);
 
@@ -440,17 +440,17 @@ create table KJK_DIC
 )
 ;
 comment on column KJK_DIC.DIC_DESC
-  is 'ÃèÊö';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_DIC.DIC_TYPE
-  is 'ÀàÐÍ';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_DIC.PARENT_ID
-  is '¸¸ID';
+  is 'ï¿½ï¿½ID';
 comment on column KJK_DIC.SEQ
-  is 'ÅÅÐò';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_DIC.STATUS
-  is 'Êý¾Ý×´Ì¬(0 Õý³£,1 Ê§Ð§)';
+  is 'ï¿½ï¿½ï¿½ï¿½×´Ì¬(0 ï¿½ï¿½ï¿½ï¿½,1 Ê§Ð§)';
 comment on column KJK_DIC.REMARK
-  is '±¸×¢';
+  is 'ï¿½ï¿½×¢';
 alter table KJK_DIC
   add constraint PK_KJK_DIC primary key (DIC_ID);
 
@@ -479,37 +479,37 @@ create table KJK_QUESTION
 )
 ;
 comment on table KJK_QUESTION
-  is '¿Î¼þÌâÄ¿±í';
+  is 'ï¿½Î¼ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½';
 comment on column KJK_QUESTION.CW_ID
-  is '¿Î¼þID';
+  is 'ï¿½Î¼ï¿½ID';
 comment on column KJK_QUESTION.Q_TYPE
-  is 'ÊÔÌâÀàÐÍ£¨¶ÔÓ¦KJK_DIC±íQUESTION_TYPE£©';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½Ó¦KJK_DICï¿½ï¿½QUESTION_TYPEï¿½ï¿½';
 comment on column KJK_QUESTION.Q_CLASS
-  is 'ÌâÐÍ£¨¶ÔÓ¦KJK_DIC±íQUESTION_CLASS£©';
+  is 'ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½Ó¦KJK_DICï¿½ï¿½QUESTION_CLASSï¿½ï¿½';
 comment on column KJK_QUESTION.Q_LEVEL
-  is 'ÊÔÌâÄÑ¶È';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¶ï¿½';
 comment on column KJK_QUESTION.CONTENT
-  is 'Ìâ¸É';
+  is 'ï¿½ï¿½ï¿½';
 comment on column KJK_QUESTION.Q_KEY
-  is '´ð°¸';
+  is 'ï¿½ï¿½';
 comment on column KJK_QUESTION.RESOLVE
-  is '½âÎö';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_QUESTION.EXECUTE_TIME
-  is '¹ý³ÌÌâ³öÏÖÊ±¼ä';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½';
 comment on column KJK_QUESTION.Q_DATA
-  is 'Ñ¡ÏîÄÚÈÝ';
+  is 'Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_QUESTION.CREATE_DATE
-  is '´´½¨Ê±¼ä';
+  is 'ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½';
 comment on column KJK_QUESTION.MODIFY_DATE
-  is 'ÐÞ¸ÄÊ±¼ä';
+  is 'ï¿½Þ¸ï¿½Ê±ï¿½ï¿½';
 comment on column KJK_QUESTION.OPERATOR
-  is '²Ù×÷ÈË';
+  is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
 comment on column KJK_QUESTION.REMARK
-  is '±¸×¢';
+  is 'ï¿½ï¿½×¢';
 comment on column KJK_QUESTION.STATUS
-  is 'Êý¾Ý×´Ì¬£¨0 Õý³£,1 Ê§Ð§£©';
+  is 'ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½0 ï¿½ï¿½ï¿½ï¿½,1 Ê§Ð§ï¿½ï¿½';
 comment on column KJK_QUESTION.SEQ
-  is 'ÅÅÐò ½µÐò';
+  is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
 alter table KJK_QUESTION
   add constraint PK_KJK_QUESTION primary key (Q_ID);
 
@@ -541,37 +541,37 @@ create table NCME_EXPERT_NEW
 comment on column NCME_EXPERT_NEW.EXP_ID
   is 'ID';
 comment on column NCME_EXPERT_NEW.AREA
-  is 'µØÇø';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.MAJOR
   is '×¨Òµ';
 comment on column NCME_EXPERT_NEW.EXP_NAME
-  is 'ÐÕÃû';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.TITLE
-  is 'Ö°³Æ/Ö°Îñ';
+  is 'Ö°ï¿½ï¿½/Ö°ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.UNIT
-  is 'µ¥Î»';
+  is 'ï¿½ï¿½Î»';
 comment on column NCME_EXPERT_NEW.TEL
-  is '×ù»ú';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.MOBILE
-  is 'ÊÖ»ú';
+  is 'ï¿½Ö»ï¿½';
 comment on column NCME_EXPERT_NEW.EMAIL
-  is 'ÓÊÏä';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.ID_CARD
-  is 'Éí·ÝÖ¤ºÅ';
+  is 'ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.BANK_NAME
-  is 'ÒøÐÐ';
+  is 'ï¿½ï¿½ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.BANK_CARD
-  is 'ÒøÐÐ¿¨ºÅ';
+  is 'ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.ADDRESS
-  is 'µØÖ·';
+  is 'ï¿½ï¿½Ö·';
 comment on column NCME_EXPERT_NEW.REMARK
-  is '¼ò½é';
+  is 'ï¿½ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.ADD_DATE
-  is 'Ìí¼ÓÊ±¼ä';
+  is 'ï¿½ï¿½ï¿½Ê±ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.UPDATE_DATE
-  is 'ÐÞ¸ÄÊ±¼ä';
+  is 'ï¿½Þ¸ï¿½Ê±ï¿½ï¿½';
 comment on column NCME_EXPERT_NEW.LOG
-  is 'ÈÕÖ¾';
+  is 'ï¿½ï¿½Ö¾';
 alter table NCME_EXPERT_NEW
   add constraint NCME_EXPERT_NEW_KEY primary key (EXP_ID);
 

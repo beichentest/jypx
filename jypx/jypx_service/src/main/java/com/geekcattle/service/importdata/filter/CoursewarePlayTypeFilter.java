@@ -15,8 +15,8 @@ public class CoursewarePlayTypeFilter implements ImportDataFilter<CoursewareVo>{
 	private static List<KjkPlayType> playTypeList;
 	@Override
 	public String doFilter(CoursewareVo courseware) {
-		String pcType = convertPlayType(playTypeList,courseware.getPlayType());
-		String mType = convertPlayType(playTypeList,courseware.getMobileType());
+		String pcType = convertPlayType(playTypeList,courseware.getPlayTypeText());
+		String mType = convertPlayType(playTypeList,courseware.getMobileTypeText());
 		if(pcType==null) {
 			return "播放类型（PC）输入不正确";
 		}

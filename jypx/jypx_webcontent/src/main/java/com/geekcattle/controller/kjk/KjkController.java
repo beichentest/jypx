@@ -260,7 +260,11 @@ public class KjkController {
 				if (sameList != null && sameList.size() > 0) {
 					return ReturnUtil.Error("文件中课件名称同系统中课件名称有重复", null, null);
 				}
-				kjkService.insertBatch(list);
+				try {
+					kjkService.insertBatch(list);
+				} catch (Exception e) {
+					return ReturnUtil.Error(e.getMessage(), null, null);
+				}				
 				String ip = IpUtil.getIpAddr(request);
 				logService.insertLoginLog(admin.getUsername(), ip, "导入课件" + list.size() + "条");
 			}

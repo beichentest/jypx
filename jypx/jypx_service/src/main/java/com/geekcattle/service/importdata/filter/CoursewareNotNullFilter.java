@@ -40,10 +40,10 @@ public class CoursewareNotNullFilter implements ImportDataFilter<CoursewareVo>{
 		if(StringUtils.isBlank(courseware.getSubject())) {
 			sbuilder.append("三级学科为必填项，");
 		}		
-		if(StringUtils.isBlank(courseware.getPlayType())) {
+		if(StringUtils.isBlank(courseware.getPlayTypeText())) {
 			sbuilder.append("播放类型（PC）为必填项，");
 		}
-		if(StringUtils.isBlank(courseware.getMobileType())) {
+		if(StringUtils.isBlank(courseware.getMobileTypeText())) {
 			sbuilder.append("播放类型（手机）为必填项，");
 		}
 		if(StringUtils.isBlank(courseware.getSource())) {

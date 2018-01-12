@@ -238,8 +238,12 @@ public class QuestionController {
 			return ReturnUtil.Success("导入文件有错误，未导入课件请下载文件查看具体原因", null, "fromImport?type=err&errFile=" + errFileName);
 		} else {
 			List<QuestionVo> list = eir.getList();
-			if (list != null && list.size() > 0) {				
-				questionService.insertQuestionBatch(list);
+			if (list != null && list.size() > 0) {
+				try {
+					questionService.insertQuestionBatch(list);
+				} catch (Exception e) {
+					return ReturnUtil.Error(e.getMessage(), null, null);
+				}				
 				String ip = IpUtil.getIpAddr(request);
 				logService.insertLoginLog(admin.getUsername(), ip, "导入试题" + list.size() + "条");
 			}

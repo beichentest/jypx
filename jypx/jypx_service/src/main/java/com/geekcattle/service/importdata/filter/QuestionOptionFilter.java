@@ -21,13 +21,16 @@ public class QuestionOptionFilter implements ImportDataFilter<QuestionVo>{
 		List<Option> options = new ArrayList<Option>();
 		Option option = null;
 		char alisa = 'A';
-		for (int i = 0; i < KjkEnum.KJK_QUESTION_OPTION_NUMBER.getValue(); i++) {
+		for (int i = 0; i < 6; i++) {
 			Method method = ReflectionUtils.findMethod(QuestionVo.class, "getOption"+alisa);
 			if(method!=null) {
-				option = new Option();
-				option.setAlisa(String.valueOf(alisa));
 				Object txObj = ReflectionUtils.invokeMethod(method, question);
-				option.setText(txObj==null?"":txObj.toString());
+				if(txObj==null||StringUtils.isBlank(txObj.toString())) {
+					continue;
+				}
+				option = new Option();
+				option.setAlisa(String.valueOf(alisa));				
+				option.setText(txObj.toString());
 				if(ConstantEnum.KJK_DIC_TYPE_QUESTION_CLASS_SINGLE.toString().equals(question.getqClass())) {
 					option.setType("radio");
 				}else if(ConstantEnum.KJK_DIC_TYPE_QUESTION_CLASS_MULTIPLE.toString().equals(question.getqClass())) {

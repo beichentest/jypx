@@ -6,6 +6,11 @@ package com.geekcattle.service.kjk;
 
 import java.util.List;
 
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +30,11 @@ import tk.mybatis.mapper.entity.Example.Criteria;
  */
 @Service
 public class KjkService {
-
+	private final static Logger logger = LoggerFactory.getLogger(KjkService.class);
 	@Autowired
 	private KjkCoursewareMapper kjkCoursewareMapper;
+	@Autowired
+	private DefaultSqlSessionFactory sqlSessionFactory;
 	
 	public List<KjkCourseware> getPageList(KjkCourseware kjkCourseware) {
 		PageHelper.startPage(kjkCourseware.getPage(), kjkCourseware.getLimit(),
@@ -90,8 +97,32 @@ public class KjkService {
 		return kjkCoursewareMapper.findCoursewareByNames(list);
 	} 
 	
-	public void insertBatch(List<CoursewareVo> list){
-		kjkCoursewareMapper.insertCoursewareBatch(list);	
+	public void insertBatch(List<CoursewareVo> list)throws Exception{
+		SqlSession batchSqlSession = null;
+		try {
+	        batchSqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);//获取批量方式的sqlsession     
+	        int batchCount = 1000;//每批commit的个数
+	        int batchLastIndex = batchCount;//每批最后一个的下标
+	        for(int index = 0; index < list.size();){
+	        	KjkCoursewareMapper coursewareMapper = batchSqlSession.getMapper(KjkCoursewareMapper.class);
+	        	if(batchLastIndex>=list.size()) {
+	        		batchLastIndex = list.size();
+	        		coursewareMapper.insertCoursewareBatch(list.subList(index, batchLastIndex));	                
+		            batchSqlSession.commit();		            
+		            break;
+	        	}
+	        	coursewareMapper.insertCoursewareBatch(list.subList(index, batchLastIndex));
+	        	batchSqlSession.commit();
+	        	index = batchLastIndex;
+	        	batchLastIndex = batchLastIndex+batchCount;
+	        }	                           
+	    }catch(Exception e) {
+	    	logger.error("======", e);
+	    	throw new Exception("导入课件异常，请联系技术人员");
+	    }
+		finally{
+	        batchSqlSession.close();
+	    }					
 	}
 	
 	public Integer getCountNotPlay() {
